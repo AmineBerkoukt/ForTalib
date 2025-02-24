@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.no-scroll {
+    overflow: hidden;
+  }
+  

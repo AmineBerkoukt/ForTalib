@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "firstName": "Houssam",
+      "lastName": "Cherki",
+      "email": "Houssamcherki@gmail.com",
+      "password": "1234",
+      "phoneNumber": "1234",
+      "address": "Tanger",
+      "role": "student"
+    }
+  ]
+}

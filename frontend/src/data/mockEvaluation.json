@@ -1,0 +1,37 @@
+[
+  {
+    "postId": "1",
+    "userId": "user1",
+    "rate": 5
+  },
+  {
+    "postId": "1",
+    "userId": "user2",
+    "rate": 4
+  },
+  {
+    "postId": "1",
+    "userId": "user3",
+    "rate": 4
+  },
+  {
+    "postId": "2",
+    "userId": "user4",
+    "rate": 5
+  },
+  {
+    "postId": "2",
+    "userId": "user5",
+    "rate": 4
+  },
+  {
+    "postId": "3",
+    "userId": "user6",
+    "rate": 5
+  },
+  {
+    "postId": "3",
+    "userId": "user7",
+    "rate": 4
+  }
+]

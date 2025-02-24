@@ -1,0 +1,56 @@
+[
+  {
+    "_id": "1",
+    "user": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "avatar": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    "title": "Modern Apartment in the City Center",
+    "description": "A fully furnished 2-bedroom apartment located in the heart of downtown.",
+    "images": ["https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1","https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"],
+    "createdAt": "2024-12-01T10:00:00Z",
+    "price": "$1,200/month",
+    "address": "123 Main St, Downtown City",
+    "elevator": true,
+    "maximumCapacity": 4,
+    "likesCount": 120,
+    "avgRate": 4.5
+  },
+  {
+    "_id": "2",
+    "user": {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "avatar": "https://via.placeholder.com/150"
+    },
+    "title": "Cozy Cottage in the Countryside",
+    "description": "A charming 1-bedroom cottage with a beautiful garden view.",
+    "images": ["https://via.placeholder.com/600"],
+    "createdAt": "2024-11-25T14:30:00Z",
+    "price": "$850/month",
+    "address": "456 Greenway Lane, Countryside",
+    "elevator": false,
+    "maximumCapacity": 2,
+    "likesCount": 85,
+    "avgRate": 4.8
+  },
+  {
+    "_id": "3",
+    "user": {
+      "firstName": "Alice",
+      "lastName": "Brown",
+      "avatar": null
+    },
+    "title": "Spacious Family Home in the Suburbs",
+    "description": "A 4-bedroom home perfect for families, featuring a large backyard.",
+    "images": ["https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"],
+    "createdAt": "2024-11-15T08:00:00Z",
+    "price": "$2,300/month",
+    "address": "789 Oakwood Drive, Suburbs",
+    "elevator": false,
+    "maximumCapacity": 6,
+    "likesCount": 200,
+    "avgRate": 4.7
+  }
+]
