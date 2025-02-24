@@ -88,7 +88,6 @@ const OtherProfilePage = () => {
 
   return (
       <Layout isDarkMode={isDarkMode}>
-          <PostDetailsModal />
 
           <div
             className={`min-h-screen ${

@@ -1,10 +1,10 @@
 import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useAuthStore } from "./store/useAuthStore";
-import { useTheme } from "./contexts/ThemeContext.jsx";
-import { Toaster } from "react-hot-toast";
+import {Routes, Route, Navigate, useLocation} from "react-router-dom";
+import {useAuthStore} from "./store/useAuthStore";
+import {useTheme} from "./contexts/ThemeContext.jsx";
+import {Toaster} from "react-hot-toast";
 import PostDetailsModal from "./components/PostDetailsModal"; // Import the modal
-import { useModalStore } from "./store/useModalStore.js"; // Import the modal store
+import {useModalStore} from "./store/useModalStore.js"; // Import the modal store
 
 // Components and Pages
 import Home from "./pages/Home";
@@ -19,17 +19,18 @@ import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import RequestsPage from "./pages/RequestsPage.jsx";
 import OtherProfilePage from "./pages/OtherProfilePage.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 
 // Route Protection HOC
-const ProtectedRoute = ({ element, isAuthenticated, redirectTo }) => {
-    return isAuthenticated ? element : <Navigate to={redirectTo} />;
+const ProtectedRoute = ({element, isAuthenticated, redirectTo}) => {
+    return isAuthenticated ? element : <Navigate to={redirectTo}/>;
 };
 
-const RoleProtectedRoute = ({ element, isAuthenticated, userRole, allowedRoles, redirectTo }) => {
+const RoleProtectedRoute = ({element, isAuthenticated, userRole, allowedRoles, redirectTo}) => {
     return isAuthenticated && allowedRoles.includes(userRole) ? (
         element
     ) : (
-        <Navigate to={redirectTo} />
+        <Navigate to={redirectTo}/>
     );
 };
 
@@ -46,10 +47,10 @@ const LoadingSpinner = () => (
 );
 
 const App = () => {
-    const { authUser, checkAuth, isCheckingAuth, onlineUsers, role } = useAuthStore();
-    const { isDarkMode } = useTheme(); // Get dark mode state
+    const {authUser, checkAuth, isCheckingAuth, onlineUsers, role} = useAuthStore();
+    const {isDarkMode} = useTheme(); // Get dark mode state
     const location = useLocation(); // Access current route
-    const { isModalOpen, modalData, disactivateModal } = useModalStore(); // Access modal state
+    const {isModalOpen, modalData, disactivateModal} = useModalStore(); // Access modal state
 
     const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
@@ -60,7 +61,7 @@ const App = () => {
     }, [checkAuth, location.pathname]);
 
     if (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname)) {
-        return <LoadingSpinner />;
+        return <LoadingSpinner/>;
     }
 
     return (
@@ -73,27 +74,24 @@ const App = () => {
                 }}
             />
 
-            {/* Render the modal globally */}
-            {isModalOpen && (
-                <PostDetailsModal
-                    isOpen={isModalOpen}
-                    onClose={disactivateModal}
-                    post={modalData}
-                />
-            )}
+            <PostDetailsModal
+                isOpen={isModalOpen}
+                onClose={disactivateModal}
+                post={modalData}
+            />
 
             <Routes>
                 {/* Public Routes */}
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<SignUpPage/>}/>
+                <Route path="/login" element={<LoginPage/>}/>
+                <Route path="/" element={<Home/>}/>
 
                 {/* Restricted Routes (Require Authentication) */}
                 <Route
                     path="/chat"
                     element={
                         <ProtectedRoute
-                            element={<ChatPage />}
+                            element={<ChatPage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/unauthorized"
                         />
@@ -103,7 +101,7 @@ const App = () => {
                     path="/saved"
                     element={
                         <ProtectedRoute
-                            element={<SavedPage />}
+                            element={<SavedPage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/unauthorized"
                         />
@@ -113,7 +111,7 @@ const App = () => {
                     path="/profile"
                     element={
                         <ProtectedRoute
-                            element={<ProfilePage />}
+                            element={<ProfilePage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/unauthorized"
                         />
@@ -123,7 +121,7 @@ const App = () => {
                     path="/profile/:id"
                     element={
                         <ProtectedRoute
-                            element={<ProfilePage />}
+                            element={<ProfilePage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/unauthorized"
                         />
@@ -135,7 +133,7 @@ const App = () => {
                     path="/dashboard"
                     element={
                         <RoleProtectedRoute
-                            element={<DashboardPage />}
+                            element={<DashboardPage/>}
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
@@ -147,7 +145,7 @@ const App = () => {
                     path="/requests"
                     element={
                         <RoleProtectedRoute
-                            element={<RequestsPage />}
+                            element={<RequestsPage/>}
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
@@ -159,7 +157,7 @@ const App = () => {
                     path="/management"
                     element={
                         <RoleProtectedRoute
-                            element={<UserManagementPage />}
+                            element={<UserManagementPage/>}
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
@@ -169,8 +167,8 @@ const App = () => {
                 />
 
                 {/* Error Pages */}
-                <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                <Route path="*" element={<PageNotFoundPage />} />
+                <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
+                <Route path="*" element={<PageNotFoundPage/>}/>
             </Routes>
         </>
     );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { X, Play, MessageCircle, ChevronLeft, ChevronRight, Maximize2, Building2, MapPin, Phone, Star, Users, Calendar } from 'lucide-react';
+import { X, Play, MessageCircle, ChevronLeft, ChevronRight, Building2, MapPin, Phone, Star, Users, Calendar } from 'lucide-react';
 import { useModalStore } from '../store/useModalStore';
 import { useTheme } from "../contexts/ThemeContext.jsx";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +59,8 @@ const PostDetailsModal = () => {
     const mediaItems = [
         ...(modalData?.images || []),
         ...(modalData?.videos || [])
-    ].map(item => `http://localhost:5000${item.trim()}`);
+    ].map(item => `${import.meta.env.VITE_PFP_URL}${item.trim()}`);
+
 
     const nextImage = () => {
         setSelectedMediaIndex((prev) => (prev + 1) % mediaItems.length);
@@ -69,9 +70,6 @@ const PostDetailsModal = () => {
         setSelectedMediaIndex((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
     };
 
-    const toggleFullscreen = () => {
-        setIsFullscreen(!isFullscreen);
-    };
 
     if (!isModalActive || !modalData) return null;
 
@@ -96,7 +94,7 @@ const PostDetailsModal = () => {
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.95, opacity: 0 }}
                     transition={{ type: "spring", duration: 0.5 }}
-                    className={`relative w-full max-w-6xl rounded-2xl shadow-2xl overflow-hidden ${isDarkMode ? "bg-gray-900" : "bg-white"} ${isFullscreen ? 'h-full' : 'max-h-[90vh]'}`}
+                    className={`relative w-full max-w-6xl rounded-2xl shadow-2xl overflow-hidden ${isDarkMode ? "bg-gray-900" : "bg-white"}`}
                     ref={modalRef}
                 >
                     <button
@@ -109,7 +107,7 @@ const PostDetailsModal = () => {
                     <div className="flex flex-col lg:flex-row h-full">
                         {/* Media Section */}
                         <div
-                            className={`relative ${isFullscreen ? 'w-full h-full' : 'lg:w-3/5'} bg-black`}
+                            className={`relative lg:w-3/5 `}
                             ref={mediaContainerRef}
                         >
                             <div className="relative aspect-[4/3] w-full">
@@ -157,14 +155,6 @@ const PostDetailsModal = () => {
                                         </button>
                                     </>
                                 )}
-
-                                {/* Fullscreen Toggle */}
-                                <button
-                                    onClick={toggleFullscreen}
-                                    className="absolute bottom-4 right-4 p-2 rounded-full bg-black/40 hover:bg-black/60 transition-colors transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <Maximize2 className="w-5 h-5 text-white" />
-                                </button>
                             </div>
 
                             {/* Thumbnail Strip */}
@@ -203,8 +193,7 @@ const PostDetailsModal = () => {
                             )}
                         </div>
 
-                        {/* Details Section */}
-                        {!isFullscreen && (
+
                             <div className={`lg:w-2/5 p-4 sm:p-6 overflow-y-auto ${isDarkMode ? "text-gray-200" : "text-gray-800"}`}>
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
@@ -269,7 +258,7 @@ const PostDetailsModal = () => {
                                     </div>
                                 </motion.div>
                             </div>
-                        )}
+
                     </div>
                 </motion.div>
             </motion.div>

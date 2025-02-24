@@ -81,7 +81,6 @@ const ProfilePage = () => {
       <Layout isDarkMode={isDarkMode}>
         <div className="min-h-screen py-8">
           <div className="container mx-auto px-4">
-            <PostDetailsModal />
             <ProfileInfo
                 user={isOwnProfile ? authUser : user}
                 isDarkMode={isDarkMode}
