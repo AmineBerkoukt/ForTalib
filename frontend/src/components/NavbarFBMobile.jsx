@@ -9,23 +9,15 @@ import {
     SunIcon,
 } from '@heroicons/react/24/outline';
 
-import NotificationsDropdown from "./NotificationsDropDown.jsx";
 import SearchBar from "./SearchBar.jsx";
 import {useTheme} from "../contexts/ThemeContext.jsx";
 
-const MobileNav = ({ onSidebarToggle, isDarkMode }) => {
+const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
     const navigate = useNavigate();
     const [isSearchVisible, setIsSearchVisible] = useState(false);
-    const [isNotificationsOpen, setNotificationsOpen] = useState(false);
     const { toggleDarkMode } = useTheme();
 
-    const notifications = [
-        { id: 1, message: 'You have a new message from John.', time: '2 mins ago' },
-        { id: 2, message: 'Your profile has been updated successfully.', time: '1 hour ago' },
-        { id: 3, message: 'New comment on your post.', time: '5 hours ago' },
-    ];
-
-    const toggleNotifications = () => setNotificationsOpen(prev => !prev);
+    
 
     return (
         <nav className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
@@ -122,4 +114,4 @@ const MobileNav = ({ onSidebarToggle, isDarkMode }) => {
     );
 };
 
-export default MobileNav;
+export default NavbarFBMobile;

@@ -8,9 +8,13 @@ import GoogleLoginButton from "../components/GoogleLoginButton.jsx";
 import LoginHero from "../components/skeletons/LoginHero.jsx";
 import FormInput from "../components/FormInput.jsx";
 import initUpperCase from "../utils/initUpperCase.js";
+import TermsAndConditionsModal from "../components/TermsAndConditionsModal.jsx";
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [acceptTerms, setAcceptTerms] = useState(false);
+
     const firstNameRef = useRef();
     const lastNameRef = useRef();
     const emailRef = useRef();
@@ -24,6 +28,11 @@ const SignUpPage = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
 
     const validateForm = () => {
+        if (!acceptTerms) {
+            toast.error("You must accept the Terms and Conditions.");
+            return false;
+        }
+
         const fields = [
             { ref: firstNameRef, message: "Please enter your first name" },
             { ref: lastNameRef, message: "Please enter your last name" },
@@ -96,24 +105,6 @@ const SignUpPage = () => {
                         </div>
                     </div>
 
-                    <div className="flex justify-center mb-6">
-                        <button
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full transition-colors duration-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                            onClick={toggleDarkMode}
-                            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-                        >
-                            {isDarkMode ? (
-                                <>
-                                    <Sun className="w-5 h-5" /> Light Mode
-                                </>
-                            ) : (
-                                <>
-                                    <Moon className="w-5 h-5" /> Dark Mode
-                                </>
-                            )}
-                        </button>
-                    </div>
-
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="w-full">
                             <GoogleLoginButton />
@@ -131,49 +122,27 @@ const SignUpPage = () => {
                         <FormInput label="First Name" icon={User} inputRef={firstNameRef} placeholder="Enter your first name" />
                         <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
                         <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
-                        <FormInput
-                            label="Password"
-                            icon={Lock}
-                            inputRef={passwordRef}
-                            placeholder="••••••"
-                            type="password"
-                            showPassword={showPassword}
-                            setShowPassword={setShowPassword}
-                        />
+                        <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
                         <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
                         <FormInput label="Address" icon={HomeIcon} inputRef={addressRef} placeholder="Enter your address" />
                         <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
 
-                        <div>
-                            <button
-                                type="submit"
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
-                                disabled={isSigningUp}
-                            >
-                                {isSigningUp ? (
-                                    <Loader2 className="h-5 w-5 animate-spin" />
-                                ) : (
-                                    "Create your account"
-                                )}
-                            </button>
+                        <div className="flex items-center">
+                            <input type="checkbox" id="terms" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
+                            <label htmlFor="terms" className="text-gray-700 dark:text-gray-300">
+                                I accept the <span className="text-primary cursor-pointer" onClick={() => setIsModalOpen(true)}>Terms and Conditions</span>
+                            </label>
                         </div>
-                    </form>
 
-                    <div className="text-center mt-6">
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Already have an account?{" "}
-                            <Link className="font-medium text-primary hover:text-primary-dark transition-colors duration-200" to="/login">
-                                Sign in
-                            </Link>
-                        </p>
-                    </div>
+                        <button type="submit" className="w-full py-2 bg-primary text-white rounded-md transition">Create your account</button>
+                    </form>
                 </div>
             </div>
 
             <LoginHero />
+            <TermsAndConditionsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </div>
     );
 };
 
 export default SignUpPage;
-

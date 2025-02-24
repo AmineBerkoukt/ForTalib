@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NavbarFB from './NavbarFB.jsx';
 import SidebarFB from './SidebarFB.jsx';
 import RightbarFb from './RightbarFB.jsx';
-import MobileNav from './MobileNav.jsx';
+import NavbarFBMobile from './NavbarFBMobile.jsx';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
 
 const LayoutContent = ({ children, isChatPage, isDarkMode }) => {
@@ -17,7 +17,7 @@ const LayoutContent = ({ children, isChatPage, isDarkMode }) => {
                 </div>
 
                 {/* Mobile Navbar */}
-                <MobileNav
+                <NavbarFBMobile
                     isDarkMode={isDarkMode}
                     onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
                 />

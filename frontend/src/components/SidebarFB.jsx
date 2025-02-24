@@ -40,11 +40,6 @@ const SidebarFB = () => {
     const navItems = [
         { Icon: UserIcon, text: "Profile", path: "/profile" },
         { Icon: BookmarkIcon, text: "Saved", path: "/saved" },
-        ...(role === "student" ? [{
-            Icon: ArchiveBoxArrowDownIcon,
-            text: "Apply for HouseOwner",
-            path: "/applyforhouseowner"
-        }] : []),
         ...(role === "admin" ? [{
             Icon: CalendarIcon,
             text: "Dashboard",

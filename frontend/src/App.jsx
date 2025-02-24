@@ -10,7 +10,6 @@ import { useModalStore } from "./store/useModalStore.js"; // Import the modal st
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import ChatPage from "./pages/ChatPage.jsx";
-import ChatbotPage from "./pages/ChatbotPage.jsx";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -21,7 +20,6 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import RequestsPage from "./pages/RequestsPage.jsx";
-import ApplyForHouseOwnerPage from "./pages/ApplyForHouseOwnerPage.jsx";
 import OtherProfilePage from "./pages/OtherProfilePage.jsx";
 
 // Route Protection HOC
@@ -104,16 +102,6 @@ const App = () => {
                     }
                 />
                 <Route
-                    path="/chatbot"
-                    element={
-                        <ProtectedRoute
-                            element={<ChatbotPage />}
-                            isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
-                        />
-                    }
-                />
-                <Route
                     path="/saved"
                     element={
                         <ProtectedRoute
@@ -138,16 +126,6 @@ const App = () => {
                     element={
                         <ProtectedRoute
                             element={<OtherProfilePage />}
-                            isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
-                        />
-                    }
-                />
-                <Route
-                    path="/applyforhouseowner"
-                    element={
-                        <ProtectedRoute
-                            element={<ApplyForHouseOwnerPage />}
                             isAuthenticated={!!authUser}
                             redirectTo="/unauthorized"
                         />

@@ -8,27 +8,16 @@ import {
 import { Bot } from "lucide-react";
 import { useTheme } from '../contexts/ThemeContext';
 import SearchBar from './SearchBar.jsx';
-import NotificationsDropdown from './NotificationsDropdown.jsx'; // Import the new NotificationsDropdown component
 
 const NavbarFB = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
     const location = useLocation(); // Use the useLocation hook
-    const [isNotificationsOpen, setNotificationsOpen] = useState(false); // State to toggle dropdown
 
-    // Sample mock data for notifications
-    const notifications = [
-        { id: 1, message: 'You have a new message from John.', time: '2 mins ago' },
-        { id: 2, message: 'Your profile has been updated successfully.', time: '1 hour ago' },
-        { id: 3, message: 'New comment on your post.', time: '5 hours ago' },
-    ];
+
 
     // Check if the current route is "/chat"
     const isChatPage = location.pathname === '/chat';
 
-    // Toggle notifications dropdown visibility
-    const toggleNotifications = () => {
-        setNotificationsOpen((prev) => !prev);
-    };
 
     return (
         <nav
@@ -42,7 +31,7 @@ const NavbarFB = () => {
                     className={`text-xl sm:text-2xl font-bold hover:opacity-90 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
                 >
 
-                    DarIo
+                    ForTalib
                 </Link>
 
                 {/* Center: Search Bar (only show if not on /chat route) */}
@@ -65,14 +54,6 @@ const NavbarFB = () => {
                         </div>
                     </Link>
 
-                    {/* Chatbot Link */}
-                    <Link to="/chatbot">
-                        <div className="relative group">
-                            <Bot
-                                className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}
-                            />
-                        </div>
-                    </Link>
 
                     {/* Dark Mode Toggle */}
                     <button
