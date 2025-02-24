@@ -1,168 +1,175 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, Moon, Sun } from 'lucide-react';
+import React, { useState, useRef } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { useTheme } from "../contexts/ThemeContext";
-import LoginHero from "../components/skeletons/LoginHero";
+import { HomeIcon, BadgeIcon, Loader2, Lock, Mail, MessageSquare, Moon, Sun, User, Phone } from 'lucide-react';
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useTheme } from "../contexts/ThemeContext.jsx";
+import GoogleLoginButton from "../components/GoogleLoginButton.jsx";
+import LoginHero from "../components/skeletons/LoginHero.jsx";
+import FormInput from "../components/FormInput.jsx";
+import initUpperCase from "../utils/initUpperCase.js";
+import TermsAndConditionsModal from "../components/TermsAndConditionsModal.jsx";
+import Footer from "../components/Footer.jsx";
 
-const LoginPage = () => {
-  const navigate = useNavigate();
+const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const { login, isLoggingIn, checkAuth } = useAuthStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const phoneNumberRef = useRef();
+  const addressRef = useRef();
+  const cinRef = useRef();
+
+  const { signup, isSigningUp } = useAuthStore();
+  const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useTheme();
+
+  const validateForm = () => {
+    if (!acceptTerms) {
+      toast.error("You must accept the Terms and Conditions.");
+      return false;
+    }
+
+    const fields = [
+      { ref: firstNameRef, message: "Please enter your first name" },
+      { ref: lastNameRef, message: "Please enter your last name" },
+      { ref: emailRef, message: "Please enter your email" },
+      { ref: passwordRef, message: "Please enter your password" },
+      { ref: phoneNumberRef, message: "Please enter your phone number" },
+      { ref: addressRef, message: "Please enter your address" },
+    ];
+
+    for (const field of fields) {
+      if (!field.ref.current.value.trim()) {
+        toast.error(field.message);
+        return false;
+      }
+    }
+
+    if (!/\S+@\S+\.\S+/.test(emailRef.current.value)) {
+      toast.error("Invalid email format");
+      return false;
+    }
+
+    if (passwordRef.current.value.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return false;
+    }
+
+    if (!/^(0[67]|\+212)[0-9]{8}$/.test(phoneNumberRef.current.value)) {
+      toast.error("Invalid phone number");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (validateForm()) {
+      const formData = {
+        firstName: initUpperCase(firstNameRef.current.value),
+        lastName: lastNameRef.current.value.toUpperCase(),
+        email: emailRef.current.value.toLowerCase(),
+        password: passwordRef.current.value,
+        phoneNumber: phoneNumberRef.current.value,
+        address: addressRef.current.value,
+        cin: cinRef.current.value,
+      };
 
-    try {
-      const response = await login(formData);
-      if (response?.token) {
-        await checkAuth();  // Ensure user details are fetched
-        navigate('/');
+      console.log("sending data : " , formData)
+
+      try {
+        await signup(formData);
+        navigate("/login");
+      } catch (error) {
+        toast.error("Error while creating the account, please try again!");
       }
-    } catch (error) {
-      console.error('Login failed:', error);
     }
   };
 
   return (
-      <div className={`min-h-screen flex flex-col lg:flex-row ${isDarkMode ? "dark" : ""}`}>
-        {/* Left Side - Form */}
-        <div className="flex-1 flex flex-col justify-center items-center p-8 bg-white dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden">
-          <div className="w-full max-w-md space-y-8 relative z-10">
-            {/* Logo and Welcome Text */}
-            <div className="text-center mb-8">
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all duration-300 animate-float">
-                  <MessageSquare className="w-8 h-8 text-primary" />
-                </div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white animate-fade-in-up">Welcome Back</h1>
-                <p className="text-base text-gray-600 dark:text-gray-400 animate-fade-in-up animation-delay-200">Sign in to your account</p>
-              </div>
-            </div>
-
-            {/* Dark Mode Toggle */}
-            <div className="flex justify-center animate-fade-in-up animation-delay-400">
-              <button
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md"
-                  onClick={toggleDarkMode}
-                  aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-              >
-                {isDarkMode ? (
-                    <>
-                      <Sun className="w-5 h-5" /> Light Mode
-                    </>
-                ) : (
-                    <>
-                      <Moon className="w-5 h-5" /> Dark Mode
-                    </>
-                )}
-              </button>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in-up animation-delay-600">
-              <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                  Email
-                </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
+      <div className={`min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
+        <div className="flex-1 flex flex-col lg:flex-row">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200">
+            <div className="w-full max-w-md space-y-8">
+              <div className="text-center mb-8">
+                <div className="flex flex-col items-center gap-2 group">
+                  <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <MessageSquare className="w-8 h-8 text-primary" />
                   </div>
-                  <input
-                      id="email"
-                      type="email"
-                      className="block w-full pl-10 pr-3 py-3 text-base border border-gray-300 rounded-md leading-5 bg-white dark:bg-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-300"
-                      placeholder="you@example.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
-                  />
+                  <h1 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Create your account</h1>
+                  <p className="text-base text-gray-600 dark:text-gray-400">Get started with your free account</p>
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                  Password
-                </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="w-full">
+                  <GoogleLoginButton />
+                </div>
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
                   </div>
-                  <input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      className="block w-full pl-10 pr-10 py-3 text-base border border-gray-300 rounded-md leading-5 bg-white dark:bg-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-300"
-                      placeholder="••••••••"
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      required
-                      minLength={6}
-                  />
-                  <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                  >
-                    {showPassword ? (
-                        <EyeOff className="h-5 w-5 text-gray-400" />
-                    ) : (
-                        <Eye className="h-5 w-5 text-gray-400" />
-                    )}
-                  </button>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div className="text-sm">
-                  <Link to="/forgot-password" className="font-medium text-primary hover:text-primary-dark transition-colors duration-300">
-                    Forgot your password?
-                  </Link>
+                <FormInput label="First Name" icon={User} inputRef={firstNameRef} placeholder="Enter your first name" />
+                <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
+                <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
+                <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
+                <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
+                <FormInput label="Address" icon={HomeIcon} inputRef={addressRef} placeholder="Enter your address" />
+                <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
+
+                <div className="flex items-center">
+                  <input type="checkbox" id="terms" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
+                  <label htmlFor="terms" className="text-gray-700 dark:text-gray-300">
+                    I accept the <span className="text-primary cursor-pointer" onClick={() => setIsModalOpen(true)}>Terms and Conditions</span>
+                  </label>
                 </div>
-              </div>
 
-              <div>
                 <button
                     type="submit"
-                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                    disabled={isLoggingIn}
+                    className="w-full py-2 bg-primary text-white rounded-md transition flex items-center justify-center"
+                    disabled={isSigningUp}
                 >
-                  {isLoggingIn ? (
+                  {isSigningUp ? (
                       <>
                         <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                        Signing in...
+                        Creating account...
                       </>
                   ) : (
-                      "Sign in"
+                      "Create your account"
                   )}
                 </button>
-              </div>
-            </form>
 
-            <div className="text-center animate-fade-in-up animation-delay-800">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Don't have an account?{" "}
-                <Link to="/signup" className="font-medium text-primary hover:text-primary-dark transition-colors duration-300">
-                  Create account
-                </Link>
-              </p>
+                <div className="text-center">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Already have an account?{" "}
+                    <Link to="/login" className="font-medium text-primary hover:text-primary-dark transition-colors duration-300">
+                      Sign in
+                    </Link>
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
-          <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-primary/5 rounded-full filter blur-3xl animate-pulse"></div>
-          <div className="absolute -top-16 -right-16 w-64 h-64 bg-primary/5 rounded-full filter blur-3xl animate-pulse animation-delay-1000"></div>
+
+          <LoginHero />
         </div>
 
-        {/* Right Side - LoginHero component */}
-        <LoginHero />
+        <Footer />
+        <TermsAndConditionsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
   );
 };
 
-export default LoginPage;
-
+export default SignUpPage;

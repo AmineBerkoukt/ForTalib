@@ -9,6 +9,7 @@ import LoginHero from "../components/skeletons/LoginHero.jsx";
 import FormInput from "../components/FormInput.jsx";
 import initUpperCase from "../utils/initUpperCase.js";
 import TermsAndConditionsModal from "../components/TermsAndConditionsModal.jsx";
+import Footer from "../components/Footer.jsx";
 
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -92,54 +93,80 @@ const SignUpPage = () => {
     };
 
     return (
-        <div className={`min-h-screen flex flex-col lg:flex-row ${isDarkMode ? "dark" : ""}`}>
-            <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200">
-                <div className="w-full max-w-md space-y-8">
-                    <div className="text-center mb-8">
-                        <div className="flex flex-col items-center gap-2 group">
-                            <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                <MessageSquare className="w-8 h-8 text-primary" />
+        <div className={`min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
+            <div className="flex-1 flex flex-col lg:flex-row">
+                <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200">
+                    <div className="w-full max-w-md space-y-8">
+                        <div className="text-center mb-8">
+                            <div className="flex flex-col items-center gap-2 group">
+                                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <MessageSquare className="w-8 h-8 text-primary" />
+                                </div>
+                                <h1 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Create your account</h1>
+                                <p className="text-base text-gray-600 dark:text-gray-400">Get started with your free account</p>
                             </div>
-                            <h1 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Create your account</h1>
-                            <p className="text-base text-gray-600 dark:text-gray-400">Get started with your free account</p>
                         </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="w-full">
+                                <GoogleLoginButton />
+                            </div>
+
+                            <div className="relative">
+                                <div className="absolute inset-0 flex items-center">
+                                    <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
+                                </div>
+                                <div className="relative flex justify-center text-sm">
+                                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
+                                </div>
+                            </div>
+
+                            <FormInput label="First Name" icon={User} inputRef={firstNameRef} placeholder="Enter your first name" />
+                            <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
+                            <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
+                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
+                            <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
+                            <FormInput label="Address" icon={HomeIcon} inputRef={addressRef} placeholder="Enter your address" />
+                            <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
+
+                            <div className="flex items-center">
+                                <input type="checkbox" id="terms" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
+                                <label htmlFor="terms" className="text-gray-700 dark:text-gray-300">
+                                    I accept the <span className="text-primary cursor-pointer" onClick={() => setIsModalOpen(true)}>Terms and Conditions</span>
+                                </label>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="w-full py-2 bg-primary text-white rounded-md transition flex items-center justify-center"
+                                disabled={isSigningUp}
+                            >
+                                {isSigningUp ? (
+                                    <>
+                                        <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                                        Creating account...
+                                    </>
+                                ) : (
+                                    "Create your account"
+                                )}
+                            </button>
+
+                            <div className="text-center">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Already have an account?{" "}
+                                    <Link to="/login" className="font-medium text-primary hover:text-primary-dark transition-colors duration-300">
+                                        Sign in
+                                    </Link>
+                                </p>
+                            </div>
+                        </form>
                     </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="w-full">
-                            <GoogleLoginButton />
-                        </div>
-
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
-                            </div>
-                            <div className="relative flex justify-center text-sm">
-                                <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
-                            </div>
-                        </div>
-
-                        <FormInput label="First Name" icon={User} inputRef={firstNameRef} placeholder="Enter your first name" />
-                        <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
-                        <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
-                        <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
-                        <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
-                        <FormInput label="Address" icon={HomeIcon} inputRef={addressRef} placeholder="Enter your address" />
-                        <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
-
-                        <div className="flex items-center">
-                            <input type="checkbox" id="terms" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
-                            <label htmlFor="terms" className="text-gray-700 dark:text-gray-300">
-                                I accept the <span className="text-primary cursor-pointer" onClick={() => setIsModalOpen(true)}>Terms and Conditions</span>
-                            </label>
-                        </div>
-
-                        <button type="submit" className="w-full py-2 bg-primary text-white rounded-md transition">Create your account</button>
-                    </form>
                 </div>
+
+                <LoginHero />
             </div>
 
-            <LoginHero />
+            <Footer />
             <TermsAndConditionsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </div>
     );
