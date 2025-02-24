@@ -18,8 +18,7 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import RequestsPage from "./pages/RequestsPage.jsx";
-import OtherProfilePage from "./pages/OtherProfilePage.jsx";
-import ScrollToTop from "./components/ScrollToTop.jsx";
+
 
 // Route Protection HOC
 const ProtectedRoute = ({element, isAuthenticated, redirectTo}) => {
@@ -108,20 +107,10 @@ const App = () => {
                     }
                 />
                 <Route
-                    path="/profile"
+                    path="/profile/:id?"
                     element={
                         <ProtectedRoute
-                            element={<ProfilePage/>}
-                            isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
-                        />
-                    }
-                />
-                <Route
-                    path="/profile/:id"
-                    element={
-                        <ProtectedRoute
-                            element={<ProfilePage/>}
+                            element={<ProfilePage />}
                             isAuthenticated={!!authUser}
                             redirectTo="/unauthorized"
                         />
