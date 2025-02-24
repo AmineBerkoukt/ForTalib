@@ -123,7 +123,7 @@ const App = () => {
                     path="/profile/:id"
                     element={
                         <ProtectedRoute
-                            element={<OtherProfilePage />}
+                            element={<ProfilePage />}
                             isAuthenticated={!!authUser}
                             redirectTo="/unauthorized"
                         />
