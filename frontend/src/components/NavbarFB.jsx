@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // Import useLocation hook
+import {Link, useLocation, useNavigate} from 'react-router-dom'; // Import useLocation hook
 import {
     ChatBubbleOvalLeftEllipsisIcon,
     MoonIcon,
     SunIcon,
+    ArrowLeftStartOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import { Bot } from "lucide-react";
 import { useTheme } from '../contexts/ThemeContext';
@@ -11,13 +12,20 @@ import SearchBar from './SearchBar.jsx';
 
 const NavbarFB = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
-    const location = useLocation(); // Use the useLocation hook
+    const location = useLocation();
+    const navigate = useNavigate();
+
 
 
 
     // Check if the current route is "/chat"
     const isChatPage = location.pathname === '/chat';
 
+
+    function logout() {
+        localStorage.clear();
+        //navigate("/login");
+    }
 
     return (
         <nav
@@ -45,7 +53,9 @@ const NavbarFB = () => {
                 <div className="flex items-center space-x-3 sm:space-x-6">
 
                     {/* Messages */}
-                    <Link to="/chat">
+                    <Link to="/chat"
+                          className="rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                    >
                         <div className="relative group">
                             <ChatBubbleOvalLeftEllipsisIcon
                                 className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}
@@ -62,10 +72,18 @@ const NavbarFB = () => {
                     >
                         <span className="sr-only">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
                         {isDarkMode ? (
-                            <SunIcon className="h-6 w-6 text-yellow-400" />
+                            <SunIcon className="h-6 w-6 text-yellow-400"/>
                         ) : (
-                            <MoonIcon className="h-6 w-6 text-blue-600" />
+                            <MoonIcon className="h-6 w-6 text-blue-600"/>
                         )}
+                    </button>
+                    <button
+                        onClick={logout}
+                        className="rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                    >
+                        <span className="sr-only">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+                        <ArrowLeftStartOnRectangleIcon className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}
+                        />
                     </button>
                 </div>
             </div>

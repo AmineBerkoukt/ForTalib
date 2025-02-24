@@ -7,12 +7,10 @@ import PostDetailsModal from "./components/PostDetailsModal"; // Import the moda
 import { useModalStore } from "./store/useModalStore.js"; // Import the modal store
 
 // Components and Pages
-import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import ChatPage from "./pages/ChatPage.jsx";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
-import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 import UnauthorizedPage from "./pages/UnauthorizedPage.jsx";
 import PageNotFoundPage from "./pages/PageNotFoundPage.jsx";
