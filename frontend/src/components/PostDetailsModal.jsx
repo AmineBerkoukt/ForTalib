@@ -1,127 +1,279 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { X, Play, MessageCircle } from 'lucide-react';
+import { X, Play, MessageCircle, ChevronLeft, ChevronRight, Maximize2, Building2, MapPin, Phone, Star, Users, Calendar } from 'lucide-react';
 import { useModalStore } from '../store/useModalStore';
 import { useTheme } from "../contexts/ThemeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useChatStore } from "../store/useChatStore.js";
-import ImageCarousel from './ImageCarousel'; // Import the ImageCarousel component
+import { motion, AnimatePresence } from 'framer-motion';
 
 const PostDetailsModal = () => {
     const { isModalActive, modalData, disactivateModal } = useModalStore();
     const { isDarkMode } = useTheme();
     const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
+    const [isFullscreen, setIsFullscreen] = useState(false);
     const { setSelectedUser } = useChatStore();
     const navigate = useNavigate();
+    const modalRef = useRef(null);
+    const mediaContainerRef = useRef(null);
 
-    if (!isModalActive) return null;
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                disactivateModal();
+            }
+        };
+
+        if (isModalActive) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isModalActive, disactivateModal]);
+
+    useEffect(() => {
+        const handleKeyPress = (event) => {
+            if (!isModalActive) return;
+
+            if (event.key === 'ArrowLeft') {
+                previousImage();
+            } else if (event.key === 'ArrowRight') {
+                nextImage();
+            } else if (event.key === 'Escape') {
+                disactivateModal();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyPress);
+        return () => window.removeEventListener('keydown', handleKeyPress);
+    }, [isModalActive]);
 
     const handleTalkToOwner = async (userToTalkTo) => {
+        if (!userToTalkTo) return;
         setSelectedUser(userToTalkTo);
         navigate("/chat");
-    }
+    };
 
     const mediaItems = [
-        ...(modalData.images || []),
-        ...(modalData.videos || [])
+        ...(modalData?.images || []),
+        ...(modalData?.videos || [])
     ].map(item => `http://localhost:5000${item.trim()}`);
 
-    console.log("modalData " +  modalData);
+    const nextImage = () => {
+        setSelectedMediaIndex((prev) => (prev + 1) % mediaItems.length);
+    };
 
+    const previousImage = () => {
+        setSelectedMediaIndex((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
+    };
+
+    const toggleFullscreen = () => {
+        setIsFullscreen(!isFullscreen);
+    };
+
+    if (!isModalActive || !modalData) return null;
+
+    const propertyDetails = [
+        { icon: <MapPin className="w-4 h-4" />, label: "Address", value: modalData.address },
+        { icon: <Phone className="w-4 h-4" />, label: "Phone", value: modalData.user?.phoneNumber },
+        { icon: <Star className="w-4 h-4" />, label: "Rating", value: modalData.avgRate ? `${modalData.avgRate}/5` : 'N/A' },
+        { icon: <Users className="w-4 h-4" />, label: "Capacity", value: `${modalData.maximumCapacity} people` },
+        { icon: <Calendar className="w-4 h-4" />, label: "Published", value: new Date(modalData.createdAt).toLocaleDateString() }
+    ];
 
     return ReactDOM.createPortal(
-        <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${isDarkMode ? "bg-black/70" : "bg-black/50"} backdrop-blur-sm`}>
-            <div className={`relative w-full max-w-5xl p-6 rounded-xl shadow-2xl ${isDarkMode ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}>
-                <button
-                    onClick={disactivateModal}
-                    className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
-                        isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                    }`}
+        <AnimatePresence>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className={`fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 ${isDarkMode ? "bg-black/80" : "bg-black/60"} backdrop-blur-sm`}
+            >
+                <motion.div
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    transition={{ type: "spring", duration: 0.5 }}
+                    className={`relative w-full max-w-6xl rounded-2xl shadow-2xl overflow-hidden ${isDarkMode ? "bg-gray-900" : "bg-white"} ${isFullscreen ? 'h-full' : 'max-h-[90vh]'}`}
+                    ref={modalRef}
                 >
-                    <X className={`w-5 h-5 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`} />
-                </button>
+                    <button
+                        onClick={disactivateModal}
+                        className={`absolute top-4 right-4 z-50 p-2 rounded-full bg-black/20 backdrop-blur-sm hover:bg-black/30 transition-colors`}
+                    >
+                        <X className="w-5 h-5 text-white" />
+                    </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Image Carousel Section */}
-                    <div className="space-y-4">
-                        <ImageCarousel
-                            images={mediaItems}
-                            currentImageIndex={selectedMediaIndex}
-                            onImageClick={setSelectedMediaIndex}
-                        />
+                    <div className="flex flex-col lg:flex-row h-full">
+                        {/* Media Section */}
+                        <div
+                            className={`relative ${isFullscreen ? 'w-full h-full' : 'lg:w-3/5'} bg-black`}
+                            ref={mediaContainerRef}
+                        >
+                            <div className="relative aspect-[4/3] w-full">
+                                {mediaItems.length > 0 && (
+                                    <div className="relative w-full h-full overflow-hidden">
+                                        <motion.div
+                                            key={selectedMediaIndex}
+                                            initial={{ opacity: 0, x: 0 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="absolute inset-0 flex items-center justify-center"
+                                        >
+                                            {mediaItems[selectedMediaIndex].match(/\.(mp4|webm|ogg)$/i) ? (
+                                                <video
+                                                    src={mediaItems[selectedMediaIndex]}
+                                                    controls
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={mediaItems[selectedMediaIndex]}
+                                                    alt={modalData.title}
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            )}
+                                        </motion.div>
+                                    </div>
+                                )}
 
-                        {/* Thumbnail Grid */}
-                        {mediaItems.length > 1 && (
-                            <div className="grid grid-cols-4 gap-2">
-                                {mediaItems.map((item, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setSelectedMediaIndex(index)}
-                                        className={`relative aspect-square rounded-lg overflow-hidden border-2 ${
-                                            selectedMediaIndex === index
-                                                ? 'border-blue-500'
-                                                : 'border-transparent'
-                                        }`}
-                                    >
-                                        {item.match(/\.(mp4|webm|ogg)$/i) ? (
-                                            <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                                                <Play className="w-6 h-6 text-gray-500 dark:text-gray-400" />
-                                            </div>
-                                        ) : (
-                                            <img
-                                                src={item}
-                                                alt={`Thumbnail ${index + 1}`}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        )}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                    {console.log("modalData User : "+modalData.user)}
-                    {console.log("modalData : " +modalData)}
-                    {/* Post Details Section */}
-                    <div className="space-y-4">
-                        <h2 className="font-semibold text-2xl">{modalData.title}</h2>
-                        <p className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                            {modalData.description}
-                        </p>
+                                {/* Navigation Controls */}
+                                {mediaItems.length > 1 && (
+                                    <>
+                                        <button
+                                            onClick={previousImage}
+                                            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 hover:bg-black/60 transition-colors transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        >
+                                            <ChevronLeft className="w-6 h-6 text-white" />
+                                        </button>
+                                        <button
+                                            onClick={nextImage}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 hover:bg-black/60 transition-colors transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        >
+                                            <ChevronRight className="w-6 h-6 text-white" />
+                                        </button>
+                                    </>
+                                )}
 
-                        <div className={`space-y-2 pt-4 border-t ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-2">
-                                    <span className="font-medium">Propriétaire:</span>
-                                    <span>{`${modalData.user?.firstName} ${modalData.user?.lastName}`}</span>
-                                </div>
+                                {/* Fullscreen Toggle */}
                                 <button
-                                    onClick={() => handleTalkToOwner(modalData.user)}
-                                    className="bg-blue-500 text-white py-1.5 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-1"
+                                    onClick={toggleFullscreen}
+                                    className="absolute bottom-4 right-4 p-2 rounded-full bg-black/40 hover:bg-black/60 transition-colors transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
-                                    <MessageCircle className="w-4 h-4" />
-                                    <span>Contacter</span>
+                                    <Maximize2 className="w-5 h-5 text-white" />
                                 </button>
                             </div>
 
-                            {[
-                                { label: "Téléphone", value: modalData.user?.phoneNumber },
-                                { label: "Adresse", value: modalData.address },
-                                { label: "Prix", value: `${modalData.price} Dhs/mois` },
-                                { label: "Évaluation", value: modalData.avgRate },
-                                { label: "Ascenseur", value: modalData.elevator ? 'Disponible' : 'Non disponible' },
-                                { label: "Capacité", value: `${modalData.maximumCapacity} personnes` },
-                                { label: "Publié le", value: new Date(modalData.createdAt).toLocaleDateString() },
-                            ].map((detail, index) => (
-                                <div key={index} className="flex items-center space-x-2">
-                                    <span className="font-medium">{detail.label}:</span>
-                                    <span>{detail.value || 'N/A'}</span>
+                            {/* Thumbnail Strip */}
+                            {mediaItems.length > 1 && (
+                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent">
+                                    <div className="p-4 overflow-x-auto">
+                                        <div className="flex space-x-2 justify-center">
+                                            {mediaItems.map((item, index) => (
+                                                <motion.button
+                                                    key={index}
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    onClick={() => setSelectedMediaIndex(index)}
+                                                    className={`relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden transition-all ${
+                                                        selectedMediaIndex === index
+                                                            ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-black opacity-100'
+                                                            : 'opacity-60 hover:opacity-100'
+                                                    }`}
+                                                >
+                                                    {item.match(/\.(mp4|webm|ogg)$/i) ? (
+                                                        <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                                                            <Play className="w-6 h-6 text-white" />
+                                                        </div>
+                                                    ) : (
+                                                        <img
+                                                            src={item}
+                                                            alt={`Thumbnail ${index + 1}`}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    )}
+                                                </motion.button>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                            ))}
+                            )}
                         </div>
+
+                        {/* Details Section */}
+                        {!isFullscreen && (
+                            <div className={`lg:w-2/5 p-4 sm:p-6 overflow-y-auto ${isDarkMode ? "text-gray-200" : "text-gray-800"}`}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                >
+                                    <div className="flex items-start space-x-4 mb-6">
+                                        <div className={`p-3 rounded-xl ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
+                                            <Building2 className={`w-6 h-6 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`} />
+                                        </div>
+                                        <div>
+                                            <h2 className="font-semibold text-2xl leading-tight mb-2">{modalData.title}</h2>
+                                            <div className="flex items-center space-x-2">
+                                                <span className={`text-2xl font-bold ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                                                    {modalData.price} Dhs
+                                                </span>
+                                                <span className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>/month</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={`mb-6 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+                                        {modalData.description}
+                                    </div>
+
+                                    <div className={`space-y-6 pt-6 border-t ${isDarkMode ? "border-gray-800" : "border-gray-200"}`}>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3">
+                                                <span
+                                                    className={`text-2xl font-bold ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                                                    {modalData.user?.firstName} {modalData.user?.lastName}
+                                                </span>
+                                            </div>
+                                            <motion.button
+                                                whileHover={{scale: 1.05}}
+                                                whileTap={{scale: 0.95}}
+                                                onClick={() => handleTalkToOwner(modalData.user)}
+                                                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-2"
+                                            >
+                                                <MessageCircle className="w-4 h-4" />
+                                                <span>Contact</span>
+                                            </motion.button>
+                                        </div>
+
+                                        <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
+                                            {propertyDetails.map((detail, index) => (
+                                                <div key={index} className="flex items-center space-x-3">
+                                                    <div className={`p-2 rounded-lg ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>
+                                                        {detail.icon}
+                                                    </div>
+                                                    <div>
+                                                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                                                            {detail.label}
+                                                        </p>
+                                                        <p className="font-medium">
+                                                            {detail.value}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        )}
                     </div>
-                </div>
-            </div>
-        </div>,
+                </motion.div>
+            </motion.div>
+        </AnimatePresence>,
         document.body
     );
 };
