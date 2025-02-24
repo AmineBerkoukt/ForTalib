@@ -46,12 +46,18 @@ export const useAuthStore = create((set, get) => ({
   // Check authentication and fetch the logged-in user's data
   checkAuth: async () => {
     try {
+      const storedToken = localStorage.getItem("token");
+
+      if (!storedToken) {
+        set({ authUser: null });
+        return;
+      }
+
       const res = await axios.get(BASE_URL + "/users/me", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${storedToken}` },
       });
 
-      set({ authUser: res.data });
-      set({ role: res.data.role });
+      set({ authUser: res.data, role: res.data.role });
       get().connectSocket();
     } catch (error) {
       console.log("Error in checkAuth:", error.message);
@@ -60,6 +66,7 @@ export const useAuthStore = create((set, get) => ({
       set({ isCheckingAuth: false });
     }
   },
+
 
   // Sign up a new user
   signup: async (data) => {

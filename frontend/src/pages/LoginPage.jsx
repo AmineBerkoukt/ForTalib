@@ -12,7 +12,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const { login, isLoggingIn } = useAuthStore();
+  const { login, isLoggingIn, checkAuth } = useAuthStore();
   const { isDarkMode, toggleDarkMode } = useTheme();
 
   const handleSubmit = async (e) => {
@@ -21,6 +21,7 @@ const LoginPage = () => {
     try {
       const response = await login(formData);
       if (response?.token) {
+        await checkAuth();  // Ensure user details are fetched
         navigate('/');
       }
     } catch (error) {
