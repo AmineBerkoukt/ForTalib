@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { X, Play, MessageCircle, ChevronLeft, ChevronRight, Building2, MapPin, Phone, Star, Users, Calendar } from 'lucide-react';
-import { useModalStore } from '../store/useModalStore';
-import { useTheme } from "../contexts/ThemeContext.jsx";
+import { useModalStore } from '../../store/useModalStore.js';
+import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useNavigate } from "react-router-dom";
-import { useChatStore } from "../store/useChatStore.js";
+import { useChatStore } from "../../store/useChatStore.js";
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PostDetailsModal = () => {

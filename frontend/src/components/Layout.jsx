@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import NavbarFB from './NavbarFB.jsx';
-import SidebarFB from './SidebarFB.jsx';
-import RightbarFb from './RightbarFB.jsx';
-import NavbarFBMobile from './NavbarFBMobile.jsx';
+import NavbarFB from './home/NavbarFB.jsx';
+import SidebarFB from './home/SidebarFB.jsx';
+import RightbarFb from './home/RightbarFB.jsx';
+import NavbarFBMobile from './home/NavbarFBMobile.jsx';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
 
 const LayoutContent = ({ children, isChatPage, isDarkMode }) => {

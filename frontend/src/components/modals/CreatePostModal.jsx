@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { X, Upload, Loader } from "lucide-react"
 import { usePostStore } from "../../store/usePostStore.js"
-import LoadingOverlay from "../LoadingOverlay.jsx"
+import LoadingOverlay from "../skeletons/LoadingOverlay.jsx"
 
 export default function CreatePostModal({ isDarkMode, showModal, setShowModal }) {
     const { createPost, isLoading } = usePostStore()

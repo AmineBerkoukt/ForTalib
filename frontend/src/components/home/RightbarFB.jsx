@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import SearchBar from "./SearchBar.jsx";
-import RightBarPost from "./RightBarPost.jsx";
-import { useTheme } from "../contexts/ThemeContext.jsx"; // Import ThemeContext
-import { usePostStore } from "../store/usePostStore.js"; // Import the Zustand store
+import SearchBar from "../SearchBar.jsx";
+import RightBarPost from "./RightbarPost.jsx";
+import { useTheme } from "../../contexts/ThemeContext.jsx"; // Import ThemeContext
+import { usePostStore } from "../../store/usePostStore.js"; // Import the Zustand store
 
 function RightbarFb() {
     const [scrollPosition, setScrollPosition] = useState(0);

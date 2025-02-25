@@ -6,7 +6,7 @@ import { useTheme } from "../contexts/ThemeContext.jsx";
 import { BookmarkPlus, Search, SortAsc, SortDesc, Loader2 } from 'lucide-react';
 import { Toaster, toast } from "react-hot-toast";
 import { Link } from 'react-router-dom';
-import PostDetailsModal from "../components/PostDetailsModal.jsx";
+import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
 const SavedPage = () => {

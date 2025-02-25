@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { usePostStore } from "../store/usePostStore";
+import { usePostStore } from "../../store/usePostStore.js";
 
 const DEFAULT_FILTERS = {
     price: 2000,

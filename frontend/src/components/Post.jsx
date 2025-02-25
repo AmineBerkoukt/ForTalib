@@ -5,7 +5,7 @@ import { StarIcon as StarOutlineIcon, ChatBubbleLeftRightIcon, PencilSquareIcon 
 import { Bookmark, BookmarkPlus, CheckCircle, Shield, Trash2 } from 'lucide-react';
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageCarousel from "./ImageCarousel";
-import EditPostModal from "./EditPostModal";
+import EditPostModal from "./modals/EditPostModal.jsx";
 import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore.js";
 import toast from "react-hot-toast";

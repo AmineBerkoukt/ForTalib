@@ -7,8 +7,8 @@ import {
     ArrowLeftStartOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import { Bot } from "lucide-react";
-import { useTheme } from '../contexts/ThemeContext';
-import SearchBar from './SearchBar.jsx';
+import { useTheme } from '../../contexts/ThemeContext.jsx';
+import SearchBar from '../SearchBar.jsx';
 
 const NavbarFB = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();

@@ -5,7 +5,7 @@ import CreatePost from "../components/CreatePost";
 import { useTheme } from "../contexts/ThemeContext";
 import { useModalStore } from "../store/useModalStore";
 import { usePostStore } from "../store/usePostStore";
-import PostDetailsModal from "../components/PostDetailsModal";
+import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
 import ScrollToTop from "../components/ScrollToTop";

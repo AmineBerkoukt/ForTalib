@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-
 import { useAuthStore } from "./store/useAuthStore";
 import { useTheme } from "./contexts/ThemeContext.jsx";
 import { Toaster } from "react-hot-toast";
-import PostDetailsModal from "./components/PostDetailsModal";
+import PostDetailsModal from "./components/modals/PostDetailsModal.jsx";
 import { useModalStore } from "./store/useModalStore.js";
 
 // Components and Pages

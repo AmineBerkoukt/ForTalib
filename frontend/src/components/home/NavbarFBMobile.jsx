@@ -10,9 +10,9 @@ import {
     ArrowLeftStartOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
-import SearchBar from "./SearchBar.jsx";
-import { useTheme } from "../contexts/ThemeContext.jsx";
-import { useAuthStore } from "../store/useAuthStore"; // Assuming you have this hook
+import SearchBar from "../SearchBar.jsx";
+import { useTheme } from "../../contexts/ThemeContext.jsx";
+import { useAuthStore } from "../../store/useAuthStore.js"; // Assuming you have this hook
 
 const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
     const navigate = useNavigate();
