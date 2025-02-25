@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Mail, MapPin, Calendar, User, CheckCircle, Shield, Save, Camera, X } from 'lucide-react';
-import { useTheme } from "../contexts/ThemeContext.jsx";
-import { useProfileStore } from "../store/useProfileStore.js";
-import { useAuthStore } from "../store/useAuthStore.js";
+import { useTheme } from "../../contexts/ThemeContext.jsx";
+import { useProfileStore } from "../../store/useProfileStore.js";
+import { useAuthStore } from "../../store/useAuthStore.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 // Import refactored components
-import ProfileField from "./profile/ProfileField.jsx";
-import ProfileDropdown from "./profile/ProfileDropdown.jsx";
-import DeleteAccountModal from "./modals/DeleteAccountModal.jsx";
-import { getInputClassName } from "./profile/formUtils.jsx";
+import ProfileField from "./ProfileField.jsx";
+import ProfileDropdown from "./ProfileDropDown.jsx";
+import DeleteAccountModal from "../modals/DeleteAccountModal.jsx";
+import { getInputClassName } from "./formUtils.jsx";
 
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
