@@ -112,6 +112,7 @@ const Home = () => {
                                             isDarkMode ? "hover:shadow-lg hover:shadow-gray-800" : "hover:shadow-lg"
                                         }`}
                                     >
+                                        {console.info(post)}
                                         <Post
                                             user={{
                                                 _id: post.user?.id || 'unknown',
@@ -119,7 +120,7 @@ const Home = () => {
                                                 firstName: post.user?.firstName || 'Unknown',
                                                 lastName: post.user?.lastName || 'User',
                                                 role: post.user?.role || 'user',
-                                                profilePhoto: post.user?.profilePhoto || "https://via.placeholder.com/150",
+                                                profilePhoto: post.user?.profilePhoto ? post.user.profilePhoto : "./avatar.png",
                                             }}
                                             postId={post._id}
                                             title={post.title}

@@ -25,7 +25,7 @@ const PostHeader = ({
         navigate("/chat");
     };
 
-
+    console.info(profileImageUrl)
 
     return (
         <div className="flex items-center justify-between mb-2">

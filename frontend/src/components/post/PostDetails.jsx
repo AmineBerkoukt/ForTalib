@@ -1,26 +1,32 @@
 import React from "react";
+import { MapPin, DollarSign, Users, ArrowUpDown, Star } from "lucide-react";
 
-const PostDetails = ({ price, address, elevator, maximumCapacity, rating, renderStars }) => {
+const PostDetails = ({ price, address, elevator, maximumCapacity, rating }) => {
     return (
-        <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="dark:text-gray-200">
-                <strong>Price:</strong> {price}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-lg">
+            <div className="flex items-center space-x-2">
+                <DollarSign className="w-5 h-5 text-green-500" />
+                <span><strong>Price:</strong> {price} DH</span>
             </div>
-            <div className="dark:text-gray-200">
-                <strong>Address:</strong> {address}
+
+            <div className="flex items-center space-x-2">
+                <MapPin className="w-5 h-5 text-blue-500" />
+                <span><strong>Address:</strong> {address}</span>
             </div>
-            <div className="dark:text-gray-200">
-                <strong>Elevator:</strong> {elevator ? "Yes" : "No"}
+
+            <div className="flex items-center space-x-2">
+                <ArrowUpDown className="w-5 h-5 text-gray-600" />
+                <span><strong>Elevator:</strong> {elevator ? "Yes" : "No"}</span>
             </div>
-            <div className="dark:text-gray-200">
-                <strong>Max Capacity:</strong> {maximumCapacity}
+
+            <div className="flex items-center space-x-2">
+                <Users className="w-5 h-5 text-purple-500" />
+                <span><strong>Max Capacity:</strong> {maximumCapacity} people</span>
             </div>
-            <div className="dark:text-gray-200 flex items-center">
-                <strong>Rating:</strong>
-                <div className="flex ml-2">
-                    {renderStars(rating)}
-                    <small className="ml-1 text-gray-600 dark:text-gray-400">({rating.toFixed(1)})</small>
-                </div>
+
+            <div className="flex items-center space-x-2">
+                <Star className="w-5 h-5 text-yellow-500" />
+                <span><strong>Rating:</strong> {rating.toFixed(1)}</span>
             </div>
         </div>
     );
