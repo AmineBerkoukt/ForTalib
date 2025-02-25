@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Users, FileText, UserCog } from 'lucide-react';
-import { useStatsStore } from "../../store/useStatsStore.js";
-import { motion } from 'framer-motion';
+import React, {useEffect} from "react";
+import {Users, FileText, UserCog} from 'lucide-react';
+import {useStatsStore} from "../../store/useStatsStore.js";
+import {motion} from 'framer-motion';
 
-const StatCard = ({ title, value, icon: Icon, color, loading, error, delay }) => (
+const StatCard = ({title, value, icon: Icon, color, loading, error, delay}) => (
     <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay }}
+        initial={{opacity: 0, y: 20}}
+        animate={{opacity: 1, y: 0}}
+        transition={{duration: 0.5, delay}}
         className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden"
     >
         <div className={`absolute top-0 left-0 w-1.5 h-full ${color}`}></div>
@@ -16,7 +16,7 @@ const StatCard = ({ title, value, icon: Icon, color, loading, error, delay }) =>
                 {title}
             </h3>
             <div className={`p-2.5 rounded-lg ${color} bg-opacity-15 transition-colors duration-200`}>
-                <Icon className={`h-5 w-5 ${color.replace('bg-', 'text-')}`} aria-hidden="true" />
+                <Icon className={`h-5 w-5 ${color.replace('bg-', 'text-')}`} aria-hidden="true"/>
             </div>
         </div>
         <div className="mt-2">
@@ -34,38 +34,37 @@ const StatCard = ({ title, value, icon: Icon, color, loading, error, delay }) =>
 );
 
 export default function DashboardStats() {
-    const { totalUsers, totalPosts, loading, error, fetchStats } = useStatsStore();
+    const {totalUsers, totalPosts, loading, error, fetchStats} = useStatsStore();
 
     useEffect(() => {
         fetchStats();
     }, [fetchStats]);
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Left Column - Statistics */}
-            <div className="space-y-6">
-                <StatCard
-                    title="Total Users"
-                    value={totalUsers}
-                    icon={Users}
-                    color="bg-blue-500"
-                    loading={loading}
-                    error={error}
-                    delay={0}
-                />
-                <StatCard
-                    title="Total Posts"
-                    value={totalPosts}
-                    icon={FileText}
-                    color="bg-purple-500"
-                    loading={loading}
-                    error={error}
-                    delay={0.1}
-                />
-            </div>
-
-            {/* Right Column - User Management */}
-
+    <>
+        <div className="space-y-6">
+            <StatCard
+                title="Total Users"
+                value={totalUsers}
+                icon={Users}
+                color="bg-blue-500"
+                loading={loading}
+                error={error}
+                delay={0}
+            />
+            <StatCard
+                title="Total Posts"
+                value={totalPosts}
+                icon={FileText}
+                color="bg-purple-500"
+                loading={loading}
+                error={error}
+                delay={0.1}
+            />
         </div>
-    );
+    </>
+
+
+)
+    ;
 }
