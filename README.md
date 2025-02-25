@@ -1,4 +1,5 @@
-# Colocator Finder App (MERN Stack)
+# ForTalib
+The Colocator Finder App (MERN Stack)
 
 This repository contains the source code for a web application built using the MERN (MongoDB, Express.js, React, Node.js) stack, designed to help students find potential roommates or housemates.
 
@@ -29,6 +30,15 @@ Finding the right roommate can be a challenge for students. This application aim
 - **Admin Panel:** (Optional) An admin panel to manage users and content.
 
 ## Technologies Used
+
+This project utilizes the following technologies:
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/github/explore/f720921939893561720853b0a701588a44489812/logos/mongodb-leaf.svg" alt="MongoDB" width="50" height="50" />
+  <img src="https://raw.githubusercontent.com/github/explore/f720921939893561720853b0a701588a44489812/logos/express.js-icon.svg" alt="Express.js" width="50" height="50" />
+  <img src="https://raw.githubusercontent.com/github/explore/f720921939893561720853b0a701588a44489812/logos/react-icon.svg" alt="React" width="50" height="50" />
+  <img src="https://raw.githubusercontent.com/github/explore/f720921939893561720853b0a701588a44489812/logos/nodejs-icon.svg" alt="Node.js" width="50" height="50" />
+  </div>
 
 - **Frontend:** React, HTML, CSS, JavaScript
 - **Backend:** Node.js, Express.js
