@@ -33,7 +33,7 @@ export const createUser = async (req, res) => {
 // Controller to update a user profile
 export const updateProfile = async (req, res) => {
     try {
-        const { firstName, lastName, address, phoneNumber, cin } = req.body;
+        const { firstName, lastName, phoneNumber, cin } = req.body;
 
         const user = await User.findById(req.user.id).select('-password');
 
@@ -55,7 +55,6 @@ export const updateProfile = async (req, res) => {
             {
                 firstName,
                 lastName,
-                address,
                 phoneNumber,
                 cin,
                 profilePhoto: profilePhotoPath,
