@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import {create} from "zustand";
 import api from "../utils/api.js";
 import toast from "react-hot-toast";
 
@@ -11,7 +11,7 @@ export const useProfileStore = create((set, get) => ({
     getUserPosts: async (userId) => {
         try {
             const res = await api.get(`/posts/postsFor?userId=${userId}`);
-            set({ profilePosts: res.data }); // Set posts state
+            set({profilePosts: res.data}); // Set posts state
             console.log("usePostStore.userPosts res", res.data);
         } catch (error) {
             console.log("usePostStore.getPosts err", error.message);
@@ -21,7 +21,7 @@ export const useProfileStore = create((set, get) => ({
     getUser: async (userId) => {
         try {
             const res = await api.get(`/users/${userId}`);
-            set({ user: res.data });
+            set({user: res.data});
             console.log("userData : ", res.data);
         } catch (error) {
             console.log("usePostStore.getPostsFilter err", error.message);
@@ -29,7 +29,7 @@ export const useProfileStore = create((set, get) => ({
     },
 
     updateProfile: async (data) => {
-        set({ isUpdatingProfile: true });
+        set({isUpdatingProfile: true});
 
         try {
             const isFormData = data instanceof FormData;
@@ -39,7 +39,7 @@ export const useProfileStore = create((set, get) => ({
                 },
             } : {};
 
-            const res = await api.patch( '/users/update-profile',data, apiConfig);
+            const res = await api.patch('/users/update-profile', data, apiConfig);
 
             // Update the auth user state with the new data
             const updatedUser = res.data;
@@ -51,22 +51,22 @@ export const useProfileStore = create((set, get) => ({
                     : updatedUser
             }));
 
-            return { user: updatedUser }; // Return the updated user data
+            return {user: updatedUser}; // Return the updated user data
         } catch (error) {
             console.error("Error in updateProfile:", error);
             throw error; // Re-throw the error to handle it in the component
         } finally {
-            set({ isUpdatingProfile: false });
+            set({isUpdatingProfile: false});
         }
     },
 
-    changePassword: async (userId) => {
+    changePassword: async (newPassword) => {
         try {
-            const res = await api.get(`/users/${userId}`);
-            set({ user: res.data });
-            console.log("userData : ", res.data);
+            const res = await api.post(`/change-password`, newPassword);
+            toast.success("Password changed successfully !");
         } catch (error) {
             console.log("usePostStore.getPostsFilter err", error.message);
+            toast.error("Password was NOT changed !");
         }
     },
 
