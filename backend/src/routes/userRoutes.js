@@ -6,7 +6,7 @@ import {
     searchUsers,
     getCurrentUser,
     getUserById,
-    deleteUser, promoteToAdmin
+    deleteUser, promoteToAdmin, updatePassword
 } from '../controllers/userController.js';
 import {authenticateToken} from "../middlewares/authMiddleware.js";
 import {validateUpdatingProfile} from "../validations/userValidator.js";
@@ -26,7 +26,10 @@ router.delete('/:id', restrictTo("admin"), deleteUser);
 
 router.patch('/update-profile', uploadPfp.single('profilePhoto'),  updateProfile);
 router.get('/me', getCurrentUser);
+router.patch('/change-password', updatePassword);
+
 //for postman
 router.get('/:id', getUserById);
+
 
 export default router;
