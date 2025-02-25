@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Mail, MapPin, Calendar, User, CheckCircle, Shield, Save, Camera, X } from 'lucide-react';
+import { Mail,  Calendar, User, CheckCircle, Shield, Save, Camera, X } from 'lucide-react';
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useProfileStore } from "../../store/useProfileStore.js";
 import { useAuthStore } from "../../store/useAuthStore.js";
