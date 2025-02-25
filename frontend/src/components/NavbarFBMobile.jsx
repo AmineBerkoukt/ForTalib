@@ -56,7 +56,7 @@ const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
                                             : 'text-blue-600 hover:text-blue-700'
                                     }`}
                                 >
-                                    DarIo
+                                    For Talib
                                 </Link>
                             </div>
 
@@ -84,13 +84,6 @@ const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
                                     )}
                                 </button>
                                 <button
-                                    onClick={handleLogout}
-                                    className="p-1 sm:p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
-                                    aria-label="Logout"
-                                >
-                                    <ArrowLeftStartOnRectangleIcon className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`} />
-                                </button>
-                                <button
                                     onClick={() => setIsSearchVisible(true)}
                                     className={`p-2 rounded-lg transition-colors duration-200 ${
                                         isDarkMode
@@ -100,6 +93,14 @@ const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
                                     aria-label="Search"
                                 >
                                     <MagnifyingGlassIcon className="h-6 w-6"/>
+                                </button>
+                                <button
+                                    onClick={handleLogout}
+                                    className="p-1 sm:p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                                    aria-label="Logout"
+                                >
+                                    <ArrowLeftStartOnRectangleIcon
+                                        className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}/>
                                 </button>
                             </div>
                         </>
