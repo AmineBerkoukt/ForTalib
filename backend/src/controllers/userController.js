@@ -5,6 +5,8 @@ import Evaluate from '../models/Evaluate.js';
 import Favorise from '../models/Favorise.js';
 import Message from '../models/Message.js';
 import path from "path";
+import bcrypt from 'bcryptjs'; // Assure-toi d'installer bcryptjs (npm install bcryptjs)
+
 
 // Controller to fetch all users
 export const getUsers = async (req, res) => {
@@ -229,31 +231,37 @@ export const deleteUser = async (req, res) => {
     }
 };
 
-export const deleteUserinit = async (req, res) => {
-    try {
-        const { userId } = req.params;
+export const updatePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
 
-        if (!userId) {
-            return res.status(400).json({ message: "User ID is required" });
+    try {
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ message: "Both old password and new password are required" });
         }
 
-        // Supprimer l'utilisateur
-        const user = await User.findByIdAndDelete(userId);
+        const user = await User.findById(req.user.id);
+
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
 
-        // Supprimer les demandes associées
-        await Request.deleteMany({ userId: userId });
+        if (!isMatch) {
+            return res.status(400).json({ message: "Incorrect old password" });
+        }
 
-        res.status(200).json({
-            message: "User and associated requests deleted successfully",
-            user,
-        });
+        if (newPassword.length < 6) {
+            return res.status(400).json({ message: "New password must be at least 6 characters long" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ message: "Password updated successfully" });
+
     } catch (error) {
-        res.status(500).json({
-            message: "Failed to delete user and associated requests",
-            error: error.message,
-        });
+        res.status(500).json({ message: "Failed to update password", error: error.message });
     }
 };

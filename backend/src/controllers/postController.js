@@ -1,6 +1,9 @@
 import mongoose from 'mongoose'; // Add this import statement
 import Post from '../models/Post.js';
+import User from '../models/User.js';
 import currentDateTime from '../utils/CurrentDateTime.js';
+import { sendEmail } from '../services/emailService.js';
+import {generatePostEmailTemplate} from "../services/emailTemplate.js";
 
 
 export const createPost = async (req, res) => {
@@ -38,6 +41,16 @@ export const createPost = async (req, res) => {
 
         // Save the post to the database
         const savedPost = await newPost.save();
+        const admins = await User.find({ role: "admin" }).select("email");
+        const adminEmails = admins.map(admin => admin.email);
+
+        if (adminEmails.length > 0) {
+            const subject = "New Post Created on the Platform";
+            const htmlContent = generatePostEmailTemplate(savedPost);
+
+            await sendEmail(adminEmails, subject, htmlContent);
+        }
+
         return res.status(201).json(savedPost);
     } catch (error) {
         res.status(500).json({message: 'Failed to create post', error: error.message});
