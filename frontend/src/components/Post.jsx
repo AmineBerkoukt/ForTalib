@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { usePostStore } from "../store/usePostStore.js";
 import ConfirmationModal from "./modals/ConfirmationModal.jsx";
 import {useTheme} from "../contexts/ThemeContext.jsx";
+import ImageModal from "./post/ImageModal.jsx";
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
 
@@ -51,8 +52,7 @@ const Post = ({
     const isPostOwner = authUser._id === user._id;
 
 
-    let profileImageUrl = user?.profilePhoto
-        ? BASE_URL + user.profilePhoto
+    let profileImageUrl = user?.profilePhoto ? `${BASE_URL + user.profilePhoto}`
         : "/avatar.png";
 
 
@@ -178,27 +178,6 @@ const Post = ({
         }
     }, [imageModalOpen])
 
-    const ImageModal = ({ isOpen, onClose, imageSrc }) =>
-        isOpen
-            ? createPortal(
-                <div
-                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50"
-                    onClick={handleCloseModal}
-                >
-                    <div className="relative w-full max-w-3xl h-full max-h-[80vh] flex items-center justify-center">
-                        <button className="absolute top-2 right-2 text-white text-2xl font-bold z-10" onClick={onClose}>
-                            &#x2715;
-                        </button>
-                        <img
-                            src={imageSrc || "/placeholder.svg"}
-                            alt="Enlarged Post"
-                            className="max-w-full max-h-full object-contain"
-                        />
-                    </div>
-                </div>,
-                document.body,
-            )
-            : null
 
     const getSaveButtonContent = () => {
         if (isInSaved) {
@@ -295,7 +274,8 @@ const Post = ({
                 <ImageModal
                     isOpen={imageModalOpen}
                     onClose={() => setImageModalOpen(false)}
-                    imageSrc={images && images.length > 0 ? images[currentImageIndex] : ""}
+                    images={images}
+                    initialIndex={currentImageIndex}
                 />
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
@@ -320,6 +300,7 @@ const Post = ({
                     </div>
                 </div>
 
+                {/*The bottom section*/}
                 <div className="flex justify-between items-center border-t dark:border-gray-700 pt-2 mt-2">
                     <div className="flex items-center text-gray-500">
                         <span className="mr-2">Rate this post:</span>
