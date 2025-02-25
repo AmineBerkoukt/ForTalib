@@ -5,13 +5,12 @@ import { useProfileStore } from "../../store/useProfileStore.js";
 import { useAuthStore } from "../../store/useAuthStore.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
-// Import refactored components
 import ProfileField from "./ProfileField.jsx";
-import ProfileDropdown from "./ProfileDropDown.jsx";
 import DeleteAccountModal from "../modals/DeleteAccountModal.jsx";
 import { getInputClassName } from "./formUtils.jsx";
 import ProfileActions from "./ProfileActions.jsx";
+import ProfileHeader from "./ProfileHeader.jsx";
+import ProfileDetails from "./ProfileDetails.jsx";
 
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
@@ -140,130 +139,27 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
                     />
 
                     {/* Profile Picture Section */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-start gap-4 sm:gap-6 mb-4">
-                        <div className="relative group">
-                            <img
-                                src={profileImageUrl}
-                                alt="Profile"
-                                className="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg transition-transform duration-300 group-hover:scale-105"
-                            />
-                            {isOwnerConsultingProfile && (
-                                <label
-                                    className={`absolute bottom-2 right-2 p-2 rounded-full cursor-pointer
-                                    ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-100'}
-                                    shadow-lg transition-all duration-200 ${isUpdating ? 'animate-pulse' : ''}`}
-                                >
-                                    <Camera className="w-5 h-5"/>
-                                    <input
-                                        type="file"
-                                        name="profilePhoto"
-                                        className="hidden"
-                                        accept="image/*"
-                                        onChange={onImageUpload}
-                                        disabled={isSubmitting}
-                                    />
-                                </label>
-                            )}
-                        </div>
+                    <ProfileHeader
+                        profileImageUrl={profileImageUrl}
+                        isOwnerConsultingProfile={isOwnerConsultingProfile}
+                        isDarkMode={isDarkMode}
+                        isUpdating={isUpdating}
+                        onImageUpload={onImageUpload}
+                        isSubmitting={isSubmitting}
+                        fullName={fullName}
+                        displayUser={displayUser}
+                    />
 
-                        {/* Profile Info Header */}
-                        <div className="text-center sm:text-left flex-grow mt-8">
-                            <h1 className="text-3xl sm:text-4xl font-bold flex items-center justify-center sm:justify-start gap-2">
-                                {fullName.trim() || 'Name not set'}
-                                {displayUser?.role === "house_owner" && (
-                                    <CheckCircle className="h-6 w-6 text-blue-500" />
-                                )}
-                                {displayUser?.role === "admin" && (
-                                    <Shield className="h-6 w-6 text-purple-500" />
-                                )}
-                            </h1>
-                        </div>
-                    </div>
+                    <ProfileDetails
+                        displayUser={displayUser}
+                        formData={formData}
+                        handleChange={handleChange}
+                        isEditing={isEditing}
+                        isDarkMode={isDarkMode}
+                        isSubmitting={isSubmitting}
+                        fullName={fullName}
+                    />
 
-                    {/* Profile Fields */}
-                    <div className="space-y-3 mt-6">
-                        <ProfileField
-                            icon={<User className="w-6 h-6" />}
-                            label="Name"
-                            value={fullName.trim() || 'Name not set'}
-                            isEditing={isEditing}
-                            isDarkMode={isDarkMode}
-                            isSubmitting={isSubmitting}
-                        >
-                            <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                    className={getInputClassName(isDarkMode)}
-                                    placeholder="First Name"
-                                    disabled={isSubmitting}
-                                />
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    className={getInputClassName(isDarkMode)}
-                                    placeholder="Last Name"
-                                    disabled={isSubmitting}
-                                />
-                            </div>
-                        </ProfileField>
-
-                        <ProfileField
-                            icon={<Mail className="w-6 h-6" />}
-                            label="Email"
-                            value={displayUser?.email || 'Email not set'}
-                            isDarkMode={isDarkMode}
-                        />
-
-                        <ProfileField
-                            icon={<Calendar className="w-6 h-6" />}
-                            label="Phone"
-                            value={displayUser?.phoneNumber || 'Phone not set'}
-                            isEditing={isEditing}
-                            isDarkMode={isDarkMode}
-                            isSubmitting={isSubmitting}
-                        >
-                            <input
-                                type="text"
-                                name="phoneNumber"
-                                value={formData.phoneNumber}
-                                onChange={handleChange}
-                                className={getInputClassName(isDarkMode)}
-                                placeholder="Enter your phone number"
-                                disabled={isSubmitting}
-                            />
-                        </ProfileField>
-
-                        <ProfileField
-                            icon={<Calendar className="w-6 h-6" />}
-                            label="CIN"
-                            value={displayUser?.cin || 'CIN not set'}
-                            isEditing={isEditing}
-                            isDarkMode={isDarkMode}
-                            isSubmitting={isSubmitting}
-                        >
-                            <input
-                                type="text"
-                                name="cin"
-                                value={formData.cin}
-                                onChange={handleChange}
-                                className={getInputClassName(isDarkMode)}
-                                placeholder="Enter your CIN"
-                                disabled={isSubmitting}
-                            />
-                        </ProfileField>
-
-                        <ProfileField
-                            icon={<Calendar className="w-6 h-6" />}
-                            label="Joined"
-                            value={displayUser?.createdAt?.split("T")[0] || 'Join date not set'}
-                            isDarkMode={isDarkMode}
-                        />
-                    </div>
                 </div>
             </div>
 
