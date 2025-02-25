@@ -39,17 +39,16 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        if (user) {
-            setLocalUser(user);
-            setFormData({
-                firstName: user.firstName || '',
-                lastName: user.lastName || '',
-                address: user.address || '',
-                phoneNumber: user.phoneNumber || '',
-                cin: user.cin || '',
-            });
-        }
+        setLocalUser(user);
+        setFormData({
+            firstName: user?.firstName || '',
+            lastName: user?.lastName || '',
+            address: user?.address || '',
+            phoneNumber: user?.phoneNumber || '',
+            cin: user?.cin || '',
+        });
     }, [user]);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;

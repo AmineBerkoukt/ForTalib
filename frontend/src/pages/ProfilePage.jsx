@@ -56,6 +56,7 @@ const ProfilePage = () => {
     }
   };
 
+
   const handlePostDeleted = async () => {
     try {
       if (isOwnProfile) {
