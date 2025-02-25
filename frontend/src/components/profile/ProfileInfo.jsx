@@ -28,7 +28,6 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
     const [formData, setFormData] = useState({
         firstName: user?.firstName || '',
         lastName: user?.lastName || '',
-        address: user?.address || '',
         phoneNumber: user?.phoneNumber || '',
         cin: user?.cin || '',
     });
@@ -43,7 +42,6 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
         setFormData({
             firstName: user?.firstName || '',
             lastName: user?.lastName || '',
-            address: user?.address || '',
             phoneNumber: user?.phoneNumber || '',
             cin: user?.cin || '',
         });
@@ -241,25 +239,6 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
                             value={displayUser?.email || 'Email not set'}
                             isDarkMode={isDarkMode}
                         />
-
-                        <ProfileField
-                            icon={<MapPin className="w-6 h-6" />}
-                            label="Address"
-                            value={displayUser?.address || 'Address not set'}
-                            isEditing={isEditing}
-                            isDarkMode={isDarkMode}
-                            isSubmitting={isSubmitting}
-                        >
-                            <input
-                                type="text"
-                                name="address"
-                                value={formData.address}
-                                onChange={handleChange}
-                                className={getInputClassName(isDarkMode)}
-                                placeholder="Enter your address"
-                                disabled={isSubmitting}
-                            />
-                        </ProfileField>
 
                         <ProfileField
                             icon={<Calendar className="w-6 h-6" />}
