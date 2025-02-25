@@ -7,17 +7,23 @@ import {
     ChatBubbleOvalLeftEllipsisIcon,
     MoonIcon,
     SunIcon,
+    ArrowLeftStartOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
 import SearchBar from "./SearchBar.jsx";
-import {useTheme} from "../contexts/ThemeContext.jsx";
+import { useTheme } from "../contexts/ThemeContext.jsx";
+import { useAuthStore } from "../store/useAuthStore"; // Assuming you have this hook
 
 const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
     const navigate = useNavigate();
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const { toggleDarkMode } = useTheme();
+    const { logout } = useAuthStore(); // Assuming you have a logout function in your auth store
 
-    
+    const handleLogout = () => {
+        logout();
+        navigate('/login'); // Redirect to login page after logout
+    };
 
     return (
         <nav className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
@@ -55,7 +61,6 @@ const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
                             </div>
 
                             <div className="flex items-center gap-2">
-
                                 <button
                                     onClick={() => navigate("/chat")}
                                     className={`p-2 rounded-lg transition-colors duration-200 ${
@@ -78,7 +83,13 @@ const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
                                         <MoonIcon className="h-6 w-6 text-blue-600"/>
                                     )}
                                 </button>
-
+                                <button
+                                    onClick={handleLogout}
+                                    className="p-1 sm:p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                                    aria-label="Logout"
+                                >
+                                    <ArrowLeftStartOnRectangleIcon className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`} />
+                                </button>
                                 <button
                                     onClick={() => setIsSearchVisible(true)}
                                     className={`p-2 rounded-lg transition-colors duration-200 ${

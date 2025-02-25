@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useTheme } from "./contexts/ThemeContext.jsx";
 import { Toaster } from "react-hot-toast";
@@ -49,9 +49,10 @@ const LoadingSpinner = () => (
 );
 
 const App = () => {
-    const { authUser, checkAuth, isCheckingAuth, role } = useAuthStore();
+    const { authUser, checkAuth, isCheckingAuth, role, clearAuth } = useAuthStore();
     const { isDarkMode } = useTheme();
     const location = useLocation();
+    const navigate = useNavigate();
     const { isModalOpen, modalData, disactivateModal } = useModalStore();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -59,18 +60,28 @@ const App = () => {
 
     useEffect(() => {
         const initializeAuth = async () => {
+            const token = localStorage.getItem("token");
+
+            if (!token && !publicRoutes.includes(location.pathname)) {
+                clearAuth();
+                navigate("/login");
+                setIsLoading(false);
+                return;
+            }
+
             if (!publicRoutes.includes(location.pathname)) {
                 try {
                     await checkAuth();
                 } catch (error) {
-                    useAuthStore.getState().clearAuth();
+                    clearAuth();
+                    navigate("/login");
                 }
             }
             setIsLoading(false);
         };
 
         initializeAuth();
-    }, [checkAuth, location.pathname]);
+    }, [checkAuth, clearAuth, location.pathname, navigate]);
 
     if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
         return <LoadingSpinner />;

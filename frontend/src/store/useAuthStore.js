@@ -27,9 +27,6 @@ export const useAuthStore = create((set, get) => ({
       // Save token in localStorage
       const response = await axios.post(BASE_URL + "/auth/google/register", authData);
 
-
-
-      localStorage.removeItem("token");
       await localStorage.setItem("token", response.data.token);
 
 
@@ -129,7 +126,7 @@ export const useAuthStore = create((set, get) => ({
   // Log out the current user
   logout: async () => {
     try {
-      localStorage.setItem("token","meow");
+      localStorage.removeItem("token");
       set({ authUser: null });
       get().disconnectSocket();
     } catch (error) {
