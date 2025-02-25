@@ -94,6 +94,7 @@ const Post = ({
 
     return (
         <>
+            {console.info(user)}
             <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 mb-4 w-full max-w-6xl mx-auto">
                 <PostHeader
                     user={user}

@@ -32,10 +32,10 @@ const PostHeader = ({
             <div className="flex items-center cursor-pointer" onClick={() => handleNavigateToProfile(user._id)}>
                 <img
                     src={profileImageUrl}
-                    alt={user.name} className="h-10 w-10 rounded-full mr-2"/>
+                    alt={user.firstName} className="h-10 w-10 rounded-full mr-2"/>
                 <div>
                     <h3 className="flex items-center font-semibold dark:text-gray-200 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200">
-                        {user.name}
+                        {user.firstName + " " + user.lastName}
                         {user.role === "HouseOwner" && <CheckCircle className="h-4 w-4 ml-1 text-blue-500"/>}
                         {user.role === "admin" && <Shield className="h-4 w-4 ml-1 text-purple-500"/>}
                     </h3>
