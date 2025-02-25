@@ -1,3 +1,5 @@
+import React from "react";
+
 const PostDetails = ({ price, address, elevator, maximumCapacity, rating, renderStars }) => {
     return (
         <div className="grid grid-cols-2 gap-4 mb-4">
@@ -17,9 +19,7 @@ const PostDetails = ({ price, address, elevator, maximumCapacity, rating, render
                 <strong>Rating:</strong>
                 <div className="flex ml-2">
                     {renderStars(rating)}
-                    <small className="ml-1 text-gray-600 dark:text-gray-400">
-                        ({rating.toFixed(1)})
-                    </small>
+                    <small className="ml-1 text-gray-600 dark:text-gray-400">({rating.toFixed(1)})</small>
                 </div>
             </div>
         </div>
