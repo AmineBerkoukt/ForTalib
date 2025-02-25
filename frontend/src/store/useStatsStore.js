@@ -3,8 +3,7 @@ import api from "../utils/api.js";
 
 export const useStatsStore = create((set) => ({
     totalUsers: 0,
-    houseOwners: 0,
-    houseOwnersPercentage: 0,
+
     totalPosts: 0,
     loading: true,
     error: null,
@@ -21,16 +20,12 @@ export const useStatsStore = create((set) => ({
             const posts = postsResponse.data;
 
             // Compter les utilisateurs avec le rôle "house_owner"
-            const houseOwners = users.filter(user => user.role === "house_owner");
 
             // Calculer le pourcentage des house owners
-            const houseOwnersPercentage = (houseOwners.length / users.length) * 100;
 
             // Mettre à jour l'état du store
             set({
                 totalUsers: users.length,
-                houseOwners: houseOwners.length,
-                houseOwnersPercentage: houseOwnersPercentage.toFixed(2), // Arrondi à 2 décimales
                 totalPosts: posts.length,
                 loading: false,
             });

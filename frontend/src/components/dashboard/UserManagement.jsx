@@ -26,7 +26,6 @@ export default function UserManagement({ isDashboard = false }) {
     const roleDisplayNames = {
         admin: "Admin",
         student: "Student",
-        house_owner: "House Owner",
     };
 
     useEffect(() => {

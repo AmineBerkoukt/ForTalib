@@ -17,14 +17,13 @@ export default function DashboardPage() {
             >
                 <DashboardHeader />
                 <DashboardStats />
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 xl:grid-cols-2 gap-6">
                     <motion.div
                         initial={{ x: -50, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
                         className="w-full overflow-hidden"
                     >
-                        <HouseOwnerRequests isDashboard={true} />
                     </motion.div>
                     <motion.div
                         initial={{ x: 50, opacity: 0 }}
