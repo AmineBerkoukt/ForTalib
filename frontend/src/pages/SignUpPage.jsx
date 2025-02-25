@@ -21,7 +21,6 @@ const SignUpPage = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
     const phoneNumberRef = useRef();
-    const addressRef = useRef();
     const cinRef = useRef();
 
     const { signup, isSigningUp } = useAuthStore();
@@ -40,7 +39,6 @@ const SignUpPage = () => {
             { ref: emailRef, message: "Please enter your email" },
             { ref: passwordRef, message: "Please enter your password" },
             { ref: phoneNumberRef, message: "Please enter your phone number" },
-            { ref: addressRef, message: "Please enter your address" },
         ];
 
         for (const field of fields) {
@@ -77,7 +75,6 @@ const SignUpPage = () => {
                 email: emailRef.current.value.toLowerCase(),
                 password: passwordRef.current.value,
                 phoneNumber: phoneNumberRef.current.value,
-                address: addressRef.current.value,
                 cin: cinRef.current.value,
             };
 
@@ -142,7 +139,6 @@ const SignUpPage = () => {
                             <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
                             showPassword={showPassword} setShowPassword={setShowPassword} />
                             <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
-                            <FormInput label="Address" icon={HomeIcon} inputRef={addressRef} placeholder="Enter your address" />
                             <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
 
                             <div className="flex items-center">
