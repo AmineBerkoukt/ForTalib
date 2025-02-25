@@ -1,8 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { createPortal } from "react-dom";
 import { StarIcon } from "@heroicons/react/24/solid";
-import { StarIcon as StarOutlineIcon, ChatBubbleLeftRightIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Bookmark, BookmarkPlus, CheckCircle, Shield, Trash2 } from 'lucide-react';
+import { StarIcon as StarOutlineIcon} from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageCarousel from "./ImageCarousel";
 import EditPostModal from "./modals/EditPostModal.jsx";

@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import { Eye, UserPlus, Trash } from "lucide-react";
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const initialUsers = [
-    { id: 1, name: 'Alice Brown', email: 'alice@example.com', role: 'House Owner' },
-    { id: 2, name: 'Bob Wilson', email: 'bob@example.com', role: 'Admin' },
-    { id: 3, name: 'Charlie Davis', email: 'charlie@example.com', role: 'Student' },
-];
 
 export default function UserManagement() {
     const [users, setUsers] = useState(initialUsers);
