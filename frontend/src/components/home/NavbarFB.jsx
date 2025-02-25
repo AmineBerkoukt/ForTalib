@@ -23,8 +23,8 @@ const NavbarFB = () => {
 
 
     function logout() {
-        localStorage.clear();
-        //navigate("/login");
+        localStorage.removeItem("token");
+        navigate("/login");
     }
 
     return (
