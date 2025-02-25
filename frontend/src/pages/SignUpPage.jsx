@@ -137,7 +137,6 @@ const SignUpPage = () => {
                             <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
                             <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
                             <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
-                            showPassword={showPassword} setShowPassword={setShowPassword} />
                             <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
                             <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
 

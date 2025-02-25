@@ -10,7 +10,6 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
         title: '',
         description: '',
         price: '',
-        address: '',
         elevator: 'no',
         maximumCapacity: '1',
         images: [],
@@ -77,7 +76,6 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                 title: '',
                 description: '',
                 price: '',
-                address: '',
                 elevator: 'no',
                 maximumCapacity: '1',
                 images: [],
@@ -191,21 +189,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium mb-1">Address</label>
-                                    <input
-                                        type="text"
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 rounded-md border ${
-                                            isDarkMode
-                                                ? "bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500"
-                                                : "bg-white border-gray-300 text-gray-900 focus:border-blue-500"
-                                        } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors`}
-                                        required
-                                    />
-                                </div>
+
 
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Description</label>
