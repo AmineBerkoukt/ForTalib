@@ -120,7 +120,7 @@ const Home = () => {
                                                 firstName: post.user?.firstName || 'Unknown',
                                                 lastName: post.user?.lastName || 'User',
                                                 role: post.user?.role || 'user',
-                                                profilePhoto: post.user?.profilePhoto ? post.user.profilePhoto : "./avatar.png",
+                                                profilePhoto: post.user.profilePhoto
                                             }}
                                             postId={post._id}
                                             title={post.title}

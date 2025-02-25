@@ -41,7 +41,12 @@ const Post = ({
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const isPostOwner = authUser._id === user._id;
 
-    let profileImageUrl = user?.profilePhoto ? `${BASE_URL + user.profilePhoto}` : "/avatar.png";
+    let profileImageUrl = user.profilePhoto ? BASE_URL + user.profilePhoto : "./avatar.png";
+
+    if (profileImageUrl !== "./avatar.png") {
+        profileImageUrl = BASE_URL + user.profilePhoto;
+    }
+    console.log(profileImageUrl)
 
     const handleDelete = async () => {
         try {
