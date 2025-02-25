@@ -19,6 +19,7 @@ import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import RequestsPage from "./pages/RequestsPage.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import ChangePassword from "./components/profile/ChangePassword.jsx"
 
 // Route Protection HOC
 const ProtectedRoute = ({ element, isAuthenticated, redirectTo }) => {
@@ -136,6 +137,16 @@ const App = () => {
                     element={
                         <ProtectedRoute
                             element={<ProfilePage />}
+                            isAuthenticated={!!authUser}
+                            redirectTo="/login"
+                        />
+                    }
+                />
+                <Route
+                    path="/change-password"
+                    element={
+                        <ProtectedRoute
+                            element={<ChangePassword />}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />

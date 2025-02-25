@@ -60,6 +60,15 @@ export const useProfileStore = create((set, get) => ({
         }
     },
 
+    changePassword: async (userId) => {
+        try {
+            const res = await api.get(`/users/${userId}`);
+            set({ user: res.data });
+            console.log("userData : ", res.data);
+        } catch (error) {
+            console.log("usePostStore.getPostsFilter err", error.message);
+        }
+    },
 
 
 }));

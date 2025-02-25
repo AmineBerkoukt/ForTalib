@@ -49,6 +49,7 @@ const ProfilePage = () => {
     try {
       await updateProfile(formData);
       toast.success("Profile picture updated successfully!");
+      window.location.reload();
     } catch (error) {
       console.error("Failed to upload profile picture:", error);
       toast.error("Failed to upload profile picture.");

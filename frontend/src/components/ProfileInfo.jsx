@@ -158,6 +158,7 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
                                     isDarkMode={isDarkMode}
                                     onEditClick={() => setIsEditing(true)}
                                     onDeleteClick={() => setIsDeleteModalOpen(true)}
+                                    onLogoutClick={handleLogout}
                                     toggleDarkMode={toggleDarkMode}
                                 />
                             )}

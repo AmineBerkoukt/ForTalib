@@ -10,7 +10,7 @@ import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore.js";
 import toast from "react-hot-toast";
 import { usePostStore } from "../store/usePostStore.js";
-import ConfirmationModal from "./ConfirmationModal";
+import ConfirmationModal from "./modals/ConfirmationModal.jsx";
 import {useTheme} from "../contexts/ThemeContext.jsx";
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 

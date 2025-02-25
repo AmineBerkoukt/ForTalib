@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Settings, Pencil, Trash2, Lock } from 'lucide-react';
+import {Link} from 'react-router-dom';
 
-export default function ProfileDropdown({ isDarkMode, onEditClick, onDeleteClick, toggleDarkMode }) {
+export default function ProfileDropdown({ isDarkMode, onEditClick, onDeleteClick }) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
     const buttonRef = useRef(null);
@@ -61,21 +62,17 @@ export default function ProfileDropdown({ isDarkMode, onEditClick, onDeleteClick
                         <span>Edit Profile</span>
                     </button>
 
-                    <button
-                        onClick={() => {
-                            setIsOpen(false);
-                            onEditClick();
-                        }}
-                        className={`w-full px-4 py-3 text-left flex items-center gap-3 ${
-                            isDarkMode
-                                ? 'hover:bg-gray-700 text-gray-300 hover:text-white'
-                                : 'hover:bg-gray-50 text-gray-700 hover:text-gray-900'
-                        } transition-colors duration-200`}
+                    <Link to="/change-password"
+                          className={`w-full px-4 py-3 text-left flex items-center gap-3 ${
+                              isDarkMode
+                                  ? 'hover:bg-gray-700 text-gray-300 hover:text-white'
+                                  : 'hover:bg-gray-50 text-gray-700 hover:text-gray-900'
+                          } transition-colors duration-200`}
+                          onClick={() => setIsOpen(false)}
                     >
                         <Lock className="w-4 h-4 flex-shrink-0"/>
                         <span>Change Password</span>
-                    </button>
-
+                    </Link>
 
                     <button
                         onClick={() => {
