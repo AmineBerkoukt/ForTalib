@@ -18,17 +18,17 @@ const PostButtom = ({ postId, isSavedInitially, savePost, unsavePost, ratePost, 
     };
 
     return (
-        <div className="flex justify-between items-center border-t pt-2 mt-2">
+        <div className="flex justify-between items-center border-t pt-2 mt-2 transition-opacity duration-300 group-hover:opacity-100 opacity-80">
             <div className="flex">
                 {Array(5).fill().map((_, index) => (
-                    <div key={index} onClick={() => handleRatePost(index + 1)}>
+                    <div key={index} onClick={() => handleRatePost(index + 1)} className="cursor-pointer transition-transform duration-300 hover:scale-125">
                         {index + 1 <= rating ? <StarIcon className="h-5 w-5 text-yellow-500" /> : <StarOutlineIcon className="h-5 w-5 text-yellow-500" />}
                     </div>
                 ))}
             </div>
 
-            <button onClick={() => setIsSaved(!isSaved)}>
-                {isSaved ? <Bookmark className="h-5 w-5" /> : <BookmarkPlus className="h-5 w-5" />}
+            <button onClick={() => setIsSaved(!isSaved)} className="transition-transform duration-300 hover:scale-125">
+                {isSaved ? <Bookmark className="h-5 w-5 text-blue-600" /> : <BookmarkPlus className="h-5 w-5 text-gray-600" />}
             </button>
         </div>
     );
