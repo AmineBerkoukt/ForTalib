@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useProfileStore } from "../store/useProfileStore";
 import { usePostStore } from "../store/usePostStore";
 import { useTheme } from "../contexts/ThemeContext";
 import Layout from "../components/Layout";
-import ProfileInfo from "../components/profile/ProfileInfo";
+import ProfileInfo from "../components/ProfileInfo.jsx";
 import Post from "../components/Post";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react';
 import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { id } = useParams();
-  const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
+  const navigate = useNavigate();
+  const { authUser, isUpdatingProfile, updateProfile, logout } = useAuthStore();
   const { userPosts, getUserPosts: getOwnPosts } = usePostStore();
   const { profilePosts, user, getUser, getUserPosts: getOthersPosts } = useProfileStore();
   const { isDarkMode } = useTheme();
@@ -111,7 +112,11 @@ const ProfilePage = () => {
   return (
       <Layout isDarkMode={isDarkMode}>
         <div className={`min-h-screen py-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6">
+            <h1 className={`text-2xl sm:text-3xl font-bold mb-6 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+              {isOwnProfile ? "My Profile" : `${currentUser?.firstName} ${currentUser?.lastName}'s Profile`}
+            </h1>
+
             <ProfileInfo
                 user={currentUser}
                 isDarkMode={isDarkMode}
@@ -120,7 +125,7 @@ const ProfilePage = () => {
             />
 
             <div className="mt-12 max-w-4xl mx-auto">
-              <h2 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              <h2 className={`text-xl sm:text-2xl font-bold mb-6 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
                 {isOwnProfile ? "My Posts" : `${currentUser?.firstName} ${currentUser?.lastName}'s Posts`}
               </h2>
 

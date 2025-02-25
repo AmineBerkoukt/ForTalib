@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import {
     UserIcon,
     BookmarkIcon,
-    ArchiveBoxArrowDownIcon,
     CalendarIcon,
 } from "@heroicons/react/24/outline";
 import { useChatStore } from "../store/useChatStore";
@@ -35,10 +34,11 @@ const SidebarItem = ({ Icon, text, to, isActive }) => (
 const SidebarFB = () => {
     const location = useLocation();
     const { selectedUser } = useChatStore();
-    const { role } = useAuthStore();
+    const { role, authUser } = useAuthStore();
+
 
     const navItems = [
-        { Icon: UserIcon, text: "Profile", path: "/profile" },
+        { Icon: UserIcon, text: "Profile", path: `/profile/${authUser._id}` },
         { Icon: BookmarkIcon, text: "Saved", path: "/saved" },
         ...(role === "admin" ? [{
             Icon: CalendarIcon,
