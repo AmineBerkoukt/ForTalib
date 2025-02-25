@@ -53,11 +53,12 @@ This project leverages the power of the following technologies:
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
 - **Other:** (List any other key technologies, e.g., Axios, Redux, Material-UI, etc.)
+- **Containerization:** Docker for easy deployment
 
 ## ⚙️ Installation ⚙️
 
 To get started, follow the steps below:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/colocator-finder-app.git
+### 1. Clone the repository:
+```bash
+git clone https://github.com/your-username/colocator-finder-app.git
