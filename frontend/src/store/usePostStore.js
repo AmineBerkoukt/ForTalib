@@ -90,6 +90,7 @@ export const usePostStore = create((set, get) => ({
 
             // Refetch posts
             get().getPosts();
+            get().getTopFive();
 
             return res.data;
         } catch (error) {
@@ -108,6 +109,7 @@ export const usePostStore = create((set, get) => ({
             console.log("usePostStore.deletePost res", res.data);
             if (isInHome) {
                 get().getPosts();
+                get().getTopFive();
             } else{
                 const { getUserPosts } = useProfileStore.getState();
                 await getUserPosts(userId);

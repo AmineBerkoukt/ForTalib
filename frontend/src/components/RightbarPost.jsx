@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useTheme } from "../contexts/ThemeContext";
-import PostDetailsModal from "./PostDetailsModal";
-import {useModalStore} from "../store/useModalStore.js"; // Import the modal component
+import { useModalStore } from "../store/useModalStore.js";
 
 function RightBarPost({ posts }) {
-    const { isDarkMode } = useTheme(); // Get dark mode state
-    const [selectedPost, setSelectedPost] = useState(null); // Track selected post
-    const [isModalOpen, setIsModalOpen] = useState(false); // Track modal visibility
-    const { activateModal, disactivateModal } = useModalStore();
+    const { isDarkMode } = useTheme();
+    const { activateModal } = useModalStore();
 
-
-
-    const postList = posts?.posts || []; // Safely access the posts array
+    const postList = posts?.posts || [];
 
     if (!Array.isArray(postList) || postList.length === 0) {
         return (
@@ -22,12 +17,7 @@ function RightBarPost({ posts }) {
     }
 
     const openModal = (post) => {
-        console.log("openModal", post);
         activateModal(post);
-    };
-
-    const closeModal = () => {
-        disactivateModal();
     };
 
     return (

@@ -7,25 +7,23 @@ import {
     ChatBubbleOvalLeftEllipsisIcon,
     MoonIcon,
     SunIcon,
+    ArrowLeftStartOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
-import NotificationsDropdown from "./NotificationsDropDown.jsx";
 import SearchBar from "./SearchBar.jsx";
-import {useTheme} from "../contexts/ThemeContext.jsx";
+import { useTheme } from "../contexts/ThemeContext.jsx";
+import { useAuthStore } from "../store/useAuthStore"; // Assuming you have this hook
 
-const MobileNav = ({ onSidebarToggle, isDarkMode }) => {
+const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
     const navigate = useNavigate();
     const [isSearchVisible, setIsSearchVisible] = useState(false);
-    const [isNotificationsOpen, setNotificationsOpen] = useState(false);
     const { toggleDarkMode } = useTheme();
+    const { logout } = useAuthStore(); // Assuming you have a logout function in your auth store
 
-    const notifications = [
-        { id: 1, message: 'You have a new message from John.', time: '2 mins ago' },
-        { id: 2, message: 'Your profile has been updated successfully.', time: '1 hour ago' },
-        { id: 3, message: 'New comment on your post.', time: '5 hours ago' },
-    ];
-
-    const toggleNotifications = () => setNotificationsOpen(prev => !prev);
+    const handleLogout = () => {
+        logout();
+        navigate('/login'); // Redirect to login page after logout
+    };
 
     return (
         <nav className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
@@ -58,12 +56,11 @@ const MobileNav = ({ onSidebarToggle, isDarkMode }) => {
                                             : 'text-blue-600 hover:text-blue-700'
                                     }`}
                                 >
-                                    DarIo
+                                    For Talib
                                 </Link>
                             </div>
 
                             <div className="flex items-center gap-2">
-
                                 <button
                                     onClick={() => navigate("/chat")}
                                     className={`p-2 rounded-lg transition-colors duration-200 ${
@@ -86,7 +83,6 @@ const MobileNav = ({ onSidebarToggle, isDarkMode }) => {
                                         <MoonIcon className="h-6 w-6 text-blue-600"/>
                                     )}
                                 </button>
-
                                 <button
                                     onClick={() => setIsSearchVisible(true)}
                                     className={`p-2 rounded-lg transition-colors duration-200 ${
@@ -97,6 +93,14 @@ const MobileNav = ({ onSidebarToggle, isDarkMode }) => {
                                     aria-label="Search"
                                 >
                                     <MagnifyingGlassIcon className="h-6 w-6"/>
+                                </button>
+                                <button
+                                    onClick={handleLogout}
+                                    className="p-1 sm:p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                                    aria-label="Logout"
+                                >
+                                    <ArrowLeftStartOnRectangleIcon
+                                        className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}/>
                                 </button>
                             </div>
                         </>
@@ -122,4 +126,4 @@ const MobileNav = ({ onSidebarToggle, isDarkMode }) => {
     );
 };
 
-export default MobileNav;
+export default NavbarFBMobile;

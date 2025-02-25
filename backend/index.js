@@ -9,7 +9,6 @@ import authRoutes from './src/routes/authRoutes.js';
 import requestRoutes from "./src/routes/requestRoutes.js";
 import favoriseRoutes from './src/routes/favoriseRoutes.js';
 import evaluateRoutes from "./src/routes/evaluateRoutes.js";
-import chatbotRoutes from "./src/routes/chatbotRoutes.js";
 import passport from 'passport';
 import http from 'http';
 //Multer config :
@@ -27,6 +26,14 @@ import messageRoutes from "./src/routes/messageRoutes.js";
 dotenv.config();
 connectDB();
 
+const PORT = process.env.PORT || 5000;
+
+server.listen(5000, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
+
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,7 +45,6 @@ app.use(
     })
 );
 
-const PORT = process.env.PORT || 5000;
 
 
 // Middlewares
@@ -61,8 +67,6 @@ app.use('/api/saved', favoriseRoutes);
 app.use('/api/rate', evaluateRoutes);
 app.use('/api/messages', messageRoutes);
 
-// Chatbot Routes
-app.use("/api/chatbot", chatbotRoutes);
 
 let fileName = "";
 
@@ -125,7 +129,4 @@ app.get('/api/getImage', (req, res) => {
 });
 
 
-// Start the server
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+

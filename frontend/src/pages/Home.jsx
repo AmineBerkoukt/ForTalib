@@ -51,7 +51,6 @@ const Home = () => {
 
     return (
         <Layout isDarkMode={isDarkMode}>
-            <PostDetailsModal />
             <ScrollToTop isDarkMode={isDarkMode} />
 
             <div className={`min-h-screen ${isDarkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}>

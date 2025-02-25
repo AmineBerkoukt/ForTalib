@@ -1,7 +1,6 @@
 import { Server } from "socket.io";
 import http from "http";
 import express from "express";
-import {handleChatbotMessage} from "../handlers/chatbotHandler.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -27,8 +26,6 @@ io.on("connection", (socket) => {
 
     // io.emit() is used to send events to all the connected clients
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
-
-    socket.on("chatbotMessage", (data) => handleChatbotMessage(data, socket));
 
     socket.on("disconnect", () => {
         console.log("A user disconnected", socket.id);

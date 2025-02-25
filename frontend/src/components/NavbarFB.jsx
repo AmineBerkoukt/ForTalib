@@ -1,34 +1,31 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // Import useLocation hook
+import {Link, useLocation, useNavigate} from 'react-router-dom'; // Import useLocation hook
 import {
     ChatBubbleOvalLeftEllipsisIcon,
     MoonIcon,
     SunIcon,
+    ArrowLeftStartOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import { Bot } from "lucide-react";
 import { useTheme } from '../contexts/ThemeContext';
 import SearchBar from './SearchBar.jsx';
-import NotificationsDropdown from './NotificationsDropdown.jsx'; // Import the new NotificationsDropdown component
 
 const NavbarFB = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
-    const location = useLocation(); // Use the useLocation hook
-    const [isNotificationsOpen, setNotificationsOpen] = useState(false); // State to toggle dropdown
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    // Sample mock data for notifications
-    const notifications = [
-        { id: 1, message: 'You have a new message from John.', time: '2 mins ago' },
-        { id: 2, message: 'Your profile has been updated successfully.', time: '1 hour ago' },
-        { id: 3, message: 'New comment on your post.', time: '5 hours ago' },
-    ];
+
+
 
     // Check if the current route is "/chat"
     const isChatPage = location.pathname === '/chat';
 
-    // Toggle notifications dropdown visibility
-    const toggleNotifications = () => {
-        setNotificationsOpen((prev) => !prev);
-    };
+
+    function logout() {
+        localStorage.clear();
+        //navigate("/login");
+    }
 
     return (
         <nav
@@ -42,7 +39,7 @@ const NavbarFB = () => {
                     className={`text-xl sm:text-2xl font-bold hover:opacity-90 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
                 >
 
-                    DarIo
+                    ForTalib
                 </Link>
 
                 {/* Center: Search Bar (only show if not on /chat route) */}
@@ -56,7 +53,9 @@ const NavbarFB = () => {
                 <div className="flex items-center space-x-3 sm:space-x-6">
 
                     {/* Messages */}
-                    <Link to="/chat">
+                    <Link to="/chat"
+                          className="rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                    >
                         <div className="relative group">
                             <ChatBubbleOvalLeftEllipsisIcon
                                 className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}
@@ -65,14 +64,6 @@ const NavbarFB = () => {
                         </div>
                     </Link>
 
-                    {/* Chatbot Link */}
-                    <Link to="/chatbot">
-                        <div className="relative group">
-                            <Bot
-                                className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}
-                            />
-                        </div>
-                    </Link>
 
                     {/* Dark Mode Toggle */}
                     <button
@@ -81,10 +72,18 @@ const NavbarFB = () => {
                     >
                         <span className="sr-only">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
                         {isDarkMode ? (
-                            <SunIcon className="h-6 w-6 text-yellow-400" />
+                            <SunIcon className="h-6 w-6 text-yellow-400"/>
                         ) : (
-                            <MoonIcon className="h-6 w-6 text-blue-600" />
+                            <MoonIcon className="h-6 w-6 text-blue-600"/>
                         )}
+                    </button>
+                    <button
+                        onClick={logout}
+                        className="rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                    >
+                        <span className="sr-only">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+                        <ArrowLeftStartOnRectangleIcon className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}
+                        />
                     </button>
                 </div>
             </div>

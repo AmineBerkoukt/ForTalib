@@ -1,19 +1,16 @@
-import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useTheme } from "./contexts/ThemeContext.jsx";
 import { Toaster } from "react-hot-toast";
-import PostDetailsModal from "./components/PostDetailsModal"; // Import the modal
-import { useModalStore } from "./store/useModalStore.js"; // Import the modal store
+import PostDetailsModal from "./components/PostDetailsModal";
+import { useModalStore } from "./store/useModalStore.js";
 
 // Components and Pages
-import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import ChatPage from "./pages/ChatPage.jsx";
-import ChatbotPage from "./pages/ChatbotPage.jsx";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
-import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 import UnauthorizedPage from "./pages/UnauthorizedPage.jsx";
 import PageNotFoundPage from "./pages/PageNotFoundPage.jsx";
@@ -21,20 +18,22 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import RequestsPage from "./pages/RequestsPage.jsx";
-import ApplyForHouseOwnerPage from "./pages/ApplyForHouseOwnerPage.jsx";
-import OtherProfilePage from "./pages/OtherProfilePage.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 
 // Route Protection HOC
 const ProtectedRoute = ({ element, isAuthenticated, redirectTo }) => {
     return isAuthenticated ? element : <Navigate to={redirectTo} />;
 };
 
-const RoleProtectedRoute = ({ element, isAuthenticated, userRole, allowedRoles, redirectTo }) => {
-    return isAuthenticated && allowedRoles.includes(userRole) ? (
-        element
-    ) : (
-        <Navigate to={redirectTo} />
-    );
+const RoleProtectedRoute = ({
+                                element,
+                                isAuthenticated,
+                                userRole,
+                                allowedRoles,
+                                redirectTo,
+                            }) => {
+    if (!isAuthenticated) return <Navigate to={redirectTo} />;
+    return allowedRoles.includes(userRole) ? element : <Navigate to={redirectTo} />;
 };
 
 // Loading Spinner
@@ -50,20 +49,40 @@ const LoadingSpinner = () => (
 );
 
 const App = () => {
-    const { authUser, checkAuth, isCheckingAuth, onlineUsers, role } = useAuthStore();
-    const { isDarkMode } = useTheme(); // Get dark mode state
-    const location = useLocation(); // Access current route
-    const { isModalOpen, modalData, disactivateModal } = useModalStore(); // Access modal state
+    const { authUser, checkAuth, isCheckingAuth, role, logout } = useAuthStore();
+    const { isDarkMode } = useTheme();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { isModalOpen, modalData, disactivateModal } = useModalStore();
+    const [isLoading, setIsLoading] = useState(true);
 
     const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
-    React.useEffect(() => {
-        if (!publicRoutes.includes(location.pathname)) {
-            checkAuth();
-        }
-    }, [checkAuth, location.pathname]);
+    useEffect(() => {
+        const initializeAuth = async () => {
+            const token = localStorage.getItem("token");
 
-    if (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname)) {
+            if (!token && !publicRoutes.includes(location.pathname)) {
+                logout();
+                navigate("/login");
+                return;
+            }
+
+            if (!publicRoutes.includes(location.pathname)) {
+                try {
+                    await checkAuth();
+                } catch (e) {
+                    logout();
+                    navigate("/login");
+                }
+            }
+            setIsLoading(false);
+        };
+
+        initializeAuth();
+    }, [checkAuth, logout, location.pathname, navigate]);
+
+    if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
         return <LoadingSpinner />;
     }
 
@@ -77,14 +96,13 @@ const App = () => {
                 }}
             />
 
-            {/* Render the modal globally */}
-            {isModalOpen && (
-                <PostDetailsModal
-                    isOpen={isModalOpen}
-                    onClose={disactivateModal}
-                    post={modalData}
-                />
-            )}
+            <PostDetailsModal
+                isOpen={isModalOpen}
+                onClose={disactivateModal}
+                post={modalData}
+            />
+
+            <ScrollToTop />
 
             <Routes>
                 {/* Public Routes */}
@@ -92,24 +110,14 @@ const App = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/" element={<Home />} />
 
-                {/* Restricted Routes (Require Authentication) */}
+                {/* Protected Routes */}
                 <Route
                     path="/chat"
                     element={
                         <ProtectedRoute
                             element={<ChatPage />}
                             isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
-                        />
-                    }
-                />
-                <Route
-                    path="/chatbot"
-                    element={
-                        <ProtectedRoute
-                            element={<ChatbotPage />}
-                            isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
+                            redirectTo="/login"
                         />
                     }
                 />
@@ -119,37 +127,17 @@ const App = () => {
                         <ProtectedRoute
                             element={<SavedPage />}
                             isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
+                            redirectTo="/login"
                         />
                     }
                 />
                 <Route
-                    path="/profile"
+                    path="/profile/:id?"
                     element={
                         <ProtectedRoute
                             element={<ProfilePage />}
                             isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
-                        />
-                    }
-                />
-                <Route
-                    path="/profile/:id"
-                    element={
-                        <ProtectedRoute
-                            element={<OtherProfilePage />}
-                            isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
-                        />
-                    }
-                />
-                <Route
-                    path="/applyforhouseowner"
-                    element={
-                        <ProtectedRoute
-                            element={<ApplyForHouseOwnerPage />}
-                            isAuthenticated={!!authUser}
-                            redirectTo="/unauthorized"
+                            redirectTo="/login"
                         />
                     }
                 />
@@ -163,7 +151,7 @@ const App = () => {
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
-                            redirectTo="/unauthorized"
+                            redirectTo="/login"
                         />
                     }
                 />
@@ -175,7 +163,7 @@ const App = () => {
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
-                            redirectTo="/unauthorized"
+                            redirectTo="/login"
                         />
                     }
                 />
@@ -187,7 +175,7 @@ const App = () => {
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
-                            redirectTo="/unauthorized"
+                            redirectTo="/login"
                         />
                     }
                 />
