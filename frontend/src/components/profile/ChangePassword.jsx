@@ -1,44 +1,61 @@
-"use client"
+"use client";
 
-import {useState, useRef} from "react"
-import {useTheme} from "../../contexts/ThemeContext.jsx"
-import {Eye, EyeOff} from "lucide-react"
-import {useNavigate} from "react-router-dom"
-import {useProfileStore} from "../../store/useProfileStore.js"
-import toast from "react-hot-toast"; // Import your store
+import {useState, useRef} from "react";
+import {useTheme} from "../../contexts/ThemeContext.jsx";
+import {Eye, EyeOff} from "lucide-react";
+import {useNavigate} from "react-router-dom";
+import {useProfileStore} from "../../store/useProfileStore.js";
+import toast from "react-hot-toast";
 
 export default function ChangePassword() {
-    const {isDarkMode} = useTheme()
-    const navigate = useNavigate()
-    const newPasswordRef = useRef("") // useRef for the new password input
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [showNewPassword, setShowNewPassword] = useState(false)
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const changePassword = useProfileStore((state) => state.changePassword) // Get changePassword function
+    const {isDarkMode} = useTheme();
+    const navigate = useNavigate();
+
+    const existingPasswordRef = useRef("");
+    const newPasswordRef = useRef("");
+    const confirmPasswordRef = useRef("");
+
+    const [showExistingPassword, setShowExistingPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const changePassword = useProfileStore((state) => state.changePassword);
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        // Call changePassword with the current value of the new password
-        await changePassword(newPasswordRef.current.value)
-        try {
-            toast.sucess("Password change submitted");
-        } catch (e){
-            toast.error(e);
+        e.preventDefault();
+
+        const existingPassword = existingPasswordRef.current.value;
+        const newPassword = newPasswordRef.current.value;
+        const confirmPassword = confirmPasswordRef.current.value;
+
+        // Validate that the new password and confirmation match
+        if (newPassword !== confirmPassword) {
+            toast.error("New password and confirmation do not match!");
+            return;
         }
 
-    }
+        try {
+            await changePassword({
+                existingPassword,
+                newPassword
+            });
+            toast.success("Password changed successfully!");
+        } catch (e) {
+            toast.error("Password was NOT changed!");
+        }
+    };
 
     const handleCancel = () => {
-        navigate(-1)
-    }
+        navigate(-1);
+    };
 
     const inputClass = `w-full px-3 py-2 rounded-md ${
         isDarkMode
             ? "bg-gray-700 text-white border-gray-600 focus:border-blue-500"
             : "bg-white text-gray-900 border-gray-300 focus:border-blue-500"
-    } border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50`
+    } border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50`;
 
-    const buttonClass = `w-full py-2 px-4 rounded-md font-semibold text-white transition duration-200`
+    const buttonClass = `w-full py-2 px-4 rounded-md font-semibold text-white transition duration-200`;
 
     return (
         <div
@@ -48,13 +65,34 @@ export default function ChangePassword() {
         >
             <div
                 className={`w-full max-w-md space-y-8 ${isDarkMode ? "bg-gray-800" : "bg-white"} p-6 rounded-xl shadow-md`}>
-                <div className="flex items-center justify-between">
-                    <h2 className="text-center text-2xl font-extrabold sm:text-3xl">Change Your Password</h2>
-                    <div className="w-8"></div>
-                    {/* Spacer for centering */}
-                </div>
+                <h2 className="text-center text-2xl font-extrabold sm:text-3xl">Change Your Password</h2>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <div className="space-y-4">
+                        <div className="relative">
+                            <label htmlFor="existing-password" className="sr-only">
+                                Existing Password
+                            </label>
+                            <input
+                                id="existing-password"
+                                name="existing-password"
+                                type={showExistingPassword ? "text" : "password"}
+                                required
+                                className={inputClass}
+                                placeholder="Existing Password"
+                                ref={existingPasswordRef}
+                            />
+                            <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                onClick={() => setShowExistingPassword(!showExistingPassword)}
+                            >
+                                {showExistingPassword ? (
+                                    <EyeOff className="h-5 w-5 text-gray-400"/>
+                                ) : (
+                                    <Eye className="h-5 w-5 text-gray-400"/>
+                                )}
+                            </button>
+                        </div>
                         <div className="relative">
                             <label htmlFor="new-password" className="sr-only">
                                 New Password
@@ -66,7 +104,7 @@ export default function ChangePassword() {
                                 required
                                 className={inputClass}
                                 placeholder="New Password"
-                                ref={newPasswordRef} // useRef for linking to store
+                                ref={newPasswordRef}
                             />
                             <button
                                 type="button"
@@ -91,8 +129,7 @@ export default function ChangePassword() {
                                 required
                                 className={inputClass}
                                 placeholder="Confirm New Password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                ref={confirmPasswordRef}
                             />
                             <button
                                 type="button"
@@ -126,5 +163,5 @@ export default function ChangePassword() {
                 </form>
             </div>
         </div>
-    )
+    );
 }
