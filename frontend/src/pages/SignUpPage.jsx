@@ -21,7 +21,6 @@ const SignUpPage = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
     const phoneNumberRef = useRef();
-    const cinRef = useRef();
 
     const { signup, isSigningUp } = useAuthStore();
     const navigate = useNavigate();
@@ -75,7 +74,6 @@ const SignUpPage = () => {
                 email: emailRef.current.value.toLowerCase(),
                 password: passwordRef.current.value,
                 phoneNumber: phoneNumberRef.current.value,
-                cin: cinRef.current.value,
             };
 
             console.log("sending data : " , formData)
@@ -138,7 +136,6 @@ const SignUpPage = () => {
                             <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
                             <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
                             <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
-                            <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
 
                             <div className="flex items-center">
                                 <input type="checkbox" id="terms" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
