@@ -49,7 +49,7 @@ const LoadingSpinner = () => (
 );
 
 const App = () => {
-    const { authUser, checkAuth, isCheckingAuth, role, clearAuth } = useAuthStore();
+    const { authUser, checkAuth, isCheckingAuth, role, logout } = useAuthStore();
     const { isDarkMode } = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
@@ -63,17 +63,16 @@ const App = () => {
             const token = localStorage.getItem("token");
 
             if (!token && !publicRoutes.includes(location.pathname)) {
-                clearAuth();
+                logout();
                 navigate("/login");
-                setIsLoading(false);
                 return;
             }
 
             if (!publicRoutes.includes(location.pathname)) {
                 try {
                     await checkAuth();
-                } catch (error) {
-                    clearAuth();
+                } catch (e) {
+                    logout();
                     navigate("/login");
                 }
             }
@@ -81,7 +80,7 @@ const App = () => {
         };
 
         initializeAuth();
-    }, [checkAuth, clearAuth, location.pathname, navigate]);
+    }, [checkAuth, logout, location.pathname, navigate]);
 
     if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
         return <LoadingSpinner />;
