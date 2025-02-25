@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Upload } from 'lucide-react';
-import { usePostStore } from "../store/usePostStore";
+import { usePostStore } from "../../store/usePostStore.js";
 import { Toaster } from "react-hot-toast";
 
 export default function CreatePostModal({ isDarkMode, showModal, setShowModal }) {

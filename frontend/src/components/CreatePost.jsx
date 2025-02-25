@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CreatePostModal from "./CreatePostModal";
+import CreatePostModal from "./modals/CreatePostModal.jsx";
 import { useTheme } from "../contexts/ThemeContext";
 import { Plus } from 'lucide-react';
 

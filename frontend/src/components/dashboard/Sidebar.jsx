@@ -29,7 +29,6 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
     const location = useLocation();
     const navItems = [
         { Icon: LayoutDashboardIcon, text: "Dashboard", path: "/dashboard" },
-        { Icon: HousePlus, text: "House Owner Request", path: "/requests" },
         { Icon: UserCog, text: "Users Management", path: "/management" }
     ]
 
