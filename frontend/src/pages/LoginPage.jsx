@@ -35,6 +35,21 @@ const LoginPage = () => {
         <div className="flex-grow flex flex-col lg:flex-row">
           {/* Left Side - Form */}
           <div className="flex-1 flex flex-col justify-center items-center p-8 bg-white dark:bg-gray-900 transition-colors duration-300 relative overflow-hidden">
+            {/* Dark Mode Toggle */}
+            <div className="absolute top-4 right-4 z-20">
+              <button
+                  onClick={toggleDarkMode}
+                  className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-300 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {isDarkMode ? (
+                    <Sun className="w-5 h-5" />
+                ) : (
+                    <Moon className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+
             <div className="w-full max-w-md space-y-8 relative z-10">
               {/* Logo and Welcome Text */}
               <div className="text-center mb-8">
@@ -45,25 +60,6 @@ const LoginPage = () => {
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white animate-fade-in-up">Welcome Back</h1>
                   <p className="text-base text-gray-600 dark:text-gray-400 animate-fade-in-up animation-delay-200">Sign in to your account</p>
                 </div>
-              </div>
-
-              {/* Dark Mode Toggle */}
-              <div className="flex justify-center animate-fade-in-up animation-delay-400">
-                <button
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md"
-                    onClick={toggleDarkMode}
-                    aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-                >
-                  {isDarkMode ? (
-                      <>
-                        <Sun className="w-5 h-5" /> Light Mode
-                      </>
-                  ) : (
-                      <>
-                        <Moon className="w-5 h-5" /> Dark Mode
-                      </>
-                  )}
-                </button>
               </div>
 
               {/* Form */}

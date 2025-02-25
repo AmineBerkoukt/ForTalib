@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useTheme } from "./contexts/ThemeContext.jsx";
@@ -53,25 +53,26 @@ const App = () => {
     const { isDarkMode } = useTheme();
     const location = useLocation();
     const { isModalOpen, modalData, disactivateModal } = useModalStore();
+    const [isLoading, setIsLoading] = useState(true);
 
     const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
-    React.useEffect(() => {
-        if (!publicRoutes.includes(location.pathname)) {
-            checkAuth().catch(() => {
-                useAuthStore.getState().clearAuth();
-                window.location.href = "/login";
-            });
-        }
+    useEffect(() => {
+        const initializeAuth = async () => {
+            if (!publicRoutes.includes(location.pathname)) {
+                try {
+                    await checkAuth();
+                } catch (error) {
+                    useAuthStore.getState().clearAuth();
+                }
+            }
+            setIsLoading(false);
+        };
+
+        initializeAuth();
     }, [checkAuth, location.pathname]);
 
-    React.useEffect(() => {
-        if (!authUser && !publicRoutes.includes(location.pathname)) {
-            window.location.href = "/login";
-        }
-    }, [authUser, location.pathname]);
-
-    if (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname)) {
+    if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
         return <LoadingSpinner />;
     }
 

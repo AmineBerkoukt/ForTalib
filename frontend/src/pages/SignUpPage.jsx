@@ -95,7 +95,22 @@ const SignUpPage = () => {
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
             <div className="flex-1 flex flex-col lg:flex-row">
-                <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200">
+                <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200 relative">
+                    {/* Dark Mode Toggle */}
+                    <div className="absolute top-4 right-4 z-20">
+                        <button
+                            onClick={toggleDarkMode}
+                            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-300 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary"
+                            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+                        >
+                            {isDarkMode ? (
+                                <Sun className="w-5 h-5" />
+                            ) : (
+                                <Moon className="w-5 h-5" />
+                            )}
+                        </button>
+                    </div>
+
                     <div className="w-full max-w-md space-y-8">
                         <div className="text-center mb-8">
                             <div className="flex flex-col items-center gap-2 group">
@@ -125,6 +140,7 @@ const SignUpPage = () => {
                             <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
                             <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
                             <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
+                            showPassword={showPassword} setShowPassword={setShowPassword} />
                             <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
                             <FormInput label="Address" icon={HomeIcon} inputRef={addressRef} placeholder="Enter your address" />
                             <FormInput label="CIN (optional)" icon={BadgeIcon} inputRef={cinRef} placeholder="Enter your CIN" />
