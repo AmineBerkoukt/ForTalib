@@ -5,7 +5,7 @@ import {uploadPfp} from "../config/upload.js";
 
 const router = express.Router();
 
-//  { firstName, lastName, email, password, phoneNumber, address, studies(not required !) }
+//  { firstName, lastName, email, password, phoneNumber, studies(not required !) }
 //router.post('/register', uploadPfp.single('profilePhoto'), validateRegistration, register);
 
 
