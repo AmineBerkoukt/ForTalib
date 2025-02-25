@@ -62,7 +62,7 @@ export const useProfileStore = create((set, get) => ({
 
     changePassword: async (newPassword) => {
         try {
-            const res = await api.post(`/change-password`, newPassword);
+            await api.post(`/change-password`, newPassword);
             toast.success("Password changed successfully !");
         } catch (error) {
             console.log("usePostStore.getPostsFilter err", error.message);

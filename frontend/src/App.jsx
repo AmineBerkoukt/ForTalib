@@ -17,7 +17,6 @@ import PageNotFoundPage from "./pages/PageNotFoundPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
-import RequestsPage from "./pages/RequestsPage.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import ChangePassword from "./components/profile/ChangePassword.jsx"
 
@@ -159,18 +158,6 @@ const App = () => {
                     element={
                         <RoleProtectedRoute
                             element={<DashboardPage />}
-                            isAuthenticated={!!authUser}
-                            userRole={role}
-                            allowedRoles={["admin"]}
-                            redirectTo="/login"
-                        />
-                    }
-                />
-                <Route
-                    path="/requests"
-                    element={
-                        <RoleProtectedRoute
-                            element={<RequestsPage />}
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}

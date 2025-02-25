@@ -18,7 +18,7 @@ export default function Navbar({ isDarkMode, toggleDarkMode, toggleSidebar }) {
                     </button>
                     <Link to="/"
                           className={`text-2xl font-bold hover:opacity-90 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                        DarIo
+                        ForTalib
                     </Link>
                 </div>
 
