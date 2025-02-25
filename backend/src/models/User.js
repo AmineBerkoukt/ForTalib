@@ -7,7 +7,6 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: false },
     cin: {type: String, required: false},
     phoneNumber: { type: String, required: false, unique: true },
-    address: { type: String, required: false },
     role: { type: String, required: true, enum: ['admin', 'house_owner', 'student'] },
     profilePhoto : { type: String, required: false },
     resetPasswordToken: String,

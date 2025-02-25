@@ -7,7 +7,6 @@ export const registrationSchema = Joi.object({
     password: Joi.string().required(),
     cin: Joi.string().trim().optional(),
     phoneNumber: Joi.string().length(10).required(),
-    address: Joi.string().trim().required(),
     profilePhoto: Joi.string().trim(),
     studies: Joi.object({
         level: Joi.string().trim(),
@@ -25,7 +24,6 @@ export const updateProfileSchema = Joi.object({
     firstName: Joi.string().trim(),
     lastName: Joi.string().trim(),
     phoneNumber: Joi.string().length(10),
-    address: Joi.string().trim(),
     studies: Joi.object({
             level: Joi.string().trim(),
             school: Joi.string().trim(),
