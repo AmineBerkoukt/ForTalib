@@ -74,6 +74,7 @@ const SignUpPage = () => {
                 email: emailRef.current.value.toLowerCase(),
                 password: passwordRef.current.value,
                 phoneNumber: phoneNumberRef.current.value,
+                hasAcceptedTermsAndConditions: acceptTerms // Add this line
             };
 
             console.log("sending data : " , formData)
@@ -87,6 +88,7 @@ const SignUpPage = () => {
         }
     };
 
+    // ... (rest of the component remains the same)
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
             <div className="flex-1 flex flex-col lg:flex-row">
