@@ -81,14 +81,14 @@ const SignUpPage = () => {
 
             try {
                 await signup(formData);
-                navigate("/login");
+                navigate("/complete-signup");
             } catch (error) {
                 toast.error("Error while creating the account, please try again!");
             }
         }
     };
 
-    // ... (rest of the component remains the same)
+
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
             <div className="flex-1 flex flex-col lg:flex-row">
