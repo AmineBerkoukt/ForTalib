@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
 import {
@@ -23,7 +25,6 @@ const PostDetailsModal = () => {
     const { isModalActive, modalData, disactivateModal } = useModalStore()
     const { isDarkMode } = useTheme()
     const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
-    const [isFullscreen, setIsFullscreen] = useState(false)
     const { setSelectedUser } = useChatStore()
     const navigate = useNavigate()
     const modalRef = useRef(null)
@@ -147,14 +148,18 @@ const PostDetailsModal = () => {
                                         </motion.div>
                                     </div>
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+                                    <div
+                                        className={`w-full h-full flex items-center justify-center ${isDarkMode ? "bg-gradient-to-b from-gray-800 to-gray-900" : "bg-gradient-to-b from-gray-50 to-gray-100"}`}
+                                    >
                                         <motion.div
                                             initial={{ opacity: 0, y: -10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.5, ease: "easeOut" }}
                                             className="text-center p-8 max-w-md"
                                         >
-                                            <div className="mx-auto w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 flex items-center justify-center shadow-inner">
+                                            <div
+                                                className={`mx-auto w-24 h-24 mb-6 rounded-full flex items-center justify-center ${isDarkMode ? "bg-gradient-to-br from-blue-900/30 to-blue-800/20" : "bg-gradient-to-br from-blue-50 to-blue-100"} shadow-inner`}
+                                            >
                                                 <Building2
                                                     className={`w-12 h-12 ${isDarkMode ? "text-blue-400" : "text-blue-500"} opacity-80`}
                                                 />
@@ -167,17 +172,19 @@ const PostDetailsModal = () => {
                                             >
                                                 This property listing doesn't have any photos yet. Contact the owner for more details.
                                             </p>
-                                            <motion.div
-                                                className={`mt-6 inline-flex items-center justify-center px-4 py-2 rounded-lg border ${isDarkMode ? "border-gray-700 text-gray-300" : "border-gray-300 text-gray-700"} text-sm`}
-                                                whileHover={{
-                                                    scale: 1.03,
-                                                    backgroundColor: isDarkMode ? "rgba(59, 130, 246, 0.1)" : "rgba(59, 130, 246, 0.05)",
-                                                }}
+                                            <motion.button
+                                                className={`mt-6 inline-flex items-center justify-center px-4 py-2 rounded-lg ${
+                                                    isDarkMode
+                                                        ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                                } transition-colors duration-200`}
+                                                whileHover={{ scale: 1.03 }}
                                                 whileTap={{ scale: 0.98 }}
+                                                onClick={() => handleTalkToOwner(modalData.user)}
                                             >
                                                 <MessageCircle className="w-4 h-4 mr-2" />
                                                 <span>Ask owner for photos</span>
-                                            </motion.div>
+                                            </motion.button>
                                         </motion.div>
                                     </div>
                                 )}
@@ -267,7 +274,11 @@ const PostDetailsModal = () => {
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
                                             onClick={() => handleTalkToOwner(modalData.user)}
-                                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-2"
+                                            className={`py-2 px-4 rounded-lg transition-colors duration-200 flex items-center space-x-2 ${
+                                                isDarkMode
+                                                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                                                    : "bg-blue-500 text-white hover:bg-blue-600"
+                                            }`}
                                         >
                                             <MessageCircle className="w-4 h-4" />
                                             <span>Contact</span>
@@ -275,7 +286,9 @@ const PostDetailsModal = () => {
                                     </div>
 
                                     <div
-                                        className={`grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}
+                                        className={`grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl ${
+                                            isDarkMode ? "bg-gray-800" : "bg-gray-100"
+                                        }`}
                                     >
                                         {propertyDetails.map((detail, index) => (
                                             <div key={index} className="flex items-center space-x-3">
