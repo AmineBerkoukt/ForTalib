@@ -7,7 +7,7 @@ import PostDetailsModal from "./components/modals/PostDetailsModal.jsx";
 import { useModalStore } from "./store/useModalStore.js";
 
 // Components and Pages
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
@@ -109,7 +109,7 @@ const App = () => {
                 {/* Public Routes */}
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<HomePage />} />
 
                 {/* Protected Routes */}
                 <Route

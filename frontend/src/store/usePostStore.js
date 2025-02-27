@@ -19,7 +19,6 @@ export const usePostStore = create((set, get) => ({
         try {
             const res = await api.get("/posts");
             set({ posts: res.data });
-            console.log("usePostStore.getPosts res", res.data);
         } catch (error) {
             console.log("usePostStore.getPosts err", error.message);
         } finally {
@@ -32,7 +31,6 @@ export const usePostStore = create((set, get) => ({
         try {
             const res = await api.get(`/posts/filter?priceFilter=${priceFilter}&rateFilter=${rateFilter}`);
             set({ posts: res.data });
-            console.log("Filter ", res.data);
         } catch (error) {
             console.log("usePostStore.getPostsFilter err", error.message);
         } finally {
@@ -45,7 +43,6 @@ export const usePostStore = create((set, get) => ({
         try {
             const res = await api.get(`/postsFor?userId=${userId}`);
             set({ profilePosts: res.data });
-            console.log("usePostStore.getPostsForUser res", res.data);
         } catch (error) {
             console.log("usePostStore.getPostsForUser err", error.message);
         } finally {
@@ -57,7 +54,6 @@ export const usePostStore = create((set, get) => ({
         get().setLoading(true);
         try {
             const res = await api.get(`/posts/post/${postId}`);
-            console.log("usePostStore.getPostById res", res.data);
             return res.data;
         } catch (error) {
             console.log("usePostStore.getPostById err", error.message);
@@ -94,7 +90,6 @@ export const usePostStore = create((set, get) => ({
             const { posts } = get();
             set({ posts: [...posts, res.data] });
 
-            console.log("usePostStore.createPost res", res.data);
             toast.success('Post Created successfully!');
 
             get().getPosts();
@@ -114,7 +109,6 @@ export const usePostStore = create((set, get) => ({
         get().setLoading(true);
         try {
             const res = await api.delete(`posts/post?id=${postId}`);
-            console.log("usePostStore.deletePost res", res.data);
             if (isInHome) {
                 get().getPosts();
                 get().getTopFive();
@@ -135,7 +129,6 @@ export const usePostStore = create((set, get) => ({
         try {
             const res = await api.get(`/posts/postsFor?userId=${userId}`);
             set({ userPosts: res.data });
-            console.log("usePostStore.userPosts res", res.data);
         } catch (error) {
             console.log("usePostStore.getUserPosts err", error.message);
         } finally {
@@ -153,7 +146,6 @@ export const usePostStore = create((set, get) => ({
                 posts: posts.map((post) => (post._id === postId ? res.data : post)),
             });
 
-            console.log("usePostStore.updatePost res", res.data);
             toast.success("Post Updated successfully!");
 
             await get().getPosts();
@@ -194,9 +186,7 @@ export const usePostStore = create((set, get) => ({
     savePost: async (postId) => {
         get().setLoading(true);
         try {
-            console.log('Save post Post id : ', postId);
             const response = await api.post(`/saved/${postId}`);
-            console.log("usePostStore.savepost : ", response.data);
         } catch (error) {
             console.log("Error in saving post in the store ", error.message);
         } finally {
@@ -207,9 +197,7 @@ export const usePostStore = create((set, get) => ({
     unsavePost: async (postId) => {
         get().setLoading(true);
         try {
-            console.log('Remove Post Post id : ', postId);
             const response = await api.delete(`/saved/${postId}`);
-            console.log("usePostStore.unsavepost : ", response.data);
         } catch (error) {
             console.log("Error in saving post in the store ", error.message);
         } finally {

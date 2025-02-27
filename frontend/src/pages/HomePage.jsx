@@ -12,7 +12,7 @@ import ScrollToTop from "../components/ScrollToTop";
 
 const POSTS_PER_PAGE = 10;
 
-const Home = () => {
+const HomePage = () => {
     const { isDarkMode } = useTheme();
     const { activateModal } = useModalStore();
     const { posts, getPosts } = usePostStore();
@@ -112,7 +112,6 @@ const Home = () => {
                                             isDarkMode ? "hover:shadow-lg hover:shadow-gray-800" : "hover:shadow-lg"
                                         }`}
                                     >
-                                        {console.info(post)}
                                         <Post
                                             user={{
                                                 _id: post.user?.id || 'unknown',
@@ -173,5 +172,5 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default HomePage;
 

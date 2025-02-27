@@ -46,7 +46,6 @@ const Post = ({
     if (profileImageUrl !== "./avatar.png") {
         profileImageUrl = BASE_URL + user.profilePhoto;
     }
-    console.log(profileImageUrl)
 
     const handleDelete = async () => {
         try {
