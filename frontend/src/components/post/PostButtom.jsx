@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 import { usePostStore } from "../../store/usePostStore.js"
 import { useSavedPostStore } from "../../store/useSavedPostStore.js"
 
-const PostBottom = ({ postId, avgRate }) => {
+const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
     const location = useLocation()
     const { savePost, unsavePost, ratePost } = usePostStore()
     const { getSavedPostsIds, savedPostsIds } = useSavedPostStore()
@@ -33,13 +33,14 @@ const PostBottom = ({ postId, avgRate }) => {
 
     const handleRatePost = async (newRating) => {
         try {
-            const rateResponse = await ratePost(postId, newRating)
-            setRating(rateResponse.avgRate)
-            toast.success(`You rated this post ${newRating} stars!`)
+            const rateResponse = await ratePost(postId, newRating);
+            setRating(rateResponse.avgRate);  // Local state
+            updateAvgRate(rateResponse.avgRate); // Update parent state
+            toast.success(`You rated this post ${newRating} stars!`);
         } catch (error) {
-            toast.error("Failed to submit rating")
+            toast.error("Failed to submit rating");
         }
-    }
+    };
 
     const handleSaveUnsave = async () => {
         try {

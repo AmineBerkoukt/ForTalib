@@ -56,6 +56,13 @@ const Post = ({
         profileImageUrl = BASE_URL + user.profilePhoto;
     }
 
+
+
+    const updateAvgRate = (newRate) => {
+        setAvgRate(newRate);
+    };
+
+
     const handleDelete = async () => {
         try {
             await deletePost(postId);
@@ -118,7 +125,7 @@ const Post = ({
 
                 <PostDetails price={price} address={address} elevator={elevator} maximumCapacity={maximumCapacity} rating={avgRate} />
 
-                <PostButtom postId={postId} isSavedInitially={isSavedInitially} avgRate={avgRate} />
+                <PostButtom postId={postId} isSavedInitially={isSavedInitially} avgRate={avgRate}  updateAvgRate={updateAvgRate} />
             </div>
 
             <ConfirmationModal isOpen={showDeleteConfirm} onClose={() => setShowDeleteConfirm(false)} onConfirm={handleDelete} title="Delete Post" message="Are you sure you want to delete this post?" confirmText="Delete" />
