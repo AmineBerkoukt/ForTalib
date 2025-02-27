@@ -13,7 +13,7 @@ import toast from "react-hot-toast"
 const ProfilePage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { authUser, isUpdatingProfile, updateProfile, logout } = useAuthStore()
+  const { authUser, isUpdatingProfile } = useAuthStore()
   const { userPosts, getUserPosts: getOwnPosts } = usePostStore()
   const { profilePosts, user, getUser, getUserPosts: getOthersPosts } = useProfileStore()
   const { isDarkMode } = useTheme()
@@ -87,6 +87,8 @@ const ProfilePage = () => {
 
   const currentUser = isOwnProfile ? authUser : user
   const postsToDisplay = isOwnProfile ? userPosts : profilePosts
+  console.log(authUser)
+
 
   return (
       <Layout isDarkMode={isDarkMode}>

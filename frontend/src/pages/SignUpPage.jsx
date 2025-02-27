@@ -57,10 +57,10 @@ const SignUpPage = () => {
             return false;
         }
 
-        if (!/^(0[67]|\+212)[0-9]{8}$/.test(phoneNumberRef.current.value)) {
-            toast.error("Invalid phone number");
-            return false;
-        }
+        //if (!/^(0[67]|\+212)[0-9]{8}$/.test(phoneNumberRef.current.value)) {
+          //  toast.error("Invalid phone number");
+            //return false;
+        //}
 
         return true;
     };

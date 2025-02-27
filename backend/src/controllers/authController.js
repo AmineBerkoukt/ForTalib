@@ -13,7 +13,6 @@ export const register = async (req, res) => {
             password,
             cin,
             phoneNumber,
-            studies,
             hasAcceptedTermsAndConditions // Add this line
         } = req.body;
 
@@ -30,12 +29,7 @@ export const register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        let profilePhotoPath = null;
-        if (req.file) {
-            profilePhotoPath = `/uploads/${req.user.id}/${path.basename(req.file.path)}`;
-        } else {
-            profilePhotoPath = `/uploads/defaultProfilePhoto.png`;
-        }
+
 
         const newUser = new User({
             firstName,
@@ -44,17 +38,12 @@ export const register = async (req, res) => {
             password: hashedPassword,
             cin,
             phoneNumber,
-            profilePhoto: profilePhotoPath,
             role: "student",
             hasAcceptedTermsAndConditions: hasAcceptedTermsAndConditions || false // Add this line, defaulting to false
         });
 
         await newUser.save();
 
-        if (studies) {
-            newUser.studies = studies;
-            await newUser.save();
-        }
 
         const token = jwt.sign(
             {
