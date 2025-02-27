@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, Upload, X, Loader2 } from 'lucide-react';
+import { Camera, Upload, X, Loader2, AlertCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProfileStore } from '../store/useProfileStore';
 import LoadingOverlay from '../components/skeletons/LoadingOverlay.jsx';
@@ -11,42 +11,97 @@ const CompleteSignUp = () => {
     const { updateProfile } = useProfileStore();
     const [previewImage, setPreviewImage] = useState(null);
     const [cin, setCin] = useState('');
-    const [error, setError] = useState('');
+    const [cinError, setCinError] = useState('');
+    const [fileError, setFileError] = useState('');
+    const [generalError, setGeneralError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isTouched, setIsTouched] = useState({
+        cin: false
+    });
 
     const navigate = useNavigate();
 
+    // This regex matches 1-2 letters followed by 1-7 digits
+    const cinRegex = /^[A-Za-z]{1,2}\d{1,7}$/;
+
+    // Validate CIN when it changes
+    useEffect(() => {
+        if (isTouched.cin) {
+            validateCin(cin);
+        }
+    }, [cin, isTouched.cin]);
+
+    const validateCin = (value) => {
+        if (!value.trim()) {
+            setCinError('');
+            return true; // Empty is allowed since it's optional
+        }
+
+        if (!cinRegex.test(value)) {
+            setCinError('CIN must start with 1-2 letters followed by 1-7 numbers');
+            return false;
+        }
+
+        setCinError('');
+        return true;
+    };
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
+        setFileError('');
+
         if (file) {
             // Validate file type
             if (!file.type.match('image.*')) {
-                setError('Please select an image file');
+                setFileError('Please select an image file');
                 return;
             }
 
             // Validate file size (max 5MB)
             if (file.size > 5 * 1024 * 1024) {
-                setError('Image size should be less than 5MB');
+                setFileError('Image size should be less than 5MB');
                 return;
             }
 
             setSelectedImage(file);
             setPreviewImage(URL.createObjectURL(file));
-            setError(''); // Clear any previous errors
         }
     };
 
     const handleRemoveImage = () => {
         setPreviewImage(null);
         setSelectedImage(null);
+        setFileError('');
+    };
+
+    const handleCinChange = (e) => {
+        const value = e.target.value;
+        setCin(value);
+        if (!isTouched.cin) {
+            setIsTouched({...isTouched, cin: true});
+        }
     };
 
     const handleCompleteSignup = async (e) => {
         e.preventDefault();
+        setGeneralError('');
+        setIsTouched({cin: true});
+
+        // Validate form before submission
+        const isCinValid = validateCin(cin);
+
+        if (!isCinValid) {
+            return;
+        }
+
+        // Check if we have any data to submit
+        if (cin.trim() === '' && !selectedImage) {
+            setGeneralError('Please provide at least one field to update');
+            return;
+        }
+
         setIsLoading(true);
-        setError('');
 
         try {
             // Create a FormData object to handle file uploads
@@ -60,13 +115,6 @@ const CompleteSignUp = () => {
             // Only add profile picture if one was selected
             if (selectedImage) {
                 formData.append('profilePhoto', selectedImage);
-            }
-
-            // Check if we have any data to submit
-            if (cin.trim() === '' && !selectedImage) {
-                setError('Please provide at least one field to update');
-                setIsLoading(false);
-                return;
             }
 
             // Log what we're submitting
@@ -91,7 +139,7 @@ const CompleteSignUp = () => {
                 errorMessage = `Error: ${error.message}`;
             }
 
-            setError(errorMessage);
+            setGeneralError(errorMessage);
             toast.error(errorMessage);
         } finally {
             setIsLoading(false);
@@ -104,7 +152,7 @@ const CompleteSignUp = () => {
 
     return (
         <>
-            {isLoading && <LoadingOverlay />}
+            {isLoading && <LoadingOverlay isDarkMode={isDarkMode} message="Setting up your profile"/>}
 
             <div className={`w-full max-w-md mx-auto ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-lg transition-all duration-200 overflow-hidden`}>
                 <div className={`px-6 py-8 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
@@ -165,6 +213,12 @@ const CompleteSignUp = () => {
                             <p className={`mt-4 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                                 Upload your profile picture
                             </p>
+                            {fileError && (
+                                <div className="mt-2 flex items-center justify-center text-red-500 text-sm">
+                                    <AlertCircle size={16} className="mr-1" />
+                                    <span>{fileError}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -176,17 +230,32 @@ const CompleteSignUp = () => {
                                 id="cin"
                                 name="cin"
                                 value={cin}
-                                onChange={(e) => setCin(e.target.value)}
+                                onChange={handleCinChange}
+                                onBlur={() => setIsTouched({...isTouched, cin: true})}
                                 className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 transition-all duration-200
                                 ${isDarkMode
                                     ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-500 placeholder-gray-400'
-                                    : 'bg-white border-gray-300 text-gray-800 focus:ring-blue-500 placeholder-gray-400'}`}
-                                placeholder="Enter your CIN"
+                                    : 'bg-white border-gray-300 text-gray-800 focus:ring-blue-500 placeholder-gray-400'}
+                                ${cinError ? (isDarkMode ? 'border-red-500' : 'border-red-500') : ''}`}
+                                placeholder="Your CIN (NOT required)"
                             />
-                            {error && (
-                                <p className="mt-2 text-sm text-red-500 animate-pulse">{error}</p>
+                            {cinError && (
+                                <div className="mt-2 flex items-center text-red-500 text-sm">
+                                    <AlertCircle size={16} className="mr-1" />
+                                    <span>{cinError}</span>
+                                </div>
                             )}
+                            <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                CIN format: 1-2 letters followed by 1-7 numbers
+                            </p>
                         </div>
+
+                        {generalError && (
+                            <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-red-900/30' : 'bg-red-100'} text-red-500 text-sm flex items-center`}>
+                                <AlertCircle size={16} className="mr-2 flex-shrink-0" />
+                                <span>{generalError}</span>
+                            </div>
+                        )}
 
                         <div className="flex flex-col sm:flex-row gap-3 pt-2">
                             <button
@@ -203,17 +272,16 @@ const CompleteSignUp = () => {
 
                             <button
                                 type="submit"
-                                disabled={isLoading}
+                                disabled={isLoading || !!cinError}
                                 className={`py-3 px-4 rounded-lg font-medium transition-all duration-200 flex-1
                                 ${isDarkMode
                                     ? 'bg-blue-600 hover:bg-blue-700 text-white'
                                     : 'bg-blue-500 hover:bg-blue-600 text-white'
-                                } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''} 
+                                } ${(isLoading || !!cinError) ? 'opacity-70 cursor-not-allowed' : ''} 
                                 transform hover:translate-y-[-1px] hover:shadow-md`}
                             >
                                 {isLoading ? (
                                     <span className="flex items-center justify-center">
-                                        <Loader2 size={20} className="animate-spin mr-2" />
                                         Processing...
                                     </span>
                                 ) : (
