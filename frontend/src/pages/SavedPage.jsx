@@ -21,16 +21,33 @@ const SavedPage = () => {
     }, []);
 
     const filteredAndSortedPosts = useMemo(() => {
+        console.log("Saved posts:", savedPosts);
+
+        if (!Array.isArray(savedPosts) || savedPosts.length === 0) {
+            return [];
+        }
+
+        // Check the structure of the first post to determine how to access data
+        const samplePost = savedPosts[0];
+        console.log("Sample post structure:", samplePost);
+
         return savedPosts
-            .filter(post =>
-                post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                post.description.toLowerCase().includes(searchTerm.toLowerCase())
-            )
+            .filter(post => {
+                // Safely access title and description using optional chaining
+                const title = post.title || post.post?.title || '';
+                const description = post.description || post.post?.description || '';
+
+                return title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    description.toLowerCase().includes(searchTerm.toLowerCase());
+            })
             .sort((a, b) => {
+                const dateA = new Date(a.createdAt || a.post?.createdAt);
+                const dateB = new Date(b.createdAt || b.post?.createdAt);
+
                 if (sortOrder === "asc") {
-                    return new Date(a.createdAt) - new Date(b.createdAt);
+                    return dateA - dateB;
                 } else {
-                    return new Date(b.createdAt) - new Date(a.createdAt);
+                    return dateB - dateA;
                 }
             });
     }, [savedPosts, searchTerm, sortOrder]);
@@ -111,48 +128,50 @@ const SavedPage = () => {
                             </p>
                         </div>
                     ) : (
-                        filteredAndSortedPosts.map((savedPost) => (
-                            <div
-                                key={savedPost._id}
-                                className={`transition-all duration-300 hover:scale-[1.01] ${
-                                    isDarkMode ? "hover:shadow-lg hover:shadow-gray-700" : "hover:shadow-lg"
-                                }`}
-                            >
-                                {(() => {
-                                    const processedImages = (savedPost.images || []).map((image) => {
-                                        if (image.startsWith('http://localhost:5000')) {
-                                            return image;
-                                        }
-                                        return `http://localhost:5000${image}`;
-                                    });
+                        filteredAndSortedPosts.map((savedPost) => {
+                            // Get the actual post data, handling both potential structures
+                            const postData = savedPost.post || savedPost;
 
-                                    return (
-                                        <Post
-                                            key={savedPost._id}
-                                            postId={savedPost._id}
-                                            user={{
-                                                _id: savedPost.user?.id,
-                                                name: savedPost.user ? `${savedPost.user.firstName} ${savedPost.user.lastName}` : 'Unknown User',
-                                                firstName: savedPost.user?.firstName,
-                                                lastName: savedPost.user?.lastName,
-                                                role: savedPost.user?.role,
-                                                profilePhoto: savedPost.user?.profilePhoto,
-                                            }}
-                                            title={savedPost.title}
-                                            content={savedPost.description}
-                                            images={processedImages}
-                                            timestamp={new Date(savedPost.createdAt).toLocaleString()}
-                                            price={savedPost.price}
-                                            address={savedPost.address}
-                                            elevator={savedPost.elevator}
-                                            maximumCapacity={savedPost.maximumCapacity}
-                                            likesCount={savedPost.likesCount}
-                                            avgRate={savedPost.avgRate}
-                                        />
-                                    );
-                                })()}
-                            </div>
-                        ))
+                            const processedImages = (postData.images || []).map((image) => {
+                                if (image.startsWith(BASE_URL)) {
+                                    return image;
+                                }
+                                return `${BASE_URL}${image}`;
+                            });
+
+                            return (
+                                <div
+                                    key={postData._id}
+                                    className={`transition-all duration-300 hover:scale-[1.01] ${
+                                        isDarkMode ? "hover:shadow-lg hover:shadow-gray-700" : "hover:shadow-lg"
+                                    }`}
+                                >
+                                    <Post
+                                        key={postData._id}
+                                        postId={postData._id}
+                                        user={{
+                                            _id: postData.user?.id,
+                                            name: postData.user ? `${postData.user.firstName} ${postData.user.lastName}` : 'Unknown User',
+                                            firstName: postData.user?.firstName,
+                                            lastName: postData.user?.lastName,
+                                            role: postData.user?.role,
+                                            profilePhoto: postData.user?.profilePhoto,
+                                        }}
+                                        title={postData.title}
+                                        content={postData.description}
+                                        images={processedImages}
+                                        timestamp={new Date(postData.createdAt).toLocaleString()}
+                                        price={postData.price}
+                                        address={postData.address}
+                                        elevator={postData.elevator}
+                                        maximumCapacity={postData.maximumCapacity}
+                                        likesCount={postData.likesCount}
+                                        avgRate={postData.avgRate}
+                                        isSavedInitially={true}
+                                    />
+                                </div>
+                            );
+                        })
                     )}
                 </div>
             </div>

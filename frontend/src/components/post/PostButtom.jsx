@@ -5,12 +5,23 @@ import { StarIcon as StarOutlineIcon } from "@heroicons/react/24/outline";
 import { Bookmark, BookmarkPlus } from "lucide-react";
 import toast from "react-hot-toast";
 import { usePostStore } from "../../store/usePostStore.js";
+import { useSavedPostStore } from "../../store/useSavedPostStore.js";
 
-const PostButtom = ({ postId, isSavedInitially, avgRate }) => {
+const PostBottom = ({ postId, avgRate }) => {
     const location = useLocation();
     const { savePost, unsavePost, ratePost } = usePostStore();
+    const { getSavedPostsIds, savedPosts } = useSavedPostStore();
     const [rating, setRating] = useState(avgRate);
-    const [isSaved, setIsSaved] = useState(isSavedInitially);
+    const [isSaved, setIsSaved] = useState(false);
+
+    // Check if the post is saved initially
+    useEffect(() => {
+        getSavedPostsIds();
+    }, [getSavedPostsIds]);
+
+    useEffect(() => {
+        setIsSaved(savedPosts.includes(postId));
+    }, [savedPosts, postId]);
 
     // If the user is on the /saved route, mark the post as saved by default
     useEffect(() => {
@@ -58,9 +69,9 @@ const PostButtom = ({ postId, isSavedInitially, avgRate }) => {
                             className="cursor-pointer transition-transform duration-300 hover:scale-125"
                         >
                             {index + 1 <= rating ? (
-                                <StarIcon className="h-5 w-5 text-yellow-500"/>
+                                <StarIcon className="h-5 w-5 text-yellow-500" />
                             ) : (
-                                <StarOutlineIcon className="h-5 w-5 text-yellow-500"/>
+                                <StarOutlineIcon className="h-5 w-5 text-yellow-500" />
                             )}
                         </div>
                     ))}
@@ -75,18 +86,17 @@ const PostButtom = ({ postId, isSavedInitially, avgRate }) => {
                 {isSaved ? (
                     <>
                         <span>Unsave</span>
-                        <Bookmark className="h-5 w-5"/>
+                        <Bookmark className="h-5 w-5" />
                     </>
                 ) : (
                     <>
                         <span>Save</span>
-                        <BookmarkPlus className="h-5 w-5"/>
+                        <BookmarkPlus className="h-5 w-5" />
                     </>
                 )}
             </button>
-
         </div>
     );
 };
 
-export default PostButtom;
+export default PostBottom;

@@ -9,6 +9,7 @@ import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
 import ScrollToTop from "../components/ScrollToTop";
+import { useSavedPostStore } from "../store/useSavedPostStore.js";
 
 const POSTS_PER_PAGE = 10;
 
@@ -16,6 +17,7 @@ const HomePage = () => {
     const { isDarkMode } = useTheme();
     const { activateModal } = useModalStore();
     const { posts, getPosts } = usePostStore();
+    const { getSavedPostsIds, savedPostsIds, loading } = useSavedPostStore();
     const [displayedPosts, setDisplayedPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -23,7 +25,8 @@ const HomePage = () => {
 
     useEffect(() => {
         getPosts();
-    }, [getPosts]);
+        getSavedPostsIds();
+    }, [getPosts, getSavedPostsIds]);
 
     useEffect(() => {
         if (posts) {
@@ -45,6 +48,7 @@ const HomePage = () => {
     const handleRefresh = async () => {
         setIsRefreshing(true);
         await getPosts();
+        await getSavedPostsIds();
         setIsRefreshing(false);
         toast.success("Page refreshed successfully!");
     };
@@ -105,6 +109,9 @@ const HomePage = () => {
                                     ? post.images.map((image) => `http://localhost:5000${image}`)
                                     : [];
 
+                                // Check if this post is in the savedPostsIds array
+                                const isPostSaved = Array.isArray(savedPostsIds) && savedPostsIds.includes(post._id);
+
                                 return (
                                     <div
                                         key={post._id}
@@ -131,11 +138,11 @@ const HomePage = () => {
                                             elevator={post.elevator}
                                             maximumCapacity={post.maximumCapacity}
                                             avgRate={post.avgRate}
+                                            isSavedInitially={isPostSaved}
                                         />
                                     </div>
                                 );
                             })}
-
 
                             {hasMorePosts && (
                                 <div className="flex justify-center pt-4 pb-6 sm:pb-8">
@@ -173,4 +180,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

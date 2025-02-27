@@ -12,6 +12,9 @@ import ImageModal from "./post/ImageModal.jsx";
 import PostDetails from "./post/PostDetails.jsx";
 import PostHeader from "./post/PostHeader.jsx";
 import PostButtom from "./post/PostButtom.jsx";
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import { useSavedPostStore } from "../store/useSavedPostStore";
+
 
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
@@ -40,6 +43,12 @@ const Post = ({
     const location = useLocation();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const isPostOwner = authUser._id === user._id;
+    const { savedPosts, getSavedPostsIds } = useSavedPostStore();
+    const [isSaved, setIsSaved] = useState(isSavedInitially);
+
+    useEffect(() => {
+        setIsSaved(savedPosts.includes(postId));
+    }, [savedPosts, postId]);
 
     let profileImageUrl = user.profilePhoto ? BASE_URL + user.profilePhoto : "./avatar.png";
 
@@ -56,6 +65,18 @@ const Post = ({
             toast.error("Failed to delete post");
         }
     };
+
+    const handleSaveToggle = async () => {
+        if (isSaved) {
+            await unsavePost(postId);
+            toast.success("Post removed from saved!");
+        } else {
+            await savePost(postId);
+            toast.success("Post saved!");
+        }
+        await getSavedPostsIds();  // Refresh saved posts
+    };
+
 
     const handleNavigateToProfile = (userId) => {
         if (userId) navigate(`/profile/${userId}`);
