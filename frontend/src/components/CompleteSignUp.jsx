@@ -198,7 +198,7 @@ const CompleteSignUp = () => {
                                     : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
                                 }`}
                             >
-                                Cancel
+                                Skip
                             </button>
 
                             <button
