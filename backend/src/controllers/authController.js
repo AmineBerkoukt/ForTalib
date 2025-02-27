@@ -13,11 +13,12 @@ export const register = async (req, res) => {
             password,
             cin,
             phoneNumber,
-            studies
+            studies,
+            hasAcceptedTermsAndConditions // Add this line
         } = req.body;
 
         let existingUser = await User.findOne({
-            $or: [{ email }, { phoneNumber }] // Ensure email and phone are unique
+            $or: [{ email }, { phoneNumber }]
         });
 
         if (existingUser) {
@@ -33,9 +34,9 @@ export const register = async (req, res) => {
         if (req.file) {
             profilePhotoPath = `/uploads/${req.user.id}/${path.basename(req.file.path)}`;
         } else {
-            // Si aucune photo n'est fournie, utiliser la photo par défaut
             profilePhotoPath = `/uploads/defaultProfilePhoto.png`;
         }
+
         const newUser = new User({
             firstName,
             lastName,
@@ -44,14 +45,15 @@ export const register = async (req, res) => {
             cin,
             phoneNumber,
             profilePhoto: profilePhotoPath,
-            role: "student"
+            role: "student",
+            hasAcceptedTermsAndConditions: hasAcceptedTermsAndConditions || false // Add this line, defaulting to false
         });
 
         await newUser.save();
 
         if (studies) {
             newUser.studies = studies;
-            await newUser.save()
+            await newUser.save();
         }
 
         const token = jwt.sign(
@@ -74,7 +76,8 @@ export const register = async (req, res) => {
                 firstName: newUser.firstName,
                 lastName: newUser.lastName,
                 email: newUser.email,
-                role: newUser.role
+                role: newUser.role,
+                hasAcceptedTermsAndConditions: newUser.hasAcceptedTermsAndConditions //Add this line
             }
         });
     } catch (error) {
@@ -83,7 +86,7 @@ export const register = async (req, res) => {
             error: error.message
         });
     }
-};
+}
 
 export const login = async (req, res) => {
     try {

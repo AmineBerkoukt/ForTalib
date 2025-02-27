@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../../store/useUserStore.js";
-import { Eye, UserPlus, Trash, Search, Filter, ChevronRight } from 'lucide-react';
+import { Eye, UserPlus, Trash, Search, Filter, ChevronRight, Ban } from 'lucide-react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -26,7 +26,6 @@ export default function UserManagement({ isDashboard = false }) {
     const roleDisplayNames = {
         admin: "Admin",
         student: "Student",
-        house_owner: "House Owner",
     };
 
     useEffect(() => {
@@ -176,7 +175,8 @@ export default function UserManagement({ isDashboard = false }) {
                                                                 className="px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center"
                                                                 onClick={() => handleMakeAdmin(user._id)}
                                                             >
-                                                                <UserPlus className="h-4 w-4 mr-1"/> <span className="hidden sm:inline">Make Admin</span>
+                                                                <UserPlus className="h-4 w-4 mr-1"/> <span
+                                                                className="hidden sm:inline">Make Admin</span>
                                                             </button>
                                                         ) : (
                                                             <button
@@ -190,7 +190,15 @@ export default function UserManagement({ isDashboard = false }) {
                                                             onClick={() => handleDeleteUser(user._id)}
                                                             className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center"
                                                         >
-                                                            <Trash className="h-4 w-4 mr-1"/> <span className="hidden sm:inline">Delete</span>
+                                                            <Trash className="h-4 w-4 mr-1"/> <span
+                                                            className="hidden sm:inline">Delete</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteUser(user._id)}
+                                                            className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center"
+                                                        >
+                                                            <Ban className="h-4 w-4 mr-1"/> <span
+                                                            className="hidden sm:inline">Ban</span>
                                                         </button>
                                                     </>
                                                 )}

@@ -3,11 +3,11 @@ import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-
 import { useAuthStore } from "./store/useAuthStore";
 import { useTheme } from "./contexts/ThemeContext.jsx";
 import { Toaster } from "react-hot-toast";
-import PostDetailsModal from "./components/PostDetailsModal";
+import PostDetailsModal from "./components/modals/PostDetailsModal.jsx";
 import { useModalStore } from "./store/useModalStore.js";
 
 // Components and Pages
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
@@ -19,6 +19,7 @@ import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import ChangePassword from "./components/profile/ChangePassword.jsx"
+import CompleteSignUpPage from "./pages/CompleteSignUpPage.jsx";
 
 // Route Protection HOC
 const ProtectedRoute = ({ element, isAuthenticated, redirectTo }) => {
@@ -108,7 +109,7 @@ const App = () => {
                 {/* Public Routes */}
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<HomePage />} />
 
                 {/* Protected Routes */}
                 <Route
@@ -136,6 +137,16 @@ const App = () => {
                     element={
                         <ProtectedRoute
                             element={<ProfilePage />}
+                            isAuthenticated={!!authUser}
+                            redirectTo="/login"
+                        />
+                    }
+                />
+                <Route
+                    path="/complete-signup"
+                    element={
+                        <CompleteSignUpPage
+                            element={<ChatPage />}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />

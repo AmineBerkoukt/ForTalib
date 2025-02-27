@@ -1,6 +1,6 @@
 import React from "react";
-import { useTheme } from "../contexts/ThemeContext";
-import { useModalStore } from "../store/useModalStore.js";
+import { useTheme } from "../../contexts/ThemeContext.jsx";
+import { useModalStore } from "../../store/useModalStore.js";
 
 function RightBarPost({ posts }) {
     const { isDarkMode } = useTheme();

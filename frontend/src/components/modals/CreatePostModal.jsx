@@ -1,97 +1,99 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { X, Upload } from 'lucide-react';
-import { usePostStore } from "../../store/usePostStore.js";
-import { Toaster } from "react-hot-toast";
+import { useState, useRef, useEffect } from "react"
+import { X, Upload, Loader } from "lucide-react"
+import { usePostStore } from "../../store/usePostStore.js"
+import LoadingOverlay from "../skeletons/LoadingOverlay.jsx"
 
 export default function CreatePostModal({ isDarkMode, showModal, setShowModal }) {
-    const { createPost } = usePostStore();
+    const { createPost, isLoading } = usePostStore()
 
     const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        price: '',
-        address: '',
-        elevator: 'no',
-        maximumCapacity: '1',
+        title: "",
+        description: "",
+        price: "",
+        address: "",
+        elevator: "no",
+        maximumCapacity: "1",
         images: [],
-    });
+    })
 
-    const modalRef = useRef(null);
-    const fileInputRef = useRef(null);
+    const modalRef = useRef(null)
+    const fileInputRef = useRef(null)
 
     useEffect(() => {
         const handleEscapeKey = (e) => {
-            if (e.key === 'Escape') setShowModal(false);
-        };
-        window.addEventListener('keydown', handleEscapeKey);
-        return () => window.removeEventListener('keydown', handleEscapeKey);
-    }, [setShowModal]);
+            if (e.key === "Escape") setShowModal(false)
+        }
+        window.addEventListener("keydown", handleEscapeKey)
+        return () => window.removeEventListener("keydown", handleEscapeKey)
+    }, [setShowModal])
 
     useEffect(() => {
         if (showModal) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden"
         } else {
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = "unset"
         }
-        return () => { document.body.style.overflow = 'unset'; };
-    }, [showModal]);
+        return () => {
+            document.body.style.overflow = "unset"
+        }
+    }, [showModal])
 
     const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, type, checked } = e.target
         setFormData((prev) => ({
             ...prev,
-            [name]: type === 'checkbox' ? checked : value,
-        }));
-    };
+            [name]: type === "checkbox" ? checked : value,
+        }))
+    }
 
     const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
+        const files = Array.from(e.target.files)
         if (files.length > 6) {
-            alert('You can upload up to 6 images only.');
-            return;
+            alert("You can upload up to 6 images only.")
+            return
         }
         setFormData((prev) => ({
             ...prev,
             images: files,
-        }));
-    };
+        }))
+    }
 
     const removeImage = (index) => {
-        const newImages = Array.from(formData.images);
-        newImages.splice(index, 1);
-        setFormData(prev => ({
+        const newImages = Array.from(formData.images)
+        newImages.splice(index, 1)
+        setFormData((prev) => ({
             ...prev,
-            images: newImages
-        }));
+            images: newImages,
+        }))
         if (newImages.length === 0 && fileInputRef.current) {
-            fileInputRef.current.value = '';
+            fileInputRef.current.value = ""
         }
-    };
+    }
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         try {
-            await createPost(formData);
-            setShowModal(false);
+            await createPost(formData)
+            setShowModal(false)
             setFormData({
-                title: '',
-                description: '',
-                price: '',
-                address: '',
-                elevator: 'no',
-                maximumCapacity: '1',
+                title: "",
+                description: "",
+                price: "",
+                address: "",
+                elevator: "no",
+                maximumCapacity: "1",
                 images: [],
-            });
+            })
         } catch (error) {
-            console.error('Error creating post:', error);
+            console.error("Error creating post:", error)
         }
     }
 
     const handleOutsideClick = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
-            setShowModal(false);
+            setShowModal(false)
         }
-    };
+    }
 
     return (
         <>
@@ -104,6 +106,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                         ref={modalRef}
                         className={`relative bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden`}
                     >
+                        {isLoading && <LoadingOverlay isDarkMode={isDarkMode} />}
                         <button
                             onClick={() => setShowModal(false)}
                             className={`absolute top-4 right-4 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${
@@ -114,15 +117,20 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                             <X size={24} />
                         </button>
 
-                        <div className={`p-6 overflow-y-auto max-h-[calc(90vh-2rem)] ${isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"}`}>
+                        <div
+                            className={`p-6 overflow-y-auto max-h-[calc(90vh-2rem)] ${isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"}`}
+                        >
                             <h2 className="text-2xl font-bold mb-6">Create Post</h2>
 
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Title</label>
+                                        <label className="block text-sm font-medium mb-1" htmlFor="title">
+                                            Title
+                                        </label>
                                         <input
                                             type="text"
+                                            id="title"
                                             name="title"
                                             value={formData.title}
                                             onChange={handleInputChange}
@@ -135,9 +143,12 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Price</label>
+                                        <label className="block text-sm font-medium mb-1" htmlFor="price">
+                                            Price
+                                        </label>
                                         <input
                                             type="number"
+                                            id="price"
                                             name="price"
                                             value={formData.price}
                                             onChange={handleInputChange}
@@ -146,7 +157,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                                     ? "bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500"
                                                     : "bg-white border-gray-300 text-gray-900 focus:border-blue-500"
                                             } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors`}
-                                            style={{ appearance: 'textfield' }}
+                                            style={{ appearance: "textfield" }}
                                             required
                                         />
                                     </div>
@@ -154,8 +165,11 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Maximum Capacity (Rooms)</label>
+                                        <label className="block text-sm font-medium mb-1" htmlFor="maximumCapacity">
+                                            Maximum Capacity (Rooms)
+                                        </label>
                                         <select
+                                            id="maximumCapacity"
                                             name="maximumCapacity"
                                             value={formData.maximumCapacity}
                                             onChange={handleInputChange}
@@ -166,7 +180,9 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                             } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors`}
                                         >
                                             {[1, 2, 3, 4, 5].map((room) => (
-                                                <option key={room} value={room}>{room}</option>
+                                                <option key={room} value={room}>
+                                                    {room}
+                                                </option>
                                             ))}
                                         </select>
                                     </div>
@@ -174,7 +190,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                     <div>
                                         <label className="block text-sm font-medium mb-1">Elevator</label>
                                         <div className="flex space-x-4 mt-1">
-                                            {['yes', 'no'].map((option) => (
+                                            {["yes", "no"].map((option) => (
                                                 <label key={option} className="inline-flex items-center">
                                                     <input
                                                         type="radio"
@@ -192,9 +208,12 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Address</label>
+                                    <label className="block text-sm font-medium mb-1" htmlFor="address">
+                                        Address
+                                    </label>
                                     <input
                                         type="text"
+                                        id="address"
                                         name="address"
                                         value={formData.address}
                                         onChange={handleInputChange}
@@ -208,8 +227,11 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Description</label>
+                                    <label className="block text-sm font-medium mb-1" htmlFor="description">
+                                        Description
+                                    </label>
                                     <textarea
+                                        id="description"
                                         name="description"
                                         value={formData.description}
                                         onChange={handleInputChange}
@@ -248,7 +270,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                             aria-label="Upload images"
                                         />
                                     </div>
-                                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">
+                                    <p className={`mt-2 text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"} text-center`}>
                                         PNG, JPG, GIF up to 10MB each
                                     </p>
                                 </div>
@@ -257,7 +279,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                     {formData.images.map((image, index) => (
                                         <div key={index} className="relative w-20 h-20">
                                             <img
-                                                src={URL.createObjectURL(image)}
+                                                src={URL.createObjectURL(image) || "/placeholder.svg"}
                                                 alt={`preview-${index}`}
                                                 className="w-full h-full object-cover rounded-lg"
                                             />
@@ -275,13 +297,21 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
 
                                 <button
                                     type="submit"
+                                    disabled={isLoading}
                                     className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
-                                        isDarkMode
-                                            ? "bg-blue-600 hover:bg-blue-700"
-                                            : "bg-blue-500 hover:bg-blue-600"
-                                    } transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                                        isDarkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+                                    } transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                                        isLoading ? "opacity-50 cursor-not-allowed" : ""
+                                    }`}
                                 >
-                                    Create Post
+                                    {isLoading ? (
+                                        <>
+                                            <Loader className="inline-block animate-spin mr-2" size={16} />
+                                            Creating Post...
+                                        </>
+                                    ) : (
+                                        "Create Post"
+                                    )}
                                 </button>
                             </form>
                         </div>
@@ -289,6 +319,6 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                 </div>
             )}
         </>
-    );
+    )
 }
 

@@ -1,6 +1,9 @@
 import { CheckCircle, Shield } from 'lucide-react';
 import {ChatBubbleLeftRightIcon, PencilSquareIcon} from "@heroicons/react/24/outline";
 import { Trash2 } from 'lucide-react';
+import React from "react";
+import {useChatStore} from "../../store/useChatStore.js";
+import {useNavigate} from "react-router-dom";
 
 const PostHeader = ({
                         user,
@@ -10,34 +13,36 @@ const PostHeader = ({
                         handleNavigateToProfile,
                         handleEditClick,
                         setShowDeleteConfirm,
-                        handleTalkToOwner,
                         isInProfile,
                         profileImageUrl
                     }) => {
+    const { setSelectedUser } = useChatStore();
+    const navigate = useNavigate();
+
+
+    const handleTalkToOwner = async (userToTalkTo) => {
+        setSelectedUser(userToTalkTo);
+        navigate("/chat");
+    };
+
+
     return (
         <div className="flex items-center justify-between mb-2">
-            <div
-                className="flex items-center cursor-pointer"
-                onClick={() => handleNavigateToProfile(user._id)}
-            >
+            <div className="flex items-center cursor-pointer" onClick={() => handleNavigateToProfile(user._id)}>
                 <img
-                    src={profileImageUrl}
-                    alt="Profile"
-                    className="h-10 w-10 rounded-full mr-2"
+                    src={profileImageUrl || "/default-avatar.png"}
+                    alt={user.firstName}
+                    className="h-12 w-12 rounded-full border-2 border-gray-300 dark:border-gray-500 shadow-md transition-transform duration-300 hover:scale-105 mr-2 object-cover"
+                    loading="lazy"
                 />
+
                 <div>
                     <h3 className="flex items-center font-semibold dark:text-gray-200 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200">
-                        {user.name}
-                        {user.role === "HouseOwner" && (
-                            <CheckCircle className="h-4 w-4 ml-1 text-blue-500"/>
-                        )}
-                        {user.role === "admin" && (
-                            <Shield className="h-4 w-4 ml-1 text-purple-500"/>
-                        )}
+                        {user.firstName + " " + user.lastName}
+                        {user.role === "HouseOwner" && <CheckCircle className="h-4 w-4 ml-1 text-blue-500"/>}
+                        {user.role === "admin" && <Shield className="h-4 w-4 ml-1 text-purple-500"/>}
                     </h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">
-                        {new Date(timestamp).toLocaleString()}
-                    </p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">{new Date(timestamp).toLocaleString()}</p>
                 </div>
             </div>
 
@@ -61,7 +66,7 @@ const PostHeader = ({
                     </button>
                 )}
 
-                {!isInProfile && (
+                {!isInProfile && !isPostOwner && (
                     <button
                         onClick={() => handleTalkToOwner(user)}
                         className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"

@@ -5,9 +5,9 @@ import {
     BookmarkIcon,
     CalendarIcon,
 } from "@heroicons/react/24/outline";
-import { useChatStore } from "../store/useChatStore";
-import { useAuthStore } from "../store/useAuthStore";
-import SidebarFBFilter from "./SidebarFBFilter";
+import { useChatStore } from "../../store/useChatStore.js";
+import { useAuthStore } from "../../store/useAuthStore.js";
+import SidebarFBFilter from "./SidebarFBFilter.jsx";
 
 const SidebarItem = ({ Icon, text, to, isActive }) => (
     <Link

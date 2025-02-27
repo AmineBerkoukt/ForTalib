@@ -13,24 +13,25 @@ export default function DashboardPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="space-y-6 p-6"
+                className="space-y-6 p-4 sm:p-6"
             >
                 <DashboardHeader />
-                <DashboardStats />
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+                {/* Main Dashboard Content */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     <motion.div
-                        initial={{ x: -50, opacity: 0 }}
+                        initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="w-full overflow-hidden"
                     >
-                        <HouseOwnerRequests isDashboard={true} />
+                        <DashboardStats />
                     </motion.div>
+
+                    {/* Right Side - User Management */}
                     <motion.div
-                        initial={{ x: 50, opacity: 0 }}
+                        initial={{ x: 20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.4, duration: 0.5 }}
-                        className="w-full overflow-hidden"
                     >
                         <UserManagement isDashboard={true} />
                     </motion.div>
@@ -39,4 +40,3 @@ export default function DashboardPage() {
         </Layout>
     )
 }
-

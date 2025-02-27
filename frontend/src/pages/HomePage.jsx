@@ -5,14 +5,14 @@ import CreatePost from "../components/CreatePost";
 import { useTheme } from "../contexts/ThemeContext";
 import { useModalStore } from "../store/useModalStore";
 import { usePostStore } from "../store/usePostStore";
-import PostDetailsModal from "../components/PostDetailsModal";
+import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
 import ScrollToTop from "../components/ScrollToTop";
 
 const POSTS_PER_PAGE = 10;
 
-const Home = () => {
+const HomePage = () => {
     const { isDarkMode } = useTheme();
     const { activateModal } = useModalStore();
     const { posts, getPosts } = usePostStore();
@@ -119,7 +119,7 @@ const Home = () => {
                                                 firstName: post.user?.firstName || 'Unknown',
                                                 lastName: post.user?.lastName || 'User',
                                                 role: post.user?.role || 'user',
-                                                profilePhoto: post.user?.profilePhoto || "https://via.placeholder.com/150",
+                                                profilePhoto: post.user.profilePhoto
                                             }}
                                             postId={post._id}
                                             title={post.title}
@@ -172,5 +172,5 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default HomePage;
 
