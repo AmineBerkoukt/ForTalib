@@ -4,19 +4,16 @@ import api from "../utils/api.js";
 export const useSavedPostStore = create((set) => ({
     savedPosts: [],
     loading: true,
-    error: null,
 
     // Fetch all saved posts
-    fetchSavedPosts: async () => {
-        set({ loading: true, error: null }); // Set loading state
+    getSavedPosts: async () => {
         try {
+            set({ loading: true, error: null });
             const response = await api.get("/saved");
             set({ savedPosts: response.data, loading: false });
         } catch (err) {
-            set({
-                error: err.message || "Failed to fetch saved posts",
-                loading: false,
-            });
+            console.error("Failed to fetch saved posts:", err);
+            set({ savedPosts: [], loading: false, error: err.message });
         }
-    },
+    }
 }));

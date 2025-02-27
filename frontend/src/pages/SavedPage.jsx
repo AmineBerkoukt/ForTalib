@@ -1,35 +1,23 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Layout from "../components/Layout";
 import Post from "../components/Post";
-import api from "../utils/api.js";
 import { useTheme } from "../contexts/ThemeContext.jsx";
 import { BookmarkPlus, Search, SortAsc, SortDesc, Loader2 } from 'lucide-react';
-import { Toaster, toast } from "react-hot-toast";
 import { Link } from 'react-router-dom';
-import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
+import { useSavedPostStore } from "../store/useSavedPostStore.js";
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
 const SavedPage = () => {
     const { isDarkMode } = useTheme();
-    const [savedPosts, setSavedPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortOrder, setSortOrder] = useState("desc");
 
-    useEffect(() => {
-        const fetchSavedPosts = async () => {
-            try {
-                const response = await api.get("/saved");
-                setSavedPosts(response.data);
-                setLoading(false);
-            } catch (err) {
-                console.error("Failed to fetch saved posts:", err);
-                setSavedPosts([]);
-                setLoading(false);
-            }
-        };
+    // Accessing Zustand store data and method
+    const { savedPosts, loading, getSavedPosts } = useSavedPostStore();
 
-        fetchSavedPosts();
+    // Fetching saved posts when the component mounts
+    useEffect(() => {
+        getSavedPosts();
     }, []);
 
     const filteredAndSortedPosts = useMemo(() => {
@@ -53,7 +41,6 @@ const SavedPage = () => {
 
     return (
         <Layout isDarkMode={isDarkMode}>
-
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <header className="text-left mb-8">
                     <h1
@@ -131,19 +118,15 @@ const SavedPage = () => {
                                     isDarkMode ? "hover:shadow-lg hover:shadow-gray-700" : "hover:shadow-lg"
                                 }`}
                             >
-                                {/* Preprocess the images array to ensure they start with the base URL */}
                                 {(() => {
                                     const processedImages = (savedPost.images || []).map((image) => {
-                                        // Check if the image already starts with the base URL
                                         if (image.startsWith('http://localhost:5000')) {
-                                            return image; // Return as is if it already starts with the base URL
+                                            return image;
                                         }
-                                        // Otherwise, prepend the base URL
                                         return `http://localhost:5000${image}`;
                                     });
 
                                     return (
-
                                         <Post
                                             key={savedPost._id}
                                             postId={savedPost._id}
@@ -151,13 +134,13 @@ const SavedPage = () => {
                                                 _id: savedPost.user?.id,
                                                 name: savedPost.user ? `${savedPost.user.firstName} ${savedPost.user.lastName}` : 'Unknown User',
                                                 firstName: savedPost.user?.firstName,
-                                                lastName: savedPost.user?.lastName ,
+                                                lastName: savedPost.user?.lastName,
                                                 role: savedPost.user?.role,
                                                 profilePhoto: savedPost.user?.profilePhoto,
                                             }}
                                             title={savedPost.title}
                                             content={savedPost.description}
-                                            images={processedImages} // Pass the processed images array
+                                            images={processedImages}
                                             timestamp={new Date(savedPost.createdAt).toLocaleString()}
                                             price={savedPost.price}
                                             address={savedPost.address}
@@ -178,4 +161,3 @@ const SavedPage = () => {
 };
 
 export default SavedPage;
-
