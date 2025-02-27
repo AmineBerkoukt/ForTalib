@@ -111,7 +111,7 @@ export const usePostStore = create((set, get) => ({
             const res = await api.delete(`posts/post?id=${postId}`);
             if (isInHome) {
                 get().getPosts();
-                get().getTopFive();
+                await get().getTopFive();
             } else {
                 const { getUserPosts } = useProfileStore.getState();
                 await getUserPosts(userId);

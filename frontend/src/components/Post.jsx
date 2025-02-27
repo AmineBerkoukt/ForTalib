@@ -34,7 +34,7 @@ const Post = ({
               }) => {
     const { isDarkMode } = useTheme();
     const { role, authUser } = useAuthStore();
-    const { savePost, unsavePost, ratePost, deletePost } = usePostStore();
+    const { savePost, unsavePost, getPosts, getTopFive, deletePost } = usePostStore();
     const [avgRate, setAvgRate] = useState(initialAvgRate);
     const [imageModalOpen, setImageModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -59,6 +59,8 @@ const Post = ({
     const handleDelete = async () => {
         try {
             await deletePost(postId);
+            await getPosts();
+            await getTopFive();
             setShowDeleteConfirm(false);
             toast.success("Post deleted successfully");
         } catch (error) {
