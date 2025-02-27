@@ -4,18 +4,21 @@ import toast from "react-hot-toast";
 
 export const useSavedPostStore = create((set) => ({
     savedPosts: [],
-    savedPostsIds:[],
-    loading: true,
+    savedPostsIds: [],
+    loading: false,
 
-    // Fetch all saved posts
     getSavedPosts: async () => {
+        set({ loading: true, error: null }); // Start loading
+
         try {
-            set({ loading: true, error: null });
             const response = await api.get("/saved");
             console.info(response.data);
-            set({ savedPosts: response.data, loading: false });
-            if(response.status === 404) {
+
+            if (response.status === 404) {
+                set({ savedPosts: [], loading: false });
                 toast.error("No saved posts");
+            } else {
+                set({ savedPosts: response.data, loading: false });
             }
         } catch (err) {
             console.error("Failed to fetch saved posts:", err);
@@ -24,12 +27,14 @@ export const useSavedPostStore = create((set) => ({
     },
 
     getSavedPostsIds: async () => {
+        set({ loading: true, error: null }); // Start loading
+
         try {
-            set({ loading: true, error: null });
             const response = await api.get("/saved/ids");
             set({ savedPostsIds: response.data, loading: false });
         } catch (err) {
             console.error("Failed to fetch saved posts:", err);
+            set({ loading: false, error: err.message });
         }
     }
 }));
