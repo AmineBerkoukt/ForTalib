@@ -41,20 +41,7 @@ const ProfilePage = () => {
     fetchData()
   }, [id, authUser, isOwnProfile, getUser, getOwnPosts, getOthersPosts])
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
-    const formData = new FormData()
-    formData.append("profilePhoto", file)
-    try {
-      await updateProfile(formData)
-      toast.success("Profile picture updated successfully!")
-      window.location.reload()
-    } catch (error) {
-      console.error("Failed to upload profile picture:", error)
-      toast.error("Failed to upload profile picture.")
-    }
-  }
+
 
   const handlePostDeleted = async () => {
     try {
@@ -112,7 +99,6 @@ const ProfilePage = () => {
             <ProfileInfo
                 user={currentUser}
                 isDarkMode={isDarkMode}
-                onImageUpload={isOwnProfile ? handleImageUpload : undefined}
                 isUpdating={isUpdatingProfile}
             />
 

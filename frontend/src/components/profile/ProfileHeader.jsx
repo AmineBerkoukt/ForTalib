@@ -1,16 +1,36 @@
 import React from "react";
 import { CheckCircle, Shield, Camera } from "lucide-react";
+import toast from "react-hot-toast";
+import {useAuthStore} from "../../store/useAuthStore.js";
 
 export default function ProfileHeader({
                                           profileImageUrl,
                                           isOwnerConsultingProfile,
                                           isDarkMode,
                                           isUpdating,
-                                          onImageUpload,
                                           isSubmitting,
                                           fullName,
                                           displayUser
                                       }) {
+    const { updateProfile } = useAuthStore()
+
+
+    const handleImageUpload = async (e) => {
+        e.preventDefault();
+        const file = e.target.files[0]
+        if (!file) return
+        const formData = new FormData()
+        formData.append("profilePhoto", file)
+        try {
+            await updateProfile(formData)
+            toast.success("Profile picture updated successfully!")
+            window.location.reload()
+        } catch (error) {
+            console.error("Failed to upload profile picture:", error)
+            toast.error("Failed to upload profile picture.")
+        }
+    }
+
     return (
         <div className="flex flex-col sm:flex-row items-start sm:items-start gap-4 sm:gap-6 mb-4">
             {/* Profile Picture Section */}
@@ -32,7 +52,7 @@ export default function ProfileHeader({
                             name="profilePhoto"
                             className="hidden"
                             accept="image/*"
-                            onChange={onImageUpload}
+                            onChange={handleImageUpload}
                             disabled={isSubmitting}
                         />
                     </label>
