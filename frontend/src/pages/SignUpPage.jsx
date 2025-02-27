@@ -27,11 +27,6 @@ const SignUpPage = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
 
     const validateForm = () => {
-        if (!acceptTerms) {
-            toast.error("You must accept the Terms and Conditions.");
-            return false;
-        }
-
         const fields = [
             { ref: firstNameRef, message: "Please enter your first name" },
             { ref: lastNameRef, message: "Please enter your last name" },
@@ -66,6 +61,7 @@ const SignUpPage = () => {
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         if (validateForm()) {
             const formData = {
@@ -74,10 +70,10 @@ const SignUpPage = () => {
                 email: emailRef.current.value.toLowerCase(),
                 password: passwordRef.current.value,
                 phoneNumber: phoneNumberRef.current.value,
-                hasAcceptedTermsAndConditions: acceptTerms // Add this line
+                hasAcceptedTermsAndConditions: acceptTerms
             };
 
-            console.log("sending data : " , formData)
+
 
             try {
                 await signup(formData);
