@@ -187,6 +187,7 @@ export const usePostStore = create((set, get) => ({
         get().setLoading(true);
         try {
             const response = await api.post(`/saved/${postId}`);
+            return response;
         } catch (error) {
             console.log("Error in saving post in the store ", error.message);
         } finally {

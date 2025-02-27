@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import User from './src/models/User.js';
 import Post from './src/models/Post.js';
 import Evaluate from './src/models/Evaluate.js';
-import Favorise from './src/models/Favorise.js';
+import Favorise from './src/models/Save.js';
 import Request from './src/models/Request.js'; // Import the Request model
 import connectDB from "./src/config/db.js";
 import dotenv from "dotenv";

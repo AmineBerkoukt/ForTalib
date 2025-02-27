@@ -1,4 +1,4 @@
-import Favorise from '../models/Favorise.js';
+import Favorise from '../models/Save.js';
 import Post from '../models/Post.js';
 import mongoose from "mongoose";
 

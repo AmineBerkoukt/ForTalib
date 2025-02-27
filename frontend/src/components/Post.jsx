@@ -61,15 +61,7 @@ const Post = ({
         if (userId) navigate(`/profile/${userId}`);
     };
 
-    const handleRatePost = async (newRating) => {
-        try {
-            const rateResponse = await ratePost(postId, newRating);
-            setAvgRate(rateResponse.avgRate);
-            toast.success(`You rated this post ${newRating} stars!`);
-        } catch (error) {
-            toast.error("Failed to submit rating");
-        }
-    };
+
 
     return (
         <>
@@ -103,7 +95,7 @@ const Post = ({
 
                 <PostDetails price={price} address={address} elevator={elevator} maximumCapacity={maximumCapacity} rating={avgRate} />
 
-                <PostButtom postId={postId} isSavedInitially={isSavedInitially} savePost={savePost} unsavePost={unsavePost} ratePost={handleRatePost} avgRate={avgRate} />
+                <PostButtom postId={postId} isSavedInitially={isSavedInitially} avgRate={avgRate} />
             </div>
 
             <ConfirmationModal isOpen={showDeleteConfirm} onClose={() => setShowDeleteConfirm(false)} onConfirm={handleDelete} title="Delete Post" message="Are you sure you want to delete this post?" confirmText="Delete" />
