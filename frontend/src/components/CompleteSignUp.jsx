@@ -4,6 +4,7 @@ import { Camera, Upload, X, Loader2 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProfileStore } from '../store/useProfileStore';
 import LoadingOverlay from '../components/skeletons/LoadingOverlay.jsx';
+import toast from "react-hot-toast";
 
 const CompleteSignUp = () => {
     const { isDarkMode } = useTheme();
@@ -42,39 +43,41 @@ const CompleteSignUp = () => {
         setSelectedImage(null);
     };
 
-    const handleSubmit = async (e) => {
+    const handleCompleteSignup = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
 
         try {
-            // Create a simple object with just the data we need
-            const postData = {};
+            // Create a FormData object to handle file uploads
+            const formData = new FormData();
 
             // Only add CIN if it's not empty
             if (cin.trim() !== '') {
-                postData.cin = cin.trim().toUpperCase();
+                formData.append('cin', cin.trim().toUpperCase());
             }
 
             // Only add profile picture if one was selected
             if (selectedImage) {
-                postData.profilePicture = selectedImage;
+                formData.append('profilePhoto', selectedImage);
             }
 
-            // Log what we're submitting
-            console.log("Submitting data:", {
-                cin: postData.cin || '(not provided)',
-                profilePicture: selectedImage ? `${selectedImage.name} (${Math.round(selectedImage.size/1024)}KB)` : '(not provided)'
-            });
-
             // Check if we have any data to submit
-            if (!postData.cin && !postData.profilePicture) {
+            if (cin.trim() === '' && !selectedImage) {
                 setError('Please provide at least one field to update');
                 setIsLoading(false);
                 return;
             }
 
-            await updateProfile(postData);
+            // Log what we're submitting
+            console.log("Submitting data:", {
+                cin: cin.trim() || '(not provided)',
+                profilePicture: selectedImage ? `${selectedImage.name} (${Math.round(selectedImage.size/1024)}KB)` : '(not provided)'
+            });
+
+            // Send the FormData to the API
+            await updateProfile(formData);
+            toast.success("Profile updated successfully!");
             navigate('/');
         } catch (error) {
             console.error('Error completing signup:', error);
@@ -89,6 +92,7 @@ const CompleteSignUp = () => {
             }
 
             setError(errorMessage);
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -108,7 +112,7 @@ const CompleteSignUp = () => {
                         Complete Your Profile
                     </h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
+                    <form onSubmit={handleCompleteSignup} className="space-y-6" encType="multipart/form-data">
                         <div className="text-center">
                             <div className="relative inline-block">
                                 <div className={`w-32 h-32 rounded-full overflow-hidden border-4 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} mx-auto transition-all duration-200 hover:shadow-lg`}>
@@ -127,20 +131,20 @@ const CompleteSignUp = () => {
 
                                 <div className="absolute -bottom-2 right-0 flex space-x-2">
                                     <label
-                                        htmlFor="profilePicture"
+                                        htmlFor="profilePhoto"
                                         className={`p-2 rounded-full cursor-pointer
                                         ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-50'} 
                                         shadow-lg transition-all duration-200 transform hover:scale-105`}
                                         title="Upload image"
                                     >
-                                        <Upload size={20} className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} />
+                                        <Upload size={20} className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}/>
                                         <input
                                             type="file"
-                                            id="profilePicture"
-                                            name="profilePicture"
+                                            id="profilePhoto"
+                                            name="profilePhoto"
+                                            className="hidden"
                                             accept="image/*"
                                             onChange={handleImageChange}
-                                            className="hidden"
                                         />
                                     </label>
 
