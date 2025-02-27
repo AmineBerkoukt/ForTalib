@@ -47,20 +47,20 @@ const SignUpPage = () => {
             }
         }
 
-        if (!/\S+@\S+\.\S+/.test(emailRef.current.value)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value)) {
             toast.error("Invalid email format");
             return false;
         }
 
-        if (passwordRef.current.value.length < 6) {
-            toast.error("Password must be at least 6 characters long");
+        if (passwordRef.current.value.length < 8) {
+            toast.error("Password must be at least 8 characters long");
             return false;
         }
 
-        //if (!/^(0[67]|\+212)[0-9]{8}$/.test(phoneNumberRef.current.value)) {
-          //  toast.error("Invalid phone number");
-            //return false;
-        //}
+        if (!/^\d{10}$/.test(phoneNumberRef.current.value)) {
+            toast.error("Invalid phone number");
+            return false;
+        }
 
         return true;
     };
@@ -136,7 +136,7 @@ const SignUpPage = () => {
                             <FormInput label="First Name" icon={User} inputRef={firstNameRef} placeholder="Enter your first name" />
                             <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
                             <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
-                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
+                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="8 Characters" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
                             <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
 
                             <div className="flex items-center">
