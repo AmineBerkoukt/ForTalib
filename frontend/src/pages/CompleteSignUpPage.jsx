@@ -4,14 +4,17 @@ import CompleteSignUp from '../components/CompleteSignUp';
 import { Moon, Sun } from 'lucide-react';
 
 const CompleteSignUpPage = () => {
-    const { isDarkMode, toggleTheme } = useTheme();
+    const { isDarkMode, toggleDarkMode } = useTheme();
 
     return (
         <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-200`}>
             <div className="container mx-auto px-4">
                 <div className="flex justify-end pt-4">
                     <button
-                        onClick={toggleTheme}
+                        onClick={()=>{
+                            toggleDarkMode();
+                            console.log("isDarkMode : ", isDarkMode);
+                        }}
                         className={`p-2 rounded-lg transition-colors duration-200
                         ${isDarkMode
                             ? 'bg-gray-800 hover:bg-gray-700 text-gray-300'
