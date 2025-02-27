@@ -56,11 +56,6 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
         }));
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
-
     const handleSubmit = async () => {
         setIsSubmitting(true);
 
@@ -134,7 +129,6 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
                         isSubmitting={isSubmitting}
                         isDarkMode={isDarkMode}
                         setIsDeleteModalOpen={setIsDeleteModalOpen}
-                        handleLogout={handleLogout}
                         toggleDarkMode={toggleDarkMode}
                     />
 

@@ -10,7 +10,6 @@ export default function ProfileActions({
                                            setIsEditing,
                                            handleSubmit,
                                            setIsDeleteModalOpen,
-                                           handleLogout,
                                            toggleDarkMode,
                                        }) {
     if (!isOwnerConsultingProfile) return null;
@@ -42,7 +41,6 @@ export default function ProfileActions({
                     isDarkMode={isDarkMode}
                     onEditClick={() => setIsEditing(true)}
                     onDeleteClick={() => setIsDeleteModalOpen(true)}
-                    onLogoutClick={handleLogout}
                     toggleDarkMode={toggleDarkMode}
                 />
             )}
