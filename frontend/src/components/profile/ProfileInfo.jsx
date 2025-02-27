@@ -14,9 +14,9 @@ import ProfileDetails from "./ProfileDetails.jsx";
 
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
-export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdating }) {
+export default function ProfileInfo({ user, isDarkMode, isUpdating }) {
     const location = useLocation();
-    const { authUser, logout } = useAuthStore();
+    const { authUser } = useAuthStore();
     const { updateProfile } = useProfileStore();
     const { toggleDarkMode } = useTheme();
     const navigate = useNavigate();
@@ -112,6 +112,7 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
 
     const fullName = `${displayUser?.firstName || ''} ${displayUser?.lastName || ''}`;
 
+    console.info(user.profilePhoto);
     let profileImageUrl = user?.profilePhoto ? `${BASE_URL}${user.profilePhoto}` : "/avatar.png";
 
     return (
@@ -138,7 +139,6 @@ export default function ProfileInfo({ user, isDarkMode, onImageUpload, isUpdatin
                         isOwnerConsultingProfile={isOwnerConsultingProfile}
                         isDarkMode={isDarkMode}
                         isUpdating={isUpdating}
-                        onImageUpload={onImageUpload}
                         isSubmitting={isSubmitting}
                         fullName={fullName}
                         displayUser={displayUser}

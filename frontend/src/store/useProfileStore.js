@@ -2,10 +2,10 @@ import {create} from "zustand";
 import api from "../utils/api.js";
 import toast from "react-hot-toast";
 
-
 export const useProfileStore = create((set, get) => ({
     profilePosts: [],
     user: [],
+    isUpdatingProfile: false,
 
     // Fetch all posts
     getUserPosts: async (userId) => {
@@ -69,6 +69,4 @@ export const useProfileStore = create((set, get) => ({
             toast.error("Password was NOT changed !");
         }
     },
-
-
 }));
