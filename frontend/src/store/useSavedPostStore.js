@@ -7,10 +7,24 @@ export const useSavedPostStore = create((set) => ({
     savedPostsIds: [],
     loading: false,
 
+    /*
+     const fetchSavedPosts = async () => {
+            try {
+                const response = await api.get("/saved");
+                setSavedPosts(response.data);
+                setLoading(false);
+            } catch (err) {
+                console.error("Failed to fetch saved posts:", err);
+                setSavedPosts([]);
+                setLoading(false);
+            }
+        };
+    */
+
     getSavedPosts: async () => {
-        set({ loading: true, error: null }); // Start loading
 
         try {
+            set({ loading: true, error: null }); // Start loading
             const response = await api.get("/saved");
             console.info(response.data);
 
@@ -22,7 +36,7 @@ export const useSavedPostStore = create((set) => ({
             }
         } catch (err) {
             console.error("Failed to fetch saved posts:", err);
-            set({ savedPosts: [], loading: false, error: err.message });
+            set({loading: false });
         }
     },
 

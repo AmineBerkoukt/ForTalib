@@ -95,13 +95,20 @@ const HomePage = () => {
                             </p>
                         </div>
                     ) : posts.length === 0 ? (
-                        <div className={`text-center p-8 sm:p-12 rounded-lg ${
-                            isDarkMode ? "bg-gray-800" : "bg-white"
-                        } shadow-sm`}>
-                            <p className="text-base sm:text-lg">
-                                No posts available. Be the first to create one!
+                        <div
+                            className={`text-center p-10 sm:p-14 rounded-xl shadow-md space-y-4 transition-all duration-200 ${
+                                isDarkMode ? "bg-gray-800 text-gray-300" : "bg-white text-gray-700"
+                            }`}>
+                            <Newspaper
+                                className={`h-12 w-12 mx-auto ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}/>
+                            <h2 className="text-xl sm:text-2xl font-semibold">
+                                No posts available
+                            </h2>
+                            <p className="text-sm sm:text-base">
+                                It seems a bit quiet here. Be the first to find your colocator !
                             </p>
                         </div>
+
                     ) : (
                         <div className="space-y-4 sm:space-y-6">
                             {displayedPosts.map((post) => {
