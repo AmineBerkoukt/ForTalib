@@ -133,7 +133,7 @@ const HomePage = () => {
                                                 firstName: post.user?.firstName || 'Unknown',
                                                 lastName: post.user?.lastName || 'User',
                                                 role: post.user?.role || 'user',
-                                                profilePhoto: post.user.profilePhoto
+                                                profilePhoto: post.user?.profilePhoto
                                             }}
                                             postId={post._id}
                                             title={post.title}
