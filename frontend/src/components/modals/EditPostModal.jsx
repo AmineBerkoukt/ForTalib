@@ -1,8 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {createPortal} from 'react-dom';
-import {X, Upload} from 'lucide-react';
+import {X} from 'lucide-react';
 import {usePostStore} from "../../store/usePostStore.js";
-import {Toaster} from "react-hot-toast";
 import {useModalStore} from "../../store/useModalStore.js";
 
 export default function EditPostModal({isDarkMode, postId}) {

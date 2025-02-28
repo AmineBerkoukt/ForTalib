@@ -1,7 +1,7 @@
+import React from "react";
 import { CheckCircle, Shield } from 'lucide-react';
 import {ChatBubbleLeftRightIcon, PencilSquareIcon} from "@heroicons/react/24/outline";
 import { Trash2 } from 'lucide-react';
-import React from "react";
 import {useChatStore} from "../../store/useChatStore.js";
 import {useNavigate} from "react-router-dom";
 import {useAuthStore} from "../../store/useAuthStore.js";
