@@ -66,7 +66,8 @@ export const validateDescription = (description) => {
 };
 
 export const validatePrice = (price) => {
-    return price > 0 ? "" : "Price must be greater than 0.";
+    if(price < 0) return "Invalid price !";
+    if(price > 5000) return "Invalid price, it's Not Los Angelos :/";
 };
 
 export const validateAddress = (address) => {
@@ -83,3 +84,54 @@ export const validateImages = (images) => {
     }
     return "";
 };
+
+export const postValidator = (post) => {
+    const errors = [];
+
+    const titleError = validateTitle(post.title);
+    if (titleError) errors.push(titleError);
+
+    const descriptionError = validateDescription(post.description);
+    if (descriptionError) errors.push(descriptionError);
+
+    const priceError = validatePrice(post.price);
+    if (priceError) errors.push(priceError);
+
+    const addressError = validateAddress(post.address);
+    if (addressError) errors.push(addressError);
+
+    const imagesError = validateImages(post.images);
+    if (imagesError) errors.push(imagesError);
+
+    if (errors.length > 0) {
+        errors.forEach(error => toast.error(error));
+        return false;
+    }
+
+    return true;
+};
+
+
+export const profileValidator = (profile) => {
+    const errors = [];
+
+    const emailValid = validateEmail(profile.email);
+    if (!emailValid) errors.push("Invalid email format.");
+
+    const phoneValid = validatePhoneNumber(profile.phoneNumber);
+    if (!phoneValid) errors.push("Invalid phone number.");
+
+    const cinValid = validateCin(profile.cin);
+    if (!cinValid) errors.push("Invalid CIN.");
+
+    const passwordValid = validatePassword(profile.password);
+    if (!passwordValid) errors.push("Password must be at least 8 characters long.");
+
+    if (errors.length > 0) {
+        errors.forEach(error => toast.error(error));
+        return false;
+    }
+
+    return true; // Validation passed
+};
+

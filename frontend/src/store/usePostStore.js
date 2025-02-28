@@ -1,9 +1,8 @@
 import { create } from "zustand";
 import api from "../utils/api.js";
 import toast from "react-hot-toast";
+import { postValidator } from "../utils/validators_filters.js";
 import { useProfileStore } from "./useProfileStore";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const usePostStore = create((set, get) => ({
     posts: [],
@@ -63,6 +62,14 @@ export const usePostStore = create((set, get) => ({
     },
 
     createPost: async (postData) => {
+        // Validate post data before creating the post
+        const isValid = postValidator(postData);
+        if (!isValid) {
+            toast.error('Post data is invalid');
+            get().setLoading(false);
+            return;  // Stop the create post process if validation fails
+        }
+
         get().setLoading(true);
         try {
             const formData = new FormData();
@@ -137,6 +144,14 @@ export const usePostStore = create((set, get) => ({
     },
 
     updatePost: async (postId, newPostData) => {
+        // Validate post data before updating
+        const isValid = postValidator(newPostData);
+        if (!isValid) {
+            toast.error('Post data is invalid');
+            get().setLoading(false);
+            return;  // Stop the update post process if validation fails
+        }
+
         get().setLoading(true);
         try {
             const res = await api.patch(`/posts/post/${postId}`, newPostData);

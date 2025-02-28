@@ -1,6 +1,7 @@
-import {create} from "zustand";
+import { create } from "zustand";
 import api from "../utils/api.js";
 import toast from "react-hot-toast";
+import { profileValidator } from "../utils/validators_filters.js";
 
 export const useProfileStore = create((set, get) => ({
     profilePosts: [],
@@ -11,7 +12,7 @@ export const useProfileStore = create((set, get) => ({
     getUserPosts: async (userId) => {
         try {
             const res = await api.get(`/posts/postsFor?userId=${userId}`);
-            set({profilePosts: res.data}); // Set posts state
+            set({ profilePosts: res.data }); // Set posts state
             console.log("usePostStore.userPosts res", res.data);
         } catch (error) {
             console.log("usePostStore.getPosts err", error.message);
@@ -21,7 +22,7 @@ export const useProfileStore = create((set, get) => ({
     getUser: async (userId) => {
         try {
             const res = await api.get(`/users/${userId}`);
-            set({user: res.data});
+            set({ user: res.data });
             console.log("userData : ", res.data);
         } catch (error) {
             console.log("usePostStore.getPostsFilter err", error.message);
@@ -29,7 +30,14 @@ export const useProfileStore = create((set, get) => ({
     },
 
     updateProfile: async (data) => {
-        set({isUpdatingProfile: true});
+        set({ isUpdatingProfile: true });
+
+        // Validate profile data before updating
+        const isValid = profileValidator(data);
+        if (!isValid) {
+            set({ isUpdatingProfile: false });
+            return; // Stop the update process if validation fails
+        }
 
         try {
             const isFormData = data instanceof FormData;
@@ -51,18 +59,25 @@ export const useProfileStore = create((set, get) => ({
                     : updatedUser
             }));
 
-            return {user: updatedUser}; // Return the updated user data
+            return { user: updatedUser }; // Return the updated user data
         } catch (error) {
             console.error("Error in updateProfile:", error);
             throw error; // Re-throw the error to handle it in the component
         } finally {
-            set({isUpdatingProfile: false});
+            set({ isUpdatingProfile: false });
         }
     },
 
     changePassword: async (newPassword) => {
+        // Validate the new password before changing it
+        const passwordValid = validatePassword(newPassword);
+        if (!passwordValid) {
+            toast.error("Password is invalid");
+            return; // Stop the password change process if validation fails
+        }
+
         try {
-            await api.post(`/users/change-password`, newPassword);
+            await api.post(`/users/change-password`, { password: newPassword });
             toast.success("Password changed successfully !");
         } catch (error) {
             console.log("usePostStore.getPostsFilter err", error.message);
