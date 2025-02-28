@@ -5,7 +5,7 @@ import Evaluate from '../models/Evaluate.js';
 import Favorise from '../models/Save.js';
 import Message from '../models/Message.js';
 import path from "path";
-import bcrypt from 'bcryptjs'; // Assure-toi d'installer bcryptjs (npm install bcryptjs)
+import bcrypt from 'bcryptjs';
 
 
 // Controller to fetch all users
