@@ -7,7 +7,7 @@ import { useTheme } from "../contexts/ThemeContext.jsx";
 import GoogleLoginButton from "../components/GoogleLoginButton.jsx";
 import LoginHero from "../components/skeletons/LoginHero.jsx";
 import FormInput from "../components/FormInput.jsx";
-import initUpperCase from "../utils/initUpperCase.js";
+import { initUpperCase, validateRequiredFields, validateEmail, validatePassword, validatePhoneNumber } from "../utils/validators_filters.js";
 import TermsAndConditionsModal from "../components/TermsAndConditionsModal.jsx";
 import Footer from "../components/Footer.jsx";
 
@@ -35,25 +35,12 @@ const SignUpPage = () => {
             { ref: phoneNumberRef, message: "Please enter your phone number" },
         ];
 
-        for (const field of fields) {
-            if (!field.ref.current.value.trim()) {
-                toast.error(field.message);
-                return false;
-            }
-        }
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value)) {
-            toast.error("Invalid email format");
-            return false;
-        }
-
-        if (passwordRef.current.value.length < 8) {
-            toast.error("Password must be at least 8 characters long");
-            return false;
-        }
-
-        if (!/^\d{10}$/.test(phoneNumberRef.current.value)) {
-            toast.error("Invalid phone number");
+        if (!validateRequiredFields(fields)) return false;
+        if (!validateEmail(emailRef.current.value)) return false;
+        if (!validatePassword(passwordRef.current.value)) return false;
+        if (!validatePhoneNumber(phoneNumberRef.current.value)) return false;
+        if (!acceptTerms) {
+            toast.error("You must accept the Terms and Conditions!");
             return false;
         }
 

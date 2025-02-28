@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { GoogleLogin } from "react-google-login";
 import { gapi } from "gapi-script";
 import { useNavigate } from "react-router-dom";
-import initUpperCase from "../utils/initUpperCase.js";
+import {initUpperCase} from "../utils/validators_filters.js";
 
 const GoogleLoginButton = () => {
     const { oAuthLogin } = useAuthStore();

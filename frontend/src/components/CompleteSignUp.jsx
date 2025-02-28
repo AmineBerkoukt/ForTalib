@@ -4,7 +4,9 @@ import { Camera, Upload, X, Loader2, AlertCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useProfileStore } from '../store/useProfileStore';
 import LoadingOverlay from '../components/skeletons/LoadingOverlay.jsx';
+import { validateCin } from '../utils/validators_filters';
 import toast from "react-hot-toast";
+
 
 const CompleteSignUp = () => {
     const { isDarkMode } = useTheme();
@@ -32,20 +34,6 @@ const CompleteSignUp = () => {
         }
     }, [cin, isTouched.cin]);
 
-    const validateCin = (value) => {
-        if (!value.trim()) {
-            setCinError('');
-            return true; // Empty is allowed since it's optional
-        }
-
-        if (!cinRegex.test(value)) {
-            setCinError('CIN must start with 1-2 letters followed by 1-7 numbers');
-            return false;
-        }
-
-        setCinError('');
-        return true;
-    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -81,7 +69,14 @@ const CompleteSignUp = () => {
         if (!isTouched.cin) {
             setIsTouched({...isTouched, cin: true});
         }
+
+        if (!validateCin(value)) {
+            setCinError('CIN must start with 1-2 letters followed by 1-7 numbers');
+        } else {
+            setCinError('');
+        }
     };
+
 
     const handleCompleteSignup = async (e) => {
         e.preventDefault();
