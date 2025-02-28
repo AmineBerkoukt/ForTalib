@@ -115,23 +115,18 @@ export const postValidator = (post) => {
 export const profileValidator = (profile) => {
     const errors = [];
 
-    const emailValid = validateEmail(profile.email);
-    if (!emailValid) errors.push("Invalid email format.");
 
-    const phoneValid = validatePhoneNumber(profile.phoneNumber);
+    const phoneValid = validatePhoneNumber(profile.get('phoneNumber'));
     if (!phoneValid) errors.push("Invalid phone number.");
 
-    const cinValid = validateCin(profile.cin);
+    const cinValid = validateCin(profile.get('cin'));
     if (!cinValid) errors.push("Invalid CIN.");
-
-    const passwordValid = validatePassword(profile.password);
-    if (!passwordValid) errors.push("Password must be at least 8 characters long.");
 
     if (errors.length > 0) {
         errors.forEach(error => toast.error(error));
         return false;
     }
 
-    return true; // Validation passed
+    return true;
 };
 

@@ -50,11 +50,21 @@ export default function ProfileInfo({ user, isDarkMode, isUpdating }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value,
-        }));
+
+        // Check if the field is 'lastName' and convert to uppercase
+        if (name === 'lastName') {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value.toUpperCase(),  // Ensure lastName is uppercase
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
     };
+
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
@@ -110,7 +120,7 @@ export default function ProfileInfo({ user, isDarkMode, isUpdating }) {
         ...formData
     } : localUser;
 
-    const fullName = `${displayUser?.firstName || ''} ${displayUser?.lastName || ''}`;
+    const fullName = `${displayUser?.firstName || ''} ${displayUser?.lastName.toUpperCase() || ''}`;
 
     let profileImageUrl = user?.profilePhoto ? `${BASE_URL}${user.profilePhoto}` : "/avatar.png";
 

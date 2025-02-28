@@ -87,7 +87,6 @@ const ProfilePage = () => {
 
     const currentUser = isOwnProfile ? authUser : user
     const postsToDisplay = isOwnProfile ? userPosts : profilePosts
-    console.log(authUser)
 
 
     return (
