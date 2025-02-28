@@ -8,6 +8,8 @@ const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode
         console.log(user._id);
         setSelectedUser(user);
     }
+
+    const profilePicture = user.profilePhoto ? BASE_URL + user.profilePhoto : "./avatar.png"
     return (
         <button
             onClick={() => handleClick(user)}
@@ -27,7 +29,7 @@ const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode
             {/* User Avatar with Online Status */}
             <div className="relative group">
                 <img
-                    src={BASE_URL + user.profilePhoto || "/avatar.png"}
+                    src={profilePicture}
                     alt={user.firstName}
                     className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-full transition-transform duration-200 group-hover:scale-105"
                 />

@@ -96,7 +96,7 @@ export const useChatStore = create((set, get) => ({
     console.log(selectedUserInfos);
 
     set({selectedUser: selectedUserInfos })
-    console.log();
+    console.log(selectedUser);
     toast(`You are talking to ${selectedUser.lastName} ${selectedUser.firstName}`,
         {
           icon: 'ℹ️',
