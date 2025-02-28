@@ -11,6 +11,8 @@ const ChatHeader = () => {
 
   const baseClasses = isDarkMode ? 'border-gray-700' : 'border-gray-300';
 
+  const profilePicture = selectedUser.profilePhoto ? BASE_URL + selectedUser.profilePhoto : "./avatar.png"
+
 
   if (!selectedUser) {
     return null; // Don't render the header if there's no selected user
@@ -24,7 +26,7 @@ const ChatHeader = () => {
               <div className="size-10 rounded-full relative">
                 <img
 
-                    src={BASE_URL + selectedUser.profilePhoto || "/avatar.png"}
+                    src={profilePicture}
                     alt={`${selectedUser.firstName} ${selectedUser.lastName}`}
                 />
               </div>

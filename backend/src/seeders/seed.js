@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import User from '../models/User.js';
 import Post from '../models/Post.js';
-import Favorise from '../models/Favorise.js';
+import Favorise from '../models/Save.js';
 import connectDB from '../config/db.js';
 
 dotenv.config();

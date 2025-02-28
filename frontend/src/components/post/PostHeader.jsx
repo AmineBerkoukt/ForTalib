@@ -1,23 +1,25 @@
+import React from "react";
 import { CheckCircle, Shield } from 'lucide-react';
 import {ChatBubbleLeftRightIcon, PencilSquareIcon} from "@heroicons/react/24/outline";
 import { Trash2 } from 'lucide-react';
-import React from "react";
 import {useChatStore} from "../../store/useChatStore.js";
 import {useNavigate} from "react-router-dom";
+import {useAuthStore} from "../../store/useAuthStore.js";
+import {useModalStore} from "../../store/useModalStore.js";
 
 const PostHeader = ({
                         user,
                         timestamp,
-                        isPostOwner,
-                        role,
-                        handleNavigateToProfile,
-                        handleEditClick,
                         setShowDeleteConfirm,
                         isInProfile,
                         profileImageUrl
                     }) => {
     const { setSelectedUser } = useChatStore();
+    const { role, authUser } = useAuthStore();
+    const { toggleEditModal} = useModalStore();
     const navigate = useNavigate();
+    const isPostOwner = authUser._id === user._id;
+
 
 
     const handleTalkToOwner = async (userToTalkTo) => {
@@ -25,17 +27,16 @@ const PostHeader = ({
         navigate("/chat");
     };
 
+    const handleNavigateToProfile = (userId) => {
+        if (userId) navigate(`/profile/${userId}`);
+    };
 
     return (
         <div className="flex items-center justify-between mb-2">
             <div className="flex items-center cursor-pointer" onClick={() => handleNavigateToProfile(user._id)}>
                 <img
-                    src={profileImageUrl || "/default-avatar.png"}
-                    alt={user.firstName}
-                    className="h-12 w-12 rounded-full border-2 border-gray-300 dark:border-gray-500 shadow-md transition-transform duration-300 hover:scale-105 mr-2 object-cover"
-                    loading="lazy"
-                />
-
+                    src={profileImageUrl}
+                    alt={user.firstName} className="h-10 w-10 rounded-full mr-2"/>
                 <div>
                     <h3 className="flex items-center font-semibold dark:text-gray-200 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200">
                         {user.firstName + " " + user.lastName}
@@ -49,7 +50,7 @@ const PostHeader = ({
             <div className="flex items-center space-x-2">
                 {isPostOwner && (
                     <button
-                        onClick={handleEditClick}
+                        onClick={toggleEditModal}
                         className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition-colors"
                         title="Edit post"
                     >

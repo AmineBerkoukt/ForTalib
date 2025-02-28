@@ -62,8 +62,7 @@ export const useChatStore = create((set, get) => ({
       const res = await api.post(BASE_URL + `/send/${id}`, messageData, configToSend);
       set({ messages: [...messages, res.data] });
 
-      // Refresh sidebar
-      get().getUsersForSidebar();
+      await get().getUsersForSidebar();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to send message.");
     }
@@ -75,14 +74,14 @@ export const useChatStore = create((set, get) => ({
 
     const socket = useAuthStore.getState().socket;
 
-    socket.on("newMessage", (newMessage) => {
+    socket.on("newMessage", async (newMessage) => {
+      await get().getUsersForSidebar();
       const isMessageFromSelectedUser = newMessage.senderId === selectedUser._id;
       if (isMessageFromSelectedUser) {
         set((state) => ({
           messages: [...state.messages, newMessage],
         }));
       }
-      console.log(selectedUser);
     });
   },
 
@@ -91,14 +90,31 @@ export const useChatStore = create((set, get) => ({
     socket.off("newMessage");
   },
 
-  setSelectedUser: (selectedUser) => {
-    set({ selectedUser })
+  setSelectedUser: async (selectedUser) => {
+    let selectedUserInfos = selectedUser;
+    if(selectedUser) {selectedUserInfos = await get().getSelectedUserInfo(selectedUser._id)}
+    console.log(selectedUserInfos);
+
+    set({selectedUser: selectedUserInfos })
     console.log(selectedUser);
     toast(`You are talking to ${selectedUser.lastName} ${selectedUser.firstName}`,
         {
           icon: 'ℹ️',
-
         }
     );
     },
+
+  getSelectedUserInfo: async (userId) => {
+    try{
+      const response = await api.get(`/users/${userId}`);
+      return response.data;
+    }catch (error) {
+      console.log("Error in useChatStore.getSelectedUserInfo " + error.message);
+    }
+
+
+
+  }
+
+
 }));

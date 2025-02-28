@@ -8,7 +8,7 @@ import { useAuthStore } from "../store/useAuthStore";
 const SidebarHeader = ({ searchQuery, setSearchQuery }) => {
     const { isDarkMode } = useTheme();
     const baseClasses = isDarkMode ? 'border-gray-700' : 'border-gray-300';
-    const { allUsers, onSelectUser } = useChatStore();
+    const { allUsers } = useChatStore();
     const { onlineUsers } = useAuthStore();
 
     const searchBaseClasses = isDarkMode

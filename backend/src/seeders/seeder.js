@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import User from '../models/User.js';
 import Post from '../models/Post.js';
 import Evaluate from '../models/Evaluate.js';
-import Favorise from '../models/Favorise.js';
+import Favorise from '../models/Save.js';
 import connectDB from "../config/db.js";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";

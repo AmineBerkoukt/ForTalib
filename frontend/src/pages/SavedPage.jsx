@@ -65,39 +65,6 @@ const SavedPage = () => {
                     </h1>
                 </header>
 
-                {!loading && savedPosts.length > 0 && (
-                    <div className="mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <div className="relative w-full sm:w-64">
-                            <input
-                                type="text"
-                                placeholder="Search saved posts..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className={`w-full pl-10 pr-4 py-2 rounded-lg ${
-                                    isDarkMode
-                                        ? "bg-gray-700 text-white placeholder-gray-400"
-                                        : "bg-white text-gray-900 placeholder-gray-500"
-                                } border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                            />
-                            <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        </div>
-                        <button
-                            onClick={toggleSortOrder}
-                            className={`flex items-center px-4 py-2 rounded-lg ${
-                                isDarkMode
-                                    ? "bg-gray-700 text-white hover:bg-gray-600"
-                                    : "bg-white text-gray-900 hover:bg-gray-100"
-                            } border border-gray-300 transition-colors duration-200`}
-                        >
-                            {sortOrder === "asc" ? (
-                                <><SortAsc className="mr-2" /> Oldest First</>
-                            ) : (
-                                <><SortDesc className="mr-2" /> Newest First</>
-                            )}
-                        </button>
-                    </div>
-                )}
-
                 <div className="space-y-6">
                     {loading ? (
                         <div className="flex justify-center items-center h-64">
@@ -178,4 +145,3 @@ const SavedPage = () => {
 };
 
 export default SavedPage;
-

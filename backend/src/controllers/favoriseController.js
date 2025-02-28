@@ -1,8 +1,8 @@
-import Favorise from '../models/Favorise.js';
+import Favorise from '../models/Save.js';
 import Post from '../models/Post.js';
 import mongoose from "mongoose";
 
-export const addFavorise = async (req, res) => {
+export const savePost = async (req, res) => {
     try {
         const { postId } = req.params;
         const userId = req.user.id;
@@ -23,7 +23,7 @@ export const addFavorise = async (req, res) => {
     }
 };
 
-export const removeFavorise = async (req, res) => {
+export const unsavePost = async (req, res) => {
     try {
         const { postId } = req.params;
         const userId = req.user.id;
@@ -44,7 +44,7 @@ export const removeFavorise = async (req, res) => {
 };
 
 
-export const getAllFavorises = async (req, res) => {
+export const getAllSaved = async (req, res) => {
     try {
         const userId = req.user.id;
 
@@ -105,5 +105,27 @@ export const getAllFavorises = async (req, res) => {
     } catch (error) {
         console.error("Error: ", error);
         res.status(500).json({ message: 'Error fetching favorite posts', error: error.message });
+    }
+};
+
+export const getAllSavedIds = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        // Retrieve only the saved post IDs for the user
+        const favorises = await Favorise.find({ userId }).select('postId');
+
+        // If no saved posts found, return an empty array
+        if (!favorises || favorises.length === 0) {
+            return res.status(200).json([]);
+        }
+
+        // Extract and return the post IDs as strings
+        const postIds = favorises.map(fav => fav.postId.toString());
+
+        res.status(200).json(postIds);
+    } catch (error) {
+        console.error("Error: ", error);
+        res.status(500).json({ message: 'Error fetching saved post IDs', error: error.message });
     }
 };

@@ -92,31 +92,34 @@ const SearchWithDropdown = ({ searchQuery, setSearchQuery, baseClasses, onlineUs
                     role="listbox"
                 >
                     {filteredUsers.length > 0 ? (
-                        filteredUsers.map((user, index) => (
-                            <div
-                                key={user._id}
-                                onClick={() => handleUserSelect(user)}
-                                className={`flex items-center gap-3 px-4 py-2 cursor-pointer transition-colors 
-                                ${highlightedIndex === index ? 'bg-gray-100 dark:bg-gray-600' : 'hover:bg-gray-50 dark:hover:bg-gray-600'}`}
-                                role="option"
-                            >
-                                <div className="relative">
-                                    {/* Use fallback for profile photo */}
-                                    <img
+                        filteredUsers.map((user, index) => {
+                            // Get profile picture for each individual user
+                            const profilePicture = user.profilePhoto ? BASE_URL + user.profilePhoto : "./avatar.png";
 
-                                        src={BASE_URL + user.profilePhoto}
-                                        alt={`${user.firstName} ${user.lastName}`}
-                                        className="w-8 h-8 rounded-full object-cover"
-                                    />
-                                    {onlineUsers.includes(user._id) && (
-                                        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-gray-700" />
-                                    )}
+                            return (
+                                <div
+                                    key={user._id}
+                                    onClick={() => handleUserSelect(user)}
+                                    className={`flex items-center gap-3 px-4 py-2 cursor-pointer transition-colors 
+                                    ${highlightedIndex === index ? 'bg-gray-100 dark:bg-gray-600' : 'hover:bg-gray-50 dark:hover:bg-gray-600'}`}
+                                    role="option"
+                                >
+                                    <div className="relative">
+                                        <img
+                                            src={profilePicture}
+                                            alt={`${user.firstName} ${user.lastName}`}
+                                            className="w-8 h-8 rounded-full object-cover"
+                                        />
+                                        {onlineUsers.includes(user._id) && (
+                                            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-gray-700" />
+                                        )}
+                                    </div>
+                                    <span className="text-gray-900 dark:text-gray-100">
+                                        {user.firstName} {user.lastName}
+                                    </span>
                                 </div>
-                                <span className="text-gray-900 dark:text-gray-100">
-                                    {user.firstName} {user.lastName}
-                                </span>
-                            </div>
-                        ))
+                            );
+                        })
                     ) : (
                         <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
                             No users found

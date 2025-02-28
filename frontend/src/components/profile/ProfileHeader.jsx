@@ -13,7 +13,6 @@ export default function ProfileHeader({
                                           displayUser
                                       }) {
     const { updateProfile } = useAuthStore()
-    console.info(profileImageUrl);
 
     const handleImageUpload = async (e) => {
         e.preventDefault();

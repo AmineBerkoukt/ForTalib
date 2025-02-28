@@ -9,6 +9,7 @@ import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
 import ScrollToTop from "../components/ScrollToTop";
+import { useSavedPostStore } from "../store/useSavedPostStore.js";
 
 const POSTS_PER_PAGE = 10;
 
@@ -16,6 +17,7 @@ const HomePage = () => {
     const { isDarkMode } = useTheme();
     const { activateModal } = useModalStore();
     const { posts, getPosts } = usePostStore();
+    const { getSavedPostsIds, savedPostsIds, loading } = useSavedPostStore();
     const [displayedPosts, setDisplayedPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -23,7 +25,8 @@ const HomePage = () => {
 
     useEffect(() => {
         getPosts();
-    }, [getPosts]);
+        getSavedPostsIds();
+    }, [getPosts, getSavedPostsIds]);
 
     useEffect(() => {
         if (posts) {
@@ -45,6 +48,7 @@ const HomePage = () => {
     const handleRefresh = async () => {
         setIsRefreshing(true);
         await getPosts();
+        await getSavedPostsIds();
         setIsRefreshing(false);
         toast.success("Page refreshed successfully!");
     };
@@ -91,19 +95,29 @@ const HomePage = () => {
                             </p>
                         </div>
                     ) : posts.length === 0 ? (
-                        <div className={`text-center p-8 sm:p-12 rounded-lg ${
-                            isDarkMode ? "bg-gray-800" : "bg-white"
-                        } shadow-sm`}>
-                            <p className="text-base sm:text-lg">
-                                No posts available. Be the first to create one!
+                        <div
+                            className={`text-center p-10 sm:p-14 rounded-xl shadow-md space-y-4 transition-all duration-200 ${
+                                isDarkMode ? "bg-gray-800 text-gray-300" : "bg-white text-gray-700"
+                            }`}>
+                            <Newspaper
+                                className={`h-12 w-12 mx-auto ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}/>
+                            <h2 className="text-xl sm:text-2xl font-semibold">
+                                No posts available
+                            </h2>
+                            <p className="text-sm sm:text-base">
+                                It seems a bit quiet here. Be the first to find your colocator !
                             </p>
                         </div>
+
                     ) : (
                         <div className="space-y-4 sm:space-y-6">
                             {displayedPosts.map((post) => {
                                 const updatedImages = post.images
                                     ? post.images.map((image) => `http://localhost:5000${image}`)
                                     : [];
+
+                                // Check if this post is in the savedPostsIds array
+                                const isPostSaved = Array.isArray(savedPostsIds) && savedPostsIds.includes(post._id);
 
                                 return (
                                     <div
@@ -119,7 +133,7 @@ const HomePage = () => {
                                                 firstName: post.user?.firstName || 'Unknown',
                                                 lastName: post.user?.lastName || 'User',
                                                 role: post.user?.role || 'user',
-                                                profilePhoto: post.user.profilePhoto
+                                                profilePhoto: post.user?.profilePhoto
                                             }}
                                             postId={post._id}
                                             title={post.title}
@@ -131,11 +145,11 @@ const HomePage = () => {
                                             elevator={post.elevator}
                                             maximumCapacity={post.maximumCapacity}
                                             avgRate={post.avgRate}
+                                            isSavedInitially={isPostSaved}
                                         />
                                     </div>
                                 );
                             })}
-
 
                             {hasMorePosts && (
                                 <div className="flex justify-center pt-4 pb-6 sm:pb-8">
@@ -173,4 +187,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

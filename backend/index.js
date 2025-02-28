@@ -7,7 +7,7 @@ import statsRoutes from './src/routes/statsRoutes.js';
 import oauth2Routes from './src/routes/oauth2Routes.js';
 import authRoutes from './src/routes/authRoutes.js';
 import requestRoutes from "./src/routes/requestRoutes.js";
-import favoriseRoutes from './src/routes/favoriseRoutes.js';
+import favoriseRoutes from './src/routes/saveRoutes.js';
 import evaluateRoutes from "./src/routes/evaluateRoutes.js";
 import passport from 'passport';
 import http from 'http';

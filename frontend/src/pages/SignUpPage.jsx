@@ -7,7 +7,7 @@ import { useTheme } from "../contexts/ThemeContext.jsx";
 import GoogleLoginButton from "../components/GoogleLoginButton.jsx";
 import LoginHero from "../components/skeletons/LoginHero.jsx";
 import FormInput from "../components/FormInput.jsx";
-import initUpperCase from "../utils/initUpperCase.js";
+import { initUpperCase, validateRequiredFields, validateEmail, validatePassword, validatePhoneNumber } from "../utils/validators_filters.js";
 import TermsAndConditionsModal from "../components/TermsAndConditionsModal.jsx";
 import Footer from "../components/Footer.jsx";
 
@@ -27,11 +27,6 @@ const SignUpPage = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
 
     const validateForm = () => {
-        if (!acceptTerms) {
-            toast.error("You must accept the Terms and Conditions.");
-            return false;
-        }
-
         const fields = [
             { ref: firstNameRef, message: "Please enter your first name" },
             { ref: lastNameRef, message: "Please enter your last name" },
@@ -40,32 +35,20 @@ const SignUpPage = () => {
             { ref: phoneNumberRef, message: "Please enter your phone number" },
         ];
 
-        for (const field of fields) {
-            if (!field.ref.current.value.trim()) {
-                toast.error(field.message);
-                return false;
-            }
-        }
-
-        if (!/\S+@\S+\.\S+/.test(emailRef.current.value)) {
-            toast.error("Invalid email format");
+        if (!validateRequiredFields(fields)) return false;
+        if (!validateEmail(emailRef.current.value)) return false;
+        if (!validatePassword(passwordRef.current.value)) return false;
+        if (!validatePhoneNumber(phoneNumberRef.current.value)) return false;
+        if (!acceptTerms) {
+            toast.error("You must accept the Terms and Conditions!");
             return false;
         }
-
-        if (passwordRef.current.value.length < 6) {
-            toast.error("Password must be at least 6 characters long");
-            return false;
-        }
-
-        //if (!/^(0[67]|\+212)[0-9]{8}$/.test(phoneNumberRef.current.value)) {
-          //  toast.error("Invalid phone number");
-            //return false;
-        //}
 
         return true;
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         if (validateForm()) {
             const formData = {
@@ -74,10 +57,10 @@ const SignUpPage = () => {
                 email: emailRef.current.value.toLowerCase(),
                 password: passwordRef.current.value,
                 phoneNumber: phoneNumberRef.current.value,
-                hasAcceptedTermsAndConditions: acceptTerms // Add this line
+                hasAcceptedTermsAndConditions: acceptTerms
             };
 
-            console.log("sending data : " , formData)
+
 
             try {
                 await signup(formData);
@@ -136,7 +119,7 @@ const SignUpPage = () => {
                             <FormInput label="First Name" icon={User} inputRef={firstNameRef} placeholder="Enter your first name" />
                             <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
                             <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
-                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="••••••" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
+                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="8 Characters" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
                             <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
 
                             <div className="flex items-center">

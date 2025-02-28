@@ -2,7 +2,7 @@ import User from '../models/User.js';
 import Request from '../models/Request.js';
 import Post from '../models/Post.js';
 import Evaluate from '../models/Evaluate.js';
-import Favorise from '../models/Favorise.js';
+import Favorise from '../models/Save.js';
 import Message from '../models/Message.js';
 import path from "path";
 import bcrypt from 'bcryptjs'; // Assure-toi d'installer bcryptjs (npm install bcryptjs)
