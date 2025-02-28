@@ -4,19 +4,19 @@ import { Trash2 } from 'lucide-react';
 import React from "react";
 import {useChatStore} from "../../store/useChatStore.js";
 import {useNavigate} from "react-router-dom";
+import {useAuthStore} from "../../store/useAuthStore.js";
 
 const PostHeader = ({
                         user,
                         timestamp,
                         isPostOwner,
-                        role,
-                        handleNavigateToProfile,
                         handleEditClick,
                         setShowDeleteConfirm,
                         isInProfile,
                         profileImageUrl
                     }) => {
     const { setSelectedUser } = useChatStore();
+    const { role } = useAuthStore();
     const navigate = useNavigate();
 
 
@@ -25,6 +25,9 @@ const PostHeader = ({
         navigate("/chat");
     };
 
+    const handleNavigateToProfile = (userId) => {
+        if (userId) navigate(`/profile/${userId}`);
+    };
 
     return (
         <div className="flex items-center justify-between mb-2">

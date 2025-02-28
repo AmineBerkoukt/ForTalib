@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageCarousel from "./ImageCarousel";
 import EditPostModal from "./modals/EditPostModal.jsx";
-import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore.js";
 import toast from "react-hot-toast";
 import { usePostStore } from "../store/usePostStore.js";
@@ -12,7 +11,6 @@ import ImageModal from "./post/ImageModal.jsx";
 import PostDetails from "./post/PostDetails.jsx";
 import PostHeader from "./post/PostHeader.jsx";
 import PostButtom from "./post/PostButtom.jsx";
-import { Bookmark, BookmarkCheck } from "lucide-react";
 import { useSavedPostStore } from "../store/useSavedPostStore";
 
 
@@ -87,9 +85,7 @@ const Post = ({
     };
 
 
-    const handleNavigateToProfile = (userId) => {
-        if (userId) navigate(`/profile/${userId}`);
-    };
+
 
 
 
@@ -100,8 +96,6 @@ const Post = ({
                     user={user}
                     timestamp={timestamp}
                     isPostOwner={isPostOwner}
-                    role={role}
-                    handleNavigateToProfile={handleNavigateToProfile}
                     setShowDeleteConfirm={setShowDeleteConfirm}
                     handleEditClick={() => setShowEditModal(true)}
                     profileImageUrl={profileImageUrl}
