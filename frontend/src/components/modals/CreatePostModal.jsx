@@ -2,13 +2,9 @@ import { useState, useRef, useEffect } from "react"
 import { X, Upload, Loader } from "lucide-react"
 import { usePostStore } from "../../store/usePostStore.js"
 import LoadingOverlay from "../skeletons/LoadingOverlay.jsx"
-import { toast } from "react-hot-toast";  // Import toast from react-hot-toast
+import { toast } from "react-hot-toast";
 import {
-    validateTitle,
-    validateDescription,
-    validatePrice,
-    validateAddress,
-    validateImages
+    postValidator
 } from "../../utils/validators_filters";
 
 export default function CreatePostModal({ isDarkMode, showModal, setShowModal }) {
@@ -58,7 +54,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files)
         if (files.length > 6) {
-            toast.error("You can upload up to 6 images only.") // Toast error when exceeding image limit
+            toast.error("You can upload up to 6 images only.")
             return
         }
         setFormData((prev) => ({
@@ -82,22 +78,13 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate fields
-        const newErrors = {
-            title: validateTitle(formData.title),
-            description: validateDescription(formData.description),
-            price: validatePrice(formData.price),
-            address: validateAddress(formData.address),
-            images: validateImages(formData.images),
-        };
+        // Use the postValidator function to validate form data
+        const validationResult = postValidator(formData);
 
-        // Filter out empty errors
-        const hasErrors = Object.values(newErrors).some((err) => err !== "");
-        if (hasErrors) {
+        if (!validationResult) {
+            // Format and display validation errors
+            const newErrors = {};
             setErrors(newErrors);
-            Object.values(newErrors).forEach((error) => {
-                if (error) toast.error(error);  // Show toast error for each validation issue
-            });
             return;
         }
 
@@ -192,6 +179,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                             style={{appearance: "textfield"}}
                                             required
                                         />
+                                        {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
                                     </div>
                                 </div>
 
@@ -217,6 +205,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                                 </option>
                                             ))}
                                         </select>
+                                        {errors.maximumCapacity && <p className="text-red-500 text-sm mt-1">{errors.maximumCapacity}</p>}
                                     </div>
 
                                     <div>
@@ -236,6 +225,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                                 </label>
                                             ))}
                                         </div>
+                                        {errors.elevator && <p className="text-red-500 text-sm mt-1">{errors.elevator}</p>}
                                     </div>
                                 </div>
 
@@ -256,6 +246,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                         } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors`}
                                         required
                                     />
+                                    {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
                                 </div>
 
                                 <div>
@@ -275,6 +266,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                         } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors`}
                                         required
                                     ></textarea>
+                                    {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
                                 </div>
 
                                 <div>
@@ -305,6 +297,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                     <p className={`mt-2 text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"} text-center`}>
                                         PNG, JPG, GIF up to 10MB each
                                     </p>
+                                    {errors.images && <p className="text-red-500 text-sm mt-1 text-center">{errors.images}</p>}
                                 </div>
 
                                 <div className="flex flex-wrap gap-2 mt-2">

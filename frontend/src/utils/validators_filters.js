@@ -87,7 +87,7 @@ export const validateImages = (images) => {
 
 export const postValidator = (post) => {
     const errors = [];
-
+    console.log(post)
     const titleError = validateTitle(post.title);
     if (titleError) errors.push(titleError);
 
@@ -99,6 +99,11 @@ export const postValidator = (post) => {
 
     const addressError = validateAddress(post.address);
     if (addressError) errors.push(addressError);
+
+    if(post.images){
+        const imagesError = validateImages(post.images);
+        if (imagesError) errors.push(imagesError);
+    }
 
     if (errors.length > 0) {
         errors.forEach(error => toast.error(error));

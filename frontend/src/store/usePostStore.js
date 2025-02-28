@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import api from "../utils/api.js";
 import toast from "react-hot-toast";
-import { postValidator } from "../utils/validators_filters.js";
 import { useProfileStore } from "./useProfileStore";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const usePostStore = create((set, get) => ({
     posts: [],
@@ -62,13 +63,6 @@ export const usePostStore = create((set, get) => ({
     },
 
     createPost: async (postData) => {
-        // Validate post data before creating the post
-        const isValid = postValidator(postData);
-        if (!isValid) {
-            get().setLoading(false);
-            return;  // Stop the create post process if validation fails
-        }
-
         get().setLoading(true);
         try {
             const formData = new FormData();
@@ -117,7 +111,7 @@ export const usePostStore = create((set, get) => ({
             const res = await api.delete(`posts/post?id=${postId}`);
             if (isInHome) {
                 get().getPosts();
-                await get().getTopFive();
+                get().getTopFive();
             } else {
                 const { getUserPosts } = useProfileStore.getState();
                 await getUserPosts(userId);
@@ -143,13 +137,6 @@ export const usePostStore = create((set, get) => ({
     },
 
     updatePost: async (postId, newPostData) => {
-        // Validate post data before updating
-        const isValid = postValidator(newPostData);
-        if (!isValid) {
-            get().setLoading(false);
-            return;  // Stop the update post process if validation fails
-        }
-
         get().setLoading(true);
         try {
             const res = await api.patch(`/posts/post/${postId}`, newPostData);
@@ -200,7 +187,6 @@ export const usePostStore = create((set, get) => ({
         get().setLoading(true);
         try {
             const response = await api.post(`/saved/${postId}`);
-            return response;
         } catch (error) {
             console.log("Error in saving post in the store ", error.message);
         } finally {
