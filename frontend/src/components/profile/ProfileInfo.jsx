@@ -112,7 +112,6 @@ export default function ProfileInfo({ user, isDarkMode, isUpdating }) {
 
     const fullName = `${displayUser?.firstName || ''} ${displayUser?.lastName || ''}`;
 
-    console.info(user.profilePhoto);
     let profileImageUrl = user?.profilePhoto ? `${BASE_URL}${user.profilePhoto}` : "/avatar.png";
 
     return (
