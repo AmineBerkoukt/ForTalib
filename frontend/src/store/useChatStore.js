@@ -93,15 +93,13 @@ export const useChatStore = create((set, get) => ({
   setSelectedUser: async (selectedUser) => {
     let selectedUserInfos = selectedUser;
     if(selectedUser) {selectedUserInfos = await get().getSelectedUserInfo(selectedUser._id)}
-    console.log(selectedUserInfos);
 
     set({selectedUser: selectedUserInfos })
     console.log(selectedUser);
     toast(`You are talking to ${selectedUser.lastName} ${selectedUser.firstName}`,
         {
           icon: 'ℹ️',
-        }
-    );
+        });
     },
 
   getSelectedUserInfo: async (userId) => {
