@@ -30,12 +30,8 @@ const PostHeader = ({
         <div className="flex items-center justify-between mb-2">
             <div className="flex items-center cursor-pointer" onClick={() => handleNavigateToProfile(user._id)}>
                 <img
-                    src={profileImageUrl || "/default-avatar.png"}
-                    alt={user.firstName}
-                    className="h-12 w-12 rounded-full border-2 border-gray-300 dark:border-gray-500 shadow-md transition-transform duration-300 hover:scale-105 mr-2 object-cover"
-                    loading="lazy"
-                />
-
+                    src={profileImageUrl}
+                    alt={user.firstName} className="h-10 w-10 rounded-full mr-2"/>
                 <div>
                     <h3 className="flex items-center font-semibold dark:text-gray-200 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200">
                         {user.firstName + " " + user.lastName}

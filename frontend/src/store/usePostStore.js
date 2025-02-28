@@ -65,7 +65,6 @@ export const usePostStore = create((set, get) => ({
         // Validate post data before creating the post
         const isValid = postValidator(postData);
         if (!isValid) {
-            toast.error('Post data is invalid');
             get().setLoading(false);
             return;  // Stop the create post process if validation fails
         }
@@ -147,7 +146,6 @@ export const usePostStore = create((set, get) => ({
         // Validate post data before updating
         const isValid = postValidator(newPostData);
         if (!isValid) {
-            toast.error('Post data is invalid');
             get().setLoading(false);
             return;  // Stop the update post process if validation fails
         }

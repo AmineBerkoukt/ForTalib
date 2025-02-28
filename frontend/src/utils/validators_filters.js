@@ -100,9 +100,6 @@ export const postValidator = (post) => {
     const addressError = validateAddress(post.address);
     if (addressError) errors.push(addressError);
 
-    const imagesError = validateImages(post.images);
-    if (imagesError) errors.push(imagesError);
-
     if (errors.length > 0) {
         errors.forEach(error => toast.error(error));
         return false;

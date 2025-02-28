@@ -91,7 +91,7 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
 
     const modalContent = (
         <>
-            {showModal && (
+            {true && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
                     onClick={handleOutsideClick}
@@ -219,4 +219,3 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
 
     return createPortal(modalContent, document.body);
 }
-
