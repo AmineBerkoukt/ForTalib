@@ -32,7 +32,6 @@ export const useProfileStore = create((set, get) => ({
     updateProfile: async (data) => {
         set({ isUpdatingProfile: true });
 
-        console.log(data);
         const isValid = profileValidator(data);
         if (!isValid) {
             set({ isUpdatingProfile: false });
