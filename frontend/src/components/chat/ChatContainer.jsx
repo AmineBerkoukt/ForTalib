@@ -24,7 +24,6 @@ const ChatContainer = () => {
     const [zoomedImage, setZoomedImage] = useState(null);
     const [isZoomed, setIsZoomed] = useState(false);
 
-    const BASEURL = "http://localhost:5000/";
     const id = selectedUser._id ? selectedUser._id : selectedUser.id;
 
     useEffect(() => {
@@ -82,6 +81,8 @@ const ChatContainer = () => {
     console.info(authUser.profilePhoto)
     console.info(selectedUser)
 
+    const otherUserPfp = selectedUser.profilePhoto ? BASE_URL + selectedUser.profilePhoto : "./avatar.png"
+
 
     return (
         <div className="flex-1 flex flex-col h-full relative">
@@ -119,7 +120,7 @@ const ChatContainer = () => {
                                     <img
                                         src={message.senderId === authUser._id
                                             ? BASE_URL + authUser.profilePhoto || "./avatar.png"
-                                            : BASE_URL + selectedUser.profilePhoto || "./avatar.png"}
+                                            : otherUserPfp}
                                         alt="profile pic"
                                         className="w-full h-full object-cover rounded-full"
                                     />
@@ -143,10 +144,10 @@ const ChatContainer = () => {
                             >
                                 {message.media && (
                                     <img
-                                        src={BASEURL + message.media}
+                                        src={BASE_URL + message.media}
                                         alt="Attachment"
                                         className="max-w-[150px] sm:max-w-[200px] rounded-md mb-2 cursor-pointer"
-                                        onClick={() => handleImageClick(BASEURL + message.media)}
+                                        onClick={() => handleImageClick(BASE_URL + message.media)}
                                     />
                                 )}
                                 {message.text && <p className="text-sm sm:text-base">{message.text}</p>}
