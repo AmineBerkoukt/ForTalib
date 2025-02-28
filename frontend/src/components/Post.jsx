@@ -41,13 +41,13 @@ const Post = ({
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const { savedPosts, getSavedPostsIds } = useSavedPostStore();
     const [isSaved, setIsSaved] = useState(isSavedInitially);
-    const {isModalActive , toggleModal} = useModalStore();
+    const {isEditModalActive , toggleEditModal} = useModalStore();
 
 
 
     useEffect(() => {
 
-    }, [isModalActive]);
+    }, [isEditModalActive]);
 
     useEffect(() => {
         setIsSaved(savedPosts.includes(postId));
@@ -128,7 +128,7 @@ const Post = ({
 
             <ConfirmationModal isOpen={showDeleteConfirm} onClose={() => setShowDeleteConfirm(false)} onConfirm={handleDelete} title="Delete Post" message="Are you sure you want to delete this post?" confirmText="Delete" />
 
-            <EditPostModal isDarkMode={isDarkMode} showModal={showEditModal} setShowModal={setShowEditModal} postId={postId} />
+            <EditPostModal isDarkMode={isDarkMode} postId={postId} />
         </>
     );
 };

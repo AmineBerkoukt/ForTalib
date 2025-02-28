@@ -2,9 +2,10 @@ import { create } from "zustand";
 
 export const useModalStore = create((set, get) => ({
   isModalActive: false,
+  isEditModalActive:false,
   modalData: {},
 
-  toggleModal: () => set({ isModalActive: !get().isModalActive }),
+  toggleEditModal: () => set({ isEditModalActive: !get().isEditModalActive }),
 
   activateModal: (data) => {
     set({ isModalActive: true, modalData: data });

@@ -10,14 +10,13 @@ import {useModalStore} from "../../store/useModalStore.js";
 const PostHeader = ({
                         user,
                         timestamp,
-                        handleEditClick,
                         setShowDeleteConfirm,
                         isInProfile,
                         profileImageUrl
                     }) => {
     const { setSelectedUser } = useChatStore();
     const { role, authUser } = useAuthStore();
-    const {isModalActive , toggleModal} = useModalStore();
+    const { toggleEditModal} = useModalStore();
     const navigate = useNavigate();
     const isPostOwner = authUser._id === user._id;
 
@@ -51,7 +50,7 @@ const PostHeader = ({
             <div className="flex items-center space-x-2">
                 {isPostOwner && (
                     <button
-                        onClick={toggleModal}
+                        onClick={toggleEditModal}
                         className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition-colors"
                         title="Edit post"
                     >

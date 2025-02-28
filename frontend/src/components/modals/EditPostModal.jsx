@@ -1,19 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { X, Upload } from 'lucide-react';
-import { usePostStore } from "../../store/usePostStore.js";
-import { Toaster } from "react-hot-toast";
+import React, {useState, useRef, useEffect} from 'react';
+import {createPortal} from 'react-dom';
+import {X, Upload} from 'lucide-react';
+import {usePostStore} from "../../store/usePostStore.js";
+import {Toaster} from "react-hot-toast";
 import {useModalStore} from "../../store/useModalStore.js";
 
-export default function EditPostModal({ isDarkMode, showModal, setShowModal, postId }) {
-    const { getPostById, updatePost } = usePostStore();
+export default function EditPostModal({isDarkMode, postId}) {
+    const {getPostById, updatePost} = usePostStore();
     const modalRef = useRef(null);
-    const {isModalActive , toggleModal} = useModalStore();
-    console.log(isModalActive)
+    const {isEditModalActive, toggleEditModal} = useModalStore();
 
     useEffect(() => {
 
-    }, [isModalActive]);
+    }, [isEditModalActive]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -25,7 +24,7 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
 
     useEffect(() => {
         const fetchPost = async () => {
-            if (showModal && postId) {
+            if (isEditModalActive && postId) {
                 const post = await getPostById(postId);
                 if (post) {
                     setFormData({
@@ -40,27 +39,29 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
             }
         };
         fetchPost();
-    }, [showModal, postId, getPostById]);
+    }, [postId, getPostById]);
 
     useEffect(() => {
         const handleEscapeKey = (e) => {
-            if (e.key === 'Escape') setShowModal(false);
+            if (e.key === 'Escape') toggleEditModal();
         };
         window.addEventListener('keydown', handleEscapeKey);
         return () => window.removeEventListener('keydown', handleEscapeKey);
-    }, [setShowModal]);
+    }, [toggleEditModal]);
 
     useEffect(() => {
-        if (showModal) {
+        if (isEditModalActive) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
         }
-        return () => { document.body.style.overflow = 'unset'; };
-    }, [showModal]);
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isEditModalActive]);
 
     const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const {name, value, type, checked} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value,
@@ -71,7 +72,7 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
         e.preventDefault();
         try {
             await updatePost(postId, formData);
-            setShowModal(false);
+            toggleEditModal()
         } catch (error) {
             console.error('Error updating post:', error);
         }
@@ -79,7 +80,7 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
 
     const handleOutsideClick = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
-            setShowModal(false);
+            toggleEditModal()
         }
     };
 
@@ -97,9 +98,9 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
 
     const modalContent = (
         <>
-            {isModalActive && (
+            {isEditModalActive && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-30 backdrop-blur-sm"
                     onClick={handleOutsideClick}
                 >
                     <div
@@ -107,16 +108,17 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
                         className={`relative bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden`}
                     >
                         <button
-                            onClick={toggleModal}
+                            onClick={toggleEditModal}
                             className={`absolute top-4 right-4 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${
                                 isDarkMode ? "text-gray-300" : "text-gray-700"
                             }`}
                             aria-label="Close modal"
                         >
-                            <X size={24} />
+                            <X size={24}/>
                         </button>
 
-                        <div className={`p-6 overflow-y-auto max-h-[calc(90vh-2rem)] ${isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"}`}>
+                        <div
+                            className={`p-6 overflow-y-auto max-h-[calc(90vh-2rem)] ${isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"}`}>
                             <h2 className="text-2xl font-bold mb-6">Edit Post</h2>
 
                             <form onSubmit={handleSubmit} className="space-y-6">
@@ -140,7 +142,7 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
                                             value={formData.price}
                                             onChange={handleInputChange}
                                             className={inputClasses}
-                                            style={{ appearance: 'textfield' }}
+                                            style={{appearance: 'textfield'}}
                                             required
                                         />
                                     </div>
@@ -148,7 +150,8 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-medium mb-1">Maximum Capacity (Rooms)</label>
+                                        <label className="block text-sm font-medium mb-1">Maximum Capacity
+                                            (Rooms)</label>
                                         <select
                                             name="maximumCapacity"
                                             value={formData.maximumCapacity}
@@ -165,7 +168,8 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
                                         <label className="block text-sm font-medium mb-1">Elevator</label>
                                         <div className="flex space-x-4 mt-1">
                                             {['yes', 'no'].map((option) => (
-                                                <label key={option} className={`inline-flex items-center ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}>
+                                                <label key={option}
+                                                       className={`inline-flex items-center ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}>
                                                     <input
                                                         type="radio"
                                                         name="elevator"
