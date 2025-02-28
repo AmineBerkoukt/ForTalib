@@ -10,15 +10,14 @@ import toast, { Toaster } from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
 import ScrollToTop from "../components/ScrollToTop";
 import { useSavedPostStore } from "../store/useSavedPostStore.js";
-import SkeletonFeed from "../components/skeletons/FeedSkeleton.jsx";
 
 const POSTS_PER_PAGE = 10;
 
 const HomePage = () => {
     const { isDarkMode } = useTheme();
     const { activateModal } = useModalStore();
-    const { posts, getPosts, isLoading: postsLoading } = usePostStore();
-    const { getSavedPostsIds, savedPostsIds, loading: savedPostsLoading } = useSavedPostStore();
+    const { posts, getPosts } = usePostStore();
+    const { getSavedPostsIds, savedPostsIds, loading } = useSavedPostStore();
     const [displayedPosts, setDisplayedPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -36,7 +35,7 @@ const HomePage = () => {
         }
     }, [posts, currentPage]);
 
-    const isLoading = postsLoading || posts === null;
+    const isLoading = posts === null;
     const hasMorePosts = posts?.length > displayedPosts.length;
 
     const handleLoadMore = async () => {
@@ -89,7 +88,12 @@ const HomePage = () => {
                     </div>
 
                     {isLoading ? (
-                        <SkeletonFeed count={5} />
+                        <div className="flex flex-col items-center justify-center p-8 sm:p-12 space-y-4">
+                            <Loader2 className="h-8 w-8 animate-spin text-blue-500"/>
+                            <p className="text-base sm:text-lg">
+                                Loading posts...
+                            </p>
+                        </div>
                     ) : posts.length === 0 ? (
                         <div
                             className={`text-center p-10 sm:p-14 rounded-xl shadow-md space-y-4 transition-all duration-200 ${
