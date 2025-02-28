@@ -56,3 +56,30 @@ export const validateCin = (value) => {
     if (!value.trim()) return true; // Optional field
     return cinRegex.test(value);
 };
+
+export const validateTitle = (title) => {
+    return title.length >= 5 && title.length <= 100 ? "" : "Title must be between 5 and 100 characters.";
+};
+
+export const validateDescription = (description) => {
+    return description.length >= 20 ? "" : "Description must be at least 20 characters.";
+};
+
+export const validatePrice = (price) => {
+    return price > 0 ? "" : "Price must be greater than 0.";
+};
+
+export const validateAddress = (address) => {
+    return address.length >= 10 ? "" : "Address must be at least 10 characters.";
+};
+
+export const validateImages = (images) => {
+    if (images.length > 6) return "You can upload up to 6 images only.";
+    for (const image of images) {
+        if (image.size > 10 * 1024 * 1024) return "Each image must be under 10MB.";
+        if (!["image/jpeg", "image/png", "image/gif"].includes(image.type)) {
+            return "Only PNG, JPG, and GIF formats are allowed.";
+        }
+    }
+    return "";
+};
