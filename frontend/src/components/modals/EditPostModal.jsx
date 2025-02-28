@@ -3,11 +3,17 @@ import { createPortal } from 'react-dom';
 import { X, Upload } from 'lucide-react';
 import { usePostStore } from "../../store/usePostStore.js";
 import { Toaster } from "react-hot-toast";
+import {useModalStore} from "../../store/useModalStore.js";
 
 export default function EditPostModal({ isDarkMode, showModal, setShowModal, postId }) {
     const { getPostById, updatePost } = usePostStore();
     const modalRef = useRef(null);
+    const {isModalActive , toggleModal} = useModalStore();
+    console.log(isModalActive)
 
+    useEffect(() => {
+
+    }, [isModalActive]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -91,7 +97,7 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
 
     const modalContent = (
         <>
-            {false && (
+            {isModalActive && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
                     onClick={handleOutsideClick}
@@ -101,7 +107,7 @@ export default function EditPostModal({ isDarkMode, showModal, setShowModal, pos
                         className={`relative bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden`}
                     >
                         <button
-                            onClick={() => setShowModal(false)}
+                            onClick={toggleModal}
                             className={`absolute top-4 right-4 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${
                                 isDarkMode ? "text-gray-300" : "text-gray-700"
                             }`}

@@ -1,15 +1,16 @@
 import { create } from "zustand";
 
-export const useModalStore = create((set) => ({
+export const useModalStore = create((set, get) => ({
   isModalActive: false,
   modalData: {},
 
+  toggleModal: () => set({ isModalActive: !get().isModalActive }),
+
   activateModal: (data) => {
-    set({ isModalActive: true });
-    set({modalData: data});
+    set({ isModalActive: true, modalData: data });
   },
 
   disactivateModal: () => {
-    set({ isModalActive: false, modalData: {} }); // Clear modal data when deactivating
+    set({ isModalActive: false, modalData: {} });
   },
 }));

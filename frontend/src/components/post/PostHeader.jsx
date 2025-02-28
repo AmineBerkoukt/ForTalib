@@ -5,19 +5,22 @@ import React from "react";
 import {useChatStore} from "../../store/useChatStore.js";
 import {useNavigate} from "react-router-dom";
 import {useAuthStore} from "../../store/useAuthStore.js";
+import {useModalStore} from "../../store/useModalStore.js";
 
 const PostHeader = ({
                         user,
                         timestamp,
-                        isPostOwner,
                         handleEditClick,
                         setShowDeleteConfirm,
                         isInProfile,
                         profileImageUrl
                     }) => {
     const { setSelectedUser } = useChatStore();
-    const { role } = useAuthStore();
+    const { role, authUser } = useAuthStore();
+    const {isModalActive , toggleModal} = useModalStore();
     const navigate = useNavigate();
+    const isPostOwner = authUser._id === user._id;
+
 
 
     const handleTalkToOwner = async (userToTalkTo) => {
@@ -48,7 +51,7 @@ const PostHeader = ({
             <div className="flex items-center space-x-2">
                 {isPostOwner && (
                     <button
-                        onClick={handleEditClick}
+                        onClick={toggleModal}
                         className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition-colors"
                         title="Edit post"
                     >

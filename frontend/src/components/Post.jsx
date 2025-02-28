@@ -12,6 +12,7 @@ import PostDetails from "./post/PostDetails.jsx";
 import PostHeader from "./post/PostHeader.jsx";
 import PostButtom from "./post/PostButtom.jsx";
 import { useSavedPostStore } from "../store/useSavedPostStore";
+import {useModalStore} from "../store/useModalStore.js";
 
 
 const BASE_URL = import.meta.env.VITE_PFP_URL;
@@ -31,18 +32,22 @@ const Post = ({
                   isSavedInitially,
               }) => {
     const { isDarkMode } = useTheme();
-    const { role, authUser } = useAuthStore();
+    const { authUser } = useAuthStore();
     const { savePost, unsavePost, getPosts, getTopFive, deletePost } = usePostStore();
     const [avgRate, setAvgRate] = useState(initialAvgRate);
     const [imageModalOpen, setImageModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [showEditModal, setShowEditModal] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const isPostOwner = authUser._id === user._id;
     const { savedPosts, getSavedPostsIds } = useSavedPostStore();
     const [isSaved, setIsSaved] = useState(isSavedInitially);
+    const {isModalActive , toggleModal} = useModalStore();
+
+
+
+    useEffect(() => {
+
+    }, [isModalActive]);
 
     useEffect(() => {
         setIsSaved(savedPosts.includes(postId));
@@ -94,11 +99,10 @@ const Post = ({
             <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 mb-4 w-full max-w-6xl mx-auto">
                 <PostHeader
                     user={user}
+                    profileImageUrl={profileImageUrl}
                     timestamp={timestamp}
-                    isPostOwner={isPostOwner}
                     setShowDeleteConfirm={setShowDeleteConfirm}
                     handleEditClick={() => setShowEditModal(true)}
-                    profileImageUrl={profileImageUrl}
                 />
 
                 <h2 className="mt-4 text-lg font-bold dark:text-gray-200 mb-2">{title}</h2>
