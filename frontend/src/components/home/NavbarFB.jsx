@@ -6,9 +6,10 @@ import {
     SunIcon,
     ArrowLeftStartOnRectangleIcon
 } from '@heroicons/react/24/outline';
-import { Bot } from "lucide-react";
 import { useTheme } from '../../contexts/ThemeContext.jsx';
 import SearchBar from '../SearchBar.jsx';
+
+const PROJECT_NAME = import.meta.env.VITE_PROJECT_NAME;
 
 const NavbarFB = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
@@ -39,7 +40,7 @@ const NavbarFB = () => {
                     className={`text-xl sm:text-2xl font-bold hover:opacity-90 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
                 >
 
-                    ForTalib
+                    {PROJECT_NAME}
                 </Link>
 
                 {/* Center: Search Bar (only show if not on /chat route) */}
@@ -60,7 +61,6 @@ const NavbarFB = () => {
                             <ChatBubbleOvalLeftEllipsisIcon
                                 className={`h-5 w-5 sm:h-6 sm:w-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} cursor-pointer group-hover:text-blue-500`}
                             />
-                            <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
                         </div>
                     </Link>
 
