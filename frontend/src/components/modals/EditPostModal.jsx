@@ -42,7 +42,8 @@ export default function EditPostModal({isDarkMode, postId}) {
 
     useEffect(() => {
         const handleEscapeKey = (e) => {
-            if (e.key === 'Escape') toggleEditModal();
+            if (e.key === 'Escape') {toggleEditModal();
+            console.log(isEditModalActive)}
         };
         window.addEventListener('keydown', handleEscapeKey);
         return () => window.removeEventListener('keydown', handleEscapeKey);
