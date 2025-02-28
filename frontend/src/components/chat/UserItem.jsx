@@ -4,10 +4,13 @@ const BASE_URL = import.meta.env.VITE_PFP_URL;
 const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode }) => {
     // Check if the user is online by checking if their ID is in the onlineUsers array
     const isUserOnline = onlineUsers && onlineUsers.includes(user._id);
-
+    const handleClick = (user) =>{
+        console.log(user._id);
+        setSelectedUser(user);
+    }
     return (
         <button
-            onClick={() => setSelectedUser(user)}
+            onClick={() => handleClick(user)}
             className={`w-full sm:w-11/12 p-2 sm:p-4 flex items-center gap-2 sm:gap-4 transition-all duration-200 transform hover:scale-[1.02] 
             rounded-lg
             ${isDarkMode

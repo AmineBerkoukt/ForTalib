@@ -79,6 +79,9 @@ const ChatContainer = () => {
     }
 
     const noMessages = messages.length === 0;
+    console.info(authUser.profilePhoto)
+    console.info(selectedUser)
+
 
     return (
         <div className="flex-1 flex flex-col h-full relative">
@@ -115,8 +118,8 @@ const ChatContainer = () => {
                                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border">
                                     <img
                                         src={message.senderId === authUser._id
-                                            ? BASE_URL + authUser.profilePhoto || "/avatar.png"
-                                            : BASE_URL + selectedUser.profilePhoto || "/avatar.png"}
+                                            ? BASE_URL + authUser.profilePhoto || "./avatar.png"
+                                            : BASE_URL + selectedUser.profilePhoto || "./avatar.png"}
                                         alt="profile pic"
                                         className="w-full h-full object-cover rounded-full"
                                     />

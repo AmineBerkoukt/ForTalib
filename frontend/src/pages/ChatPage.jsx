@@ -5,7 +5,6 @@ import NoChatSelected from "../components/chat/NoChatSelected.jsx";
 import ChatContainer from "../components/chat/ChatContainer.jsx";
 import { useTheme } from "../contexts/ThemeContext";
 import Layout from "../components/Layout.jsx";
-import {Toaster} from "react-hot-toast";
 
 const ChatPage = () => {
     const { selectedUser } = useChatStore();
