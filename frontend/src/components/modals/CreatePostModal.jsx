@@ -2,9 +2,18 @@ import { useState, useRef, useEffect } from "react"
 import { X, Upload, Loader } from "lucide-react"
 import { usePostStore } from "../../store/usePostStore.js"
 import LoadingOverlay from "../skeletons/LoadingOverlay.jsx"
+import { toast } from "react-hot-toast";  // Import toast from react-hot-toast
+import {
+    validateTitle,
+    validateDescription,
+    validatePrice,
+    validateAddress,
+    validateImages
+} from "../../utils/validators_filters";
 
 export default function CreatePostModal({ isDarkMode, showModal, setShowModal }) {
-    const { createPost, isLoading } = usePostStore()
+    const { createPost, isLoading } = usePostStore();
+    const [errors, setErrors] = useState({});
 
     const [formData, setFormData] = useState({
         title: "",
@@ -49,7 +58,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files)
         if (files.length > 6) {
-            alert("You can upload up to 6 images only.")
+            toast.error("You can upload up to 6 images only.") // Toast error when exceeding image limit
             return
         }
         setFormData((prev) => ({
@@ -71,10 +80,30 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
+        // Validate fields
+        const newErrors = {
+            title: validateTitle(formData.title),
+            description: validateDescription(formData.description),
+            price: validatePrice(formData.price),
+            address: validateAddress(formData.address),
+            images: validateImages(formData.images),
+        };
+
+        // Filter out empty errors
+        const hasErrors = Object.values(newErrors).some((err) => err !== "");
+        if (hasErrors) {
+            setErrors(newErrors);
+            Object.values(newErrors).forEach((error) => {
+                if (error) toast.error(error);  // Show toast error for each validation issue
+            });
+            return;
+        }
+
         try {
-            await createPost(formData)
-            setShowModal(false)
+            await createPost(formData);
+            setShowModal(false);
             setFormData({
                 title: "",
                 description: "",
@@ -83,11 +112,13 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                 elevator: "no",
                 maximumCapacity: "1",
                 images: [],
-            })
+            });
+            setErrors({}); // Clear errors on successful submission
         } catch (error) {
-            console.error("Error creating post:", error)
+            console.error("Error creating post:", error);
+            toast.error("Error creating post. Please try again.");
         }
-    }
+    };
 
     const handleOutsideClick = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -141,6 +172,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                             } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors`}
                                             required
                                         />
+                                        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium mb-1" htmlFor="price">
@@ -157,7 +189,7 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
                                                     ? "bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500"
                                                     : "bg-white border-gray-300 text-gray-900 focus:border-blue-500"
                                             } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors`}
-                                            style={{ appearance: "textfield" }}
+                                            style={{appearance: "textfield"}}
                                             required
                                         />
                                     </div>
@@ -321,4 +353,3 @@ export default function CreatePostModal({ isDarkMode, showModal, setShowModal })
         </>
     )
 }
-

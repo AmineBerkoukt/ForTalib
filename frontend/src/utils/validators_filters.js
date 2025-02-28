@@ -62,7 +62,7 @@ export const validateTitle = (title) => {
 };
 
 export const validateDescription = (description) => {
-    return description.length >= 20 ? "" : "Description must be at least 20 characters.";
+    return description.length >= 15 ? "" : "Description must be at least 15 characters.";
 };
 
 export const validatePrice = (price) => {
@@ -70,7 +70,7 @@ export const validatePrice = (price) => {
 };
 
 export const validateAddress = (address) => {
-    return address.length >= 10 ? "" : "Address must be at least 10 characters.";
+    return address.length >= 7 ? "" : "Address must be at least 7 characters.";
 };
 
 export const validateImages = (images) => {
