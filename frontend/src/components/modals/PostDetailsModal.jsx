@@ -64,6 +64,7 @@ const PostDetailsModal = () => {
     const handleTalkToOwner = async (userToTalkTo) => {
         if (!userToTalkTo) return
         setSelectedUser(userToTalkTo)
+        disactivateModal();
         navigate("/chat")
     }
 

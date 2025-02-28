@@ -2,6 +2,9 @@ import React from 'react';
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
 const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode }) => {
+    // Check if the user is online by checking if their ID is in the onlineUsers array
+    const isUserOnline = onlineUsers && onlineUsers.includes(user._id);
+
     return (
         <button
             onClick={() => setSelectedUser(user)}
@@ -25,7 +28,7 @@ const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode
                     alt={user.firstName}
                     className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-full transition-transform duration-200 group-hover:scale-105"
                 />
-                {user.isOnline && (
+                {isUserOnline && (
                     <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full
                     ring-2 ring-gray-800 dark:ring-gray-900 animate-pulse" />
                 )}
@@ -37,12 +40,9 @@ const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode
                     {user.firstName} {user.lastName}
                 </div>
                 <div className={`text-xs sm:text-sm flex items-center gap-1 ${
-                    user.isOnline ? 'text-green-500' : 'text-gray-400'
+                    isUserOnline ? 'text-green-500' : 'text-gray-400'
                 }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${
-                        user.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                    }`} />
-                    {user.isOnline ? "Online" : "Offline"}
+                    {isUserOnline ? "Online" : "Offline"}
                 </div>
             </div>
         </button>
@@ -50,4 +50,3 @@ const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode
 };
 
 export default UserItem;
-
