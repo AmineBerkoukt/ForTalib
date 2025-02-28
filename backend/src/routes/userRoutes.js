@@ -9,7 +9,6 @@ import {
     deleteUser, promoteToAdmin, updatePassword
 } from '../controllers/userController.js';
 import {authenticateToken} from "../middlewares/authMiddleware.js";
-import {validateUpdatingProfile} from "../validations/userValidator.js";
 import {restrictTo} from "../middlewares/authMiddleware.js";
 import {uploadPfp} from "../config/upload.js";
 

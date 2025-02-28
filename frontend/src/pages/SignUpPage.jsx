@@ -1,13 +1,19 @@
-import React, { useState, useRef } from "react";
-import { useAuthStore } from "../store/useAuthStore";
-import { HomeIcon, BadgeIcon, Loader2, Lock, Mail, MessageSquare, Moon, Sun, User, Phone } from 'lucide-react';
-import { Link, useNavigate } from "react-router-dom";
+import React, {useState, useRef} from "react";
+import {useAuthStore} from "../store/useAuthStore";
+import {HomeIcon, BadgeIcon, Loader2, Lock, Mail, MessageSquare, Moon, Sun, User, Phone} from 'lucide-react';
+import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
-import { useTheme } from "../contexts/ThemeContext.jsx";
+import {useTheme} from "../contexts/ThemeContext.jsx";
 import GoogleLoginButton from "../components/GoogleLoginButton.jsx";
 import LoginHero from "../components/skeletons/LoginHero.jsx";
 import FormInput from "../components/FormInput.jsx";
-import { initUpperCase, validateRequiredFields, validateEmail, validatePassword, validatePhoneNumber } from "../utils/validators_filters.js";
+import {
+    initUpperCase,
+    validateRequiredFields,
+    validateEmail,
+    validatePassword,
+    validatePhoneNumber
+} from "../utils/validators_filters.js";
 import TermsAndConditionsModal from "../components/TermsAndConditionsModal.jsx";
 import Footer from "../components/Footer.jsx";
 
@@ -22,17 +28,17 @@ const SignUpPage = () => {
     const passwordRef = useRef();
     const phoneNumberRef = useRef();
 
-    const { signup, isSigningUp } = useAuthStore();
+    const {signup, isSigningUp} = useAuthStore();
     const navigate = useNavigate();
-    const { isDarkMode, toggleDarkMode } = useTheme();
+    const {isDarkMode, toggleDarkMode} = useTheme();
 
     const validateForm = () => {
         const fields = [
-            { ref: firstNameRef, message: "Please enter your first name" },
-            { ref: lastNameRef, message: "Please enter your last name" },
-            { ref: emailRef, message: "Please enter your email" },
-            { ref: passwordRef, message: "Please enter your password" },
-            { ref: phoneNumberRef, message: "Please enter your phone number" },
+            {ref: firstNameRef, message: "Please enter your first name"},
+            {ref: lastNameRef, message: "Please enter your last name"},
+            {ref: emailRef, message: "Please enter your email"},
+            {ref: passwordRef, message: "Please enter your password"},
+            {ref: phoneNumberRef, message: "Please enter your phone number"},
         ];
 
         if (!validateRequiredFields(fields)) return false;
@@ -61,10 +67,9 @@ const SignUpPage = () => {
             };
 
 
-
             try {
-                await signup(formData);
-                navigate("/complete-signup");
+                const response = await signup(formData);
+                if(response) navigate("/complete-signup")
             } catch (error) {
                 toast.error("Error while creating the account, please try again!");
             }
@@ -75,7 +80,8 @@ const SignUpPage = () => {
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
             <div className="flex-1 flex flex-col lg:flex-row">
-                <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200 relative">
+                <div
+                    className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200 relative">
                     {/* Dark Mode Toggle */}
                     <div className="absolute top-4 right-4 z-20">
                         <button
@@ -84,9 +90,9 @@ const SignUpPage = () => {
                             aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
                         >
                             {isDarkMode ? (
-                                <Sun className="w-5 h-5" />
+                                <Sun className="w-5 h-5"/>
                             ) : (
-                                <Moon className="w-5 h-5" />
+                                <Moon className="w-5 h-5"/>
                             )}
                         </button>
                     </div>
@@ -94,17 +100,20 @@ const SignUpPage = () => {
                     <div className="w-full max-w-md space-y-8">
                         <div className="text-center mb-8">
                             <div className="flex flex-col items-center gap-2 group">
-                                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                    <MessageSquare className="w-8 h-8 text-primary" />
+                                <div
+                                    className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <MessageSquare className="w-8 h-8 text-primary"/>
                                 </div>
-                                <h1 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Create your account</h1>
-                                <p className="text-base text-gray-600 dark:text-gray-400">Get started with your free account</p>
+                                <h1 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Create your
+                                    account</h1>
+                                <p className="text-base text-gray-600 dark:text-gray-400">Get started with your free
+                                    account</p>
                             </div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="w-full">
-                                <GoogleLoginButton />
+                                <GoogleLoginButton/>
                             </div>
 
                             <div className="relative">
@@ -112,20 +121,28 @@ const SignUpPage = () => {
                                     <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
                                 </div>
                                 <div className="relative flex justify-center text-sm">
-                                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
+                                    <span
+                                        className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
                                 </div>
                             </div>
 
-                            <FormInput label="First Name" icon={User} inputRef={firstNameRef} placeholder="Enter your first name" />
-                            <FormInput label="Last Name" icon={User} inputRef={lastNameRef} placeholder="Enter your last name" />
-                            <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email" type="email" />
-                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="8 Characters" type="password" showPassword={showPassword} setShowPassword={setShowPassword} />
-                            <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef} placeholder="Enter your phone number" />
+                            <FormInput label="First Name" icon={User} inputRef={firstNameRef}
+                                       placeholder="Enter your first name"/>
+                            <FormInput label="Last Name" icon={User} inputRef={lastNameRef}
+                                       placeholder="Enter your last name"/>
+                            <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email"
+                                       type="email"/>
+                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="8 Characters"
+                                       type="password" showPassword={showPassword} setShowPassword={setShowPassword}/>
+                            <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef}
+                                       placeholder="Enter your phone number"/>
 
                             <div className="flex items-center">
-                                <input type="checkbox" id="terms" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
+                                <input type="checkbox" id="terms" checked={acceptTerms}
+                                       onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2"/>
                                 <label htmlFor="terms" className="text-gray-700 dark:text-gray-300">
-                                    I accept the <span className="text-primary cursor-pointer" onClick={() => setIsModalOpen(true)}>Terms and Conditions</span>
+                                    I accept the <span className="text-primary cursor-pointer"
+                                                       onClick={() => setIsModalOpen(true)}>Terms and Conditions</span>
                                 </label>
                             </div>
 
@@ -136,7 +153,7 @@ const SignUpPage = () => {
                             >
                                 {isSigningUp ? (
                                     <>
-                                        <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                                        <Loader2 className="h-5 w-5 animate-spin mr-2"/>
                                         Creating account...
                                     </>
                                 ) : (
@@ -147,7 +164,8 @@ const SignUpPage = () => {
                             <div className="text-center">
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
                                     Already have an account?{" "}
-                                    <Link to="/login" className="font-medium text-primary hover:text-primary-dark transition-colors duration-300">
+                                    <Link to="/login"
+                                          className="font-medium text-primary hover:text-primary-dark transition-colors duration-300">
                                         Sign in
                                     </Link>
                                 </p>
@@ -156,11 +174,11 @@ const SignUpPage = () => {
                     </div>
                 </div>
 
-                <LoginHero />
+                <LoginHero/>
             </div>
 
-            <Footer />
-            <TermsAndConditionsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <Footer/>
+            <TermsAndConditionsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
         </div>
     );
 };

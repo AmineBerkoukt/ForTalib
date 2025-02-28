@@ -10,7 +10,6 @@ import {
 } from '../controllers/postController.js';
 //import { protectRoute } from '../middlewares/authMiddleware.js';
 import {uploadPostImages} from '../config/upload.js';
-import {validatePostCreation , validatePostUpdate} from "../validations/postValidator.js";
 import {restrictTo} from "../middlewares/authMiddleware.js";
 
 
