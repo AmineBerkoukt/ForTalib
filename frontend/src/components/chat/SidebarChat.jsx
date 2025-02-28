@@ -73,19 +73,8 @@ const SidebarChat = ({ isWider, isHidden }) => {
                 setSearchQuery={setSearchQuery}
             />
 
-            <div className={`border-b p-2 shadow-sm`}>
-                <SearchAndFilters
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    showOnlineOnly={showOnlineOnly}
-                    setShowOnlineOnly={setShowOnlineOnly}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    allUsers={allUsers.filter(user => user._id !== authUser?._id)}
-                    onlineUsers={onlineUsers}
-                    onSelectUser={setSelectedUser}
-                />
-            </div>
+            <div className={`h-px w-full my-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}></div>
+
             <UserList
                 processedUsers={usersForSidebar}
                 onlineUsers={onlineUsers}
