@@ -117,7 +117,7 @@ const CompleteSignUp = () => {
             // Send the FormData to the API
             await updateProfile(formData);
             toast.success("Profile updated successfully!");
-            //navigate('/');
+            navigate('/');
         } catch (error) {
             console.error('Error completing signup:', error);
 
@@ -138,7 +138,7 @@ const CompleteSignUp = () => {
     };
 
     const handleCancel = () => {
-        //navigate('/');
+        navigate('/');
     };
 
     return (
