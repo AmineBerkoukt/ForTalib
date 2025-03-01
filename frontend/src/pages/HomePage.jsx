@@ -5,8 +5,7 @@ import CreatePost from "../components/CreatePost";
 import { useTheme } from "../contexts/ThemeContext";
 import { useModalStore } from "../store/useModalStore";
 import { usePostStore } from "../store/usePostStore";
-import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
 import ScrollToTop from "../components/ScrollToTop";
 import { useSavedPostStore } from "../store/useSavedPostStore.js";
@@ -15,9 +14,8 @@ const POSTS_PER_PAGE = 10;
 
 const HomePage = () => {
     const { isDarkMode } = useTheme();
-    const { activateModal } = useModalStore();
     const { posts, getPosts } = usePostStore();
-    const { getSavedPostsIds, savedPostsIds, loading } = useSavedPostStore();
+    const { getSavedPostsIds, savedPostsIds } = useSavedPostStore();
     const [displayedPosts, setDisplayedPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoadingMore, setIsLoadingMore] = useState(false);

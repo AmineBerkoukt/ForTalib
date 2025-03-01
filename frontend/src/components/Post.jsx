@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ImageCarousel from "./ImageCarousel";
 import EditPostModal from "./modals/EditPostModal.jsx";
-import { useAuthStore } from "../store/useAuthStore.js";
 import toast from "react-hot-toast";
 import { usePostStore } from "../store/usePostStore.js";
 import ConfirmationModal from "./modals/ConfirmationModal.jsx";
@@ -44,7 +43,6 @@ const Post = ({
     const updateAvgRate = (newRate) => {
         setAvgRate(newRate);
     };
-
     const handleDelete = async () => {
         try {
             await deletePost(postId);
@@ -63,7 +61,6 @@ const Post = ({
             toast.error("Failed to delete post");
         }
     };
-
     return (
         <>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-4 sm:p-6 mb-4 w-full max-w-6xl mx-auto overflow-hidden group">
@@ -71,6 +68,7 @@ const Post = ({
                     user={user}
                     profileImageUrl={profileImageUrl}
                     timestamp={timestamp}
+                    postId={postId}
                     setShowDeleteConfirm={setShowDeleteConfirm}
                     handleEditClick={() => toggleEditModal()}
                 />
@@ -113,7 +111,7 @@ const Post = ({
                 onClose={() => setShowDeleteConfirm(false)}
                 onConfirm={handleDelete}
                 title="Delete Post"
-                message="Are you sure you want to delete this post?"
+                message="Are you sure you want to delete this post ?"
                 confirmText="Delete"
             />
 

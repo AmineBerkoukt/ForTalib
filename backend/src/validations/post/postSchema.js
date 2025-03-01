@@ -1,6 +1,9 @@
 import Joi from 'joi';
 
 export const postSchema = Joi.object({
+    _id: Joi.string().optional().messages({
+        'string.base': '_id must be provided !'
+    }),
     title: Joi.string().min(5).max(100).required().messages({
         'string.base': 'Title must be a string.',
         'string.min': 'Title must be at least 5 characters long.',

@@ -10,7 +10,10 @@ export const usePostStore = create((set, get) => ({
     topFivePosts: [],
     userPosts: [],
     profilePosts: [],
+    postToEditId: null,
     isLoading: false,
+
+    setPostToEditId: (postId) => set({ postToEditId: postId }),
 
     setLoading: (loading) => set({ isLoading: loading }),
 
