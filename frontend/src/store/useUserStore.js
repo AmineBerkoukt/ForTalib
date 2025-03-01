@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import toast from 'react-hot-toast';
 import api from "../utils/api.js";
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const useUserStore = create((set) => ({
     isLoading: false,

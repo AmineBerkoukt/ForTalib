@@ -77,7 +77,7 @@ export default function UserManagement({ isDashboard = false }) {
         >
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                    Users Management
+                    Users <span className="text-blue-600"> Management </span>
                 </h2>
                 {isDashboard && (
                     <button
