@@ -5,8 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useProfileStore } from '../store/useProfileStore';
 import LoadingOverlay from '../components/skeletons/LoadingOverlay.jsx';
 import { validateCin } from '../utils/validators_filters';
-import toast from "react-hot-toast";
-
+import { toast } from "react-hot-toast"
 
 const CompleteSignUp = () => {
     const { isDarkMode } = useTheme();
@@ -23,9 +22,6 @@ const CompleteSignUp = () => {
     });
 
     const navigate = useNavigate();
-
-    // This regex matches 1-2 letters followed by 1-7 digits
-    const cinRegex = /^[A-Za-z]{1,2}\d{1,7}$/;
 
     // Validate CIN when it changes
     useEffect(() => {

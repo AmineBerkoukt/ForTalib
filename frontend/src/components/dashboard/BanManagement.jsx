@@ -4,7 +4,7 @@ import { Eye, UserPlus, Trash, Search, Filter, ChevronRight, Ban } from 'lucide-
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function UserManagement({ isDashboard = false }) {
+export default function BanManagement({ isDashboard = false }) {
     const users = useUserStore(state => state.users);
     const loading = useUserStore(state => state.loading);
     const error = useUserStore(state => state.error);
@@ -77,7 +77,7 @@ export default function UserManagement({ isDashboard = false }) {
         >
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                    Users Management
+                    Ban <span className="text-red-700" >Management </span>
                 </h2>
                 {isDashboard && (
                     <button
@@ -169,22 +169,13 @@ export default function UserManagement({ isDashboard = false }) {
                                                 </button>
                                                 {!isDashboard && (
                                                     <>
-                                                        {user.role !== "admin" ? (
-                                                            <button
-                                                                className="px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center"
-                                                                onClick={() => handleMakeAdmin(user._id)}
-                                                            >
-                                                                <UserPlus className="h-4 w-4 mr-1"/> <span
-                                                                className="hidden sm:inline">Make Admin</span>
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                className="px-2 py-1 bg-green-500 text-white rounded-md flex items-center opacity-50 cursor-not-allowed"
-                                                                disabled
-                                                            >
-                                                                <span className="hidden sm:inline">Already Admin</span>
-                                                            </button>
-                                                        )}
+                                                        <button
+                                                            onClick={() => handleDeleteUser(user._id)}
+                                                            className="px-2 py-1 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors duration-200 flex items-center"
+                                                        >
+                                                            <Trash className="h-4 w-4 mr-1"/> <span
+                                                            className="hidden sm:inline">Unban</span>
+                                                        </button>
                                                         <button
                                                             onClick={() => handleDeleteUser(user._id)}
                                                             className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center"

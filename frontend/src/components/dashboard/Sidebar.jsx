@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboardIcon, HousePlus, UserCog } from 'lucide-react';
+import { LayoutDashboardIcon, OctagonMinus, UserCog } from 'lucide-react';
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const SidebarItem = ({ Icon, text, to, isActive }) => (
@@ -29,7 +29,8 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
     const location = useLocation();
     const navItems = [
         { Icon: LayoutDashboardIcon, text: "Dashboard", path: "/dashboard" },
-        { Icon: UserCog, text: "Users Management", path: "/management" }
+        { Icon: UserCog, text: "Users Management", path: "/management" },
+        { Icon: OctagonMinus, text: "Banned Users", path: "/bans" }
     ]
 
     const sidebarContent = (

@@ -4,6 +4,7 @@ import { useTheme } from "../../contexts/ThemeContext.jsx";
 const NoChatSelected = () => {
   const { isDarkMode } = useTheme();
 
+    const PROJECT_NAME = import.meta.env.VITE_PROJECT_NAME;
 
   return (
       <div
@@ -26,13 +27,13 @@ const NoChatSelected = () => {
           </div>
 
           {/* Welcome Text */}
-          <h2 className="text-2xl font-bold">Welcome to Dario!</h2>
+          <h2 className="text-2xl font-bold">Welcome to {PROJECT_NAME} !</h2>
           <p
               className={`${
                   isDarkMode ? "text-gray-400" : "text-gray-600"
               }`}
           >
-            Select a conversation from the sidebar to start chatting
+            Select or search a conversation from the sidebar to start chatting !
           </p>
         </div>
       </div>

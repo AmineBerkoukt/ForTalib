@@ -8,10 +8,9 @@ import {
     getUserById,
     deleteUser, promoteToAdmin, updatePassword
 } from '../controllers/userController.js';
-import {authenticateToken} from "../middlewares/authMiddleware.js";
-import {validateUpdatingProfile} from "../validations/userValidator.js";
 import {restrictTo} from "../middlewares/authMiddleware.js";
 import {uploadPfp} from "../config/upload.js";
+import validateProfile from "../validations/profile/validateProfile.js";
 
 const router = express.Router();
 
@@ -24,7 +23,7 @@ router.get('/search', searchUsers);
 router.patch('/promote/:userId', restrictTo("admin"), promoteToAdmin);
 router.delete('/:id', restrictTo("admin"), deleteUser);
 
-router.patch('/update-profile', uploadPfp.single('profilePhoto'),  updateProfile);
+router.patch('/update-profile', validateProfile, uploadPfp.single('profilePhoto'),  updateProfile);
 router.get('/me', getCurrentUser);
 router.patch('/change-password', updatePassword);
 
