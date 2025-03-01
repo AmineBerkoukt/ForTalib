@@ -61,4 +61,55 @@ To get started, follow the steps below:
 
 ### 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/colocator-finder-app.git
+git clone https://github.com//AmineBerkoukt/ForTalib.git
+```
+
+### 2. Install dependencies:
+Make sure to have mongodb installed !
+```bash
+cd frontend
+npm install --peer-deps
+```
+Then in a new terminal
+```bash
+cd backend
+npm install
+```
+
+### 3. Add environment files (.env) in both folders frontend and backend with the necessary informations :
+# Backend environment :
+  - Port
+  - MONGODB_URI
+  - JWT_SECRET
+  - FRONTEND_URL
+  -OAuth2.0:
+    - GOOGLE_CLIENT_ID
+    - GOOGLE_CLIENT_SECRET
+    - GOOGLE_CALLBACK_URL
+  -Admin validation contact:
+    - EMAIL
+    - EMAIL_PASSWORD
+  
+# Frontend environment :
+  - VITE_BASE_URL
+  - VITE_PFP_URL
+  - VITE_PROJECT_NAME
+  - FRONTEND_URL
+  -OAuth2.0:
+    - VITE_GOOGLE_CLIENT_ID
+
+  
+
+
+### 4. Start the application:
+```bash
+cd frontend
+npm run dev
+```
+Then in a new terminal
+```bash
+cd backend
+npm start
+```
+
+
