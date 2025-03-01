@@ -53,9 +53,9 @@ export const useUserStore = create((set) => ({
 
     deleteUser: async (userId) => {
         try {
+            console.log(userId)
             const response = await api.delete(`/users/delete/${userId}`);
             if (response.status === 200) {
-                // Update local state to remove the deleted user
                 set((state) => ({
                     users: state.users.filter(user => user._id !== userId)
                 }));

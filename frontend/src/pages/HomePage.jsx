@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import Post from "../components/Post";
 import CreatePost from "../components/CreatePost";
 import { useTheme } from "../contexts/ThemeContext";
-import { useModalStore } from "../store/useModalStore";
 import { usePostStore } from "../store/usePostStore";
 import toast from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
