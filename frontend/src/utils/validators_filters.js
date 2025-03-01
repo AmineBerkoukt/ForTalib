@@ -87,7 +87,6 @@ export const validateImages = (images) => {
 
 export const postValidator = (post) => {
     const errors = [];
-    console.log(post)
     const titleError = validateTitle(post.title);
     if (titleError) errors.push(titleError);
 
