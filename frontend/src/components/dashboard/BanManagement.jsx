@@ -111,7 +111,6 @@ export default function BanManagement({ isDashboard = false }) {
                             <option value="">All Roles</option>
                             <option value="admin">Admin</option>
                             <option value="student">Student</option>
-                            <option value="house_owner">House Owner</option>
                         </select>
                         <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                     </div>
