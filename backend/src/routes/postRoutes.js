@@ -12,12 +12,14 @@ import {
 import {uploadPostImages} from '../config/upload.js';
 import {restrictTo} from "../middlewares/authMiddleware.js";
 import {validatePost} from "../validations/post/validatePost.js";
+import { createPostLimiter } from "../config/rateLimit.js";
+
 
 
 const router = express.Router();
 
 
-router.post('/create',  uploadPostImages.array('images', 6), createPost); // 6 images Max
+router.post('/create', createPostLimiter, uploadPostImages.array('images', 6), createPost); // 6 images Max
 
 router.get('/', getAllPosts);
 
