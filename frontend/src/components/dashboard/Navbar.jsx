@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import { MoonIcon, SunIcon, Bars3Icon } from "@heroicons/react/24/outline";
 
+const PROJECT_NAME = import.meta.env.VITE_PROJECT_NAME;
+
 export default function Navbar({ isDarkMode, toggleDarkMode, toggleSidebar }) {
     return (
         <nav
@@ -18,7 +20,7 @@ export default function Navbar({ isDarkMode, toggleDarkMode, toggleSidebar }) {
                     </button>
                     <Link to="/"
                           className={`text-2xl font-bold hover:opacity-90 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                        ForTalib
+                        {PROJECT_NAME}
                     </Link>
                 </div>
 
