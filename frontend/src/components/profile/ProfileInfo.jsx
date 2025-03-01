@@ -158,6 +158,7 @@ export default function ProfileInfo({ user, isDarkMode, isUpdating }) {
                         formData={formData}
                         handleChange={handleChange}
                         isEditing={isEditing}
+                        isOwnerConsultingProfile={isOwnerConsultingProfile}
                         isDarkMode={isDarkMode}
                         isSubmitting={isSubmitting}
                         fullName={fullName}
