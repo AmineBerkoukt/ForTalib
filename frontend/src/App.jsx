@@ -18,7 +18,7 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
-import ChangePassword from "./components/profile/ChangePassword.jsx";
+import ChangePasswordPage from "./pages/ChangePasswordPage.jsx";
 import CompleteSignUpPage from "./pages/CompleteSignUpPage.jsx";
 import BanManagementPage from "./pages/BanManagementPage.jsx";
 
@@ -209,7 +209,7 @@ const App = () => {
                     path="/change-password"
                     element={
                         <ProtectedRoute
-                            element={<ChangePassword />}
+                            element={<ChangePasswordPage />}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />

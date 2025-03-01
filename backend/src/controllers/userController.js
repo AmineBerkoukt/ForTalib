@@ -233,6 +233,8 @@ export const deleteUser = async (req, res) => {
 export const updatePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
 
+    console.log("old :" , oldPassword )
+    console.log("new :",newPassword)
     try {
         if (!oldPassword || !newPassword) {
             return res.status(400).json({ message: "Both old password and new password are required" });
