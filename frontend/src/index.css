@@ -19,3 +19,62 @@
 .animate-fadeIn {
     animation: fadeIn 0.3s ease-in-out;
 }
+
+@layer utilities {
+    .delay-75 {
+        animation-delay: 75ms;
+    }
+    .delay-150 {
+        animation-delay: 150ms;
+    }
+    .delay-200 {
+        animation-delay: 200ms;
+    }
+    .delay-250 {
+        animation-delay: 250ms;
+    }
+    .delay-300 {
+        animation-delay: 300ms;
+    }
+    .animate-spin-slow {
+        animation: spin 3s linear infinite;
+    }
+    .animate-fade-in {
+        animation: fadeIn 1s ease-in forwards;
+    }
+    .stop-color-blue-400 {
+        stop-color: #60a5fa;
+    }
+    .stop-color-blue-500 {
+        stop-color: #3b82f6;
+    }
+    .stop-color-purple-400 {
+        stop-color: #a78bfa;
+    }
+    .stop-color-purple-600 {
+        stop-color: #7c3aed;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dark mode support */
+.dark {
+    color-scheme: dark;
+}
