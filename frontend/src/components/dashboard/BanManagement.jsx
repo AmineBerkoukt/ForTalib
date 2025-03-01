@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../../store/useUserStore.js";
-import { CheckSquare, Search, Filter, ChevronRight, Ban, X, AlertTriangle, Shield } from 'lucide-react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useBanStore } from "../../store/useBanStore.js";
+import { CheckSquare, Search, ChevronRight, Ban, X, AlertTriangle, Shield, User, Mail, Phone, FileText } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BanManagement({ isDashboard = false }) {
@@ -10,6 +11,12 @@ export default function BanManagement({ isDashboard = false }) {
     const error = useUserStore(state => state.error);
     const fetchUsers = useUserStore(state => state.fetchUsers);
     const deleteUser = useUserStore(state => state.deleteUser);
+
+    // Ban related state and functions
+    const bannedUsers = useBanStore(state => state.bannedUsers);
+    const getBannedUsers = useBanStore(state => state.getBannedUsers);
+    const banUser = useBanStore(state => state.banUser);
+    const unbanUser = useBanStore(state => state.unbanUser);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
@@ -20,7 +27,13 @@ export default function BanManagement({ isDashboard = false }) {
 
     useEffect(() => {
         fetchUsers();
-    }, [fetchUsers]);
+        getBannedUsers(); // Fetch banned users when component mounts
+    }, [fetchUsers, getBannedUsers]);
+
+    // Check if a user is banned
+    const isUserBanned = (userId) => {
+        return bannedUsers.some(banned => banned.userId === userId);
+    };
 
     const handleUserAction = (user, action) => {
         setSelectedUser(user);
@@ -32,11 +45,9 @@ export default function BanManagement({ isDashboard = false }) {
         if (actionType === "delete") {
             await deleteUser(selectedUser._id);
         } else if (actionType === "unban") {
-            // Implement unban functionality
-            console.log("Unbanning user:", selectedUser._id);
+            await unbanUser(selectedUser._id);
         } else if (actionType === "ban") {
-            // Implement ban functionality
-            console.log("Banning user:", selectedUser._id);
+            await banUser(selectedUser._id);
         }
         setShowConfirmModal(false);
     };
@@ -87,9 +98,9 @@ export default function BanManagement({ isDashboard = false }) {
             case 'admin':
                 return <Shield className="h-3 w-3 mr-1" />;
             case 'student':
-                return null;
+                return <User className="h-3 w-3 mr-1" />;
             case 'teacher':
-                return null;
+                return <FileText className="h-3 w-3 mr-1" />;
             default:
                 return null;
         }
@@ -127,11 +138,11 @@ export default function BanManagement({ isDashboard = false }) {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
             className="border rounded-lg shadow-sm p-4 bg-white dark:bg-gray-800"
         >
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
+            {/* Header with improved visual hierarchy */}
+            <div className="flex justify-between items-center mb-5 border-b pb-4 dark:border-gray-700">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center">
                     <Ban className="mr-2 h-5 w-5 text-red-600" />
                     User <span className="text-red-600 ml-1">Ban Management</span>
@@ -147,9 +158,9 @@ export default function BanManagement({ isDashboard = false }) {
                 )}
             </div>
 
-            {/* Search and Filter */}
+            {/* Enhanced Search with improved visual design */}
             {!isDashboard && (
-                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                <div className="flex flex-col sm:flex-row gap-3 mb-5">
                     <div className="relative flex-1">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <Search className="h-4 w-4 text-gray-400" />
@@ -159,7 +170,7 @@ export default function BanManagement({ isDashboard = false }) {
                             placeholder="Search by name, email, CIN or phone..."
                             value={searchTerm}
                             onChange={handleSearch}
-                            className="pl-10 pr-10 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="pl-10 pr-10 py-2.5 w-full border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white shadow-sm"
                         />
                         {searchTerm && (
                             <button
@@ -173,121 +184,124 @@ export default function BanManagement({ isDashboard = false }) {
                 </div>
             )}
 
-            {/* Users Table */}
-            <div className="overflow-x-auto -mx-4 sm:-mx-4 rounded-lg">
-                <div className="inline-block min-w-full py-1 align-middle sm:px-4">
-                    <div className="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5 rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
-                            <thead className="bg-gray-50 dark:bg-gray-800">
-                            <tr>
-                                <th className="py-3 pl-4 pr-3 text-left text-xs font-semibold text-gray-900 dark:text-gray-200 sm:pl-4">
-                                    Name
+            {/* Users Table with improved spacing and visual design */}
+            <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-800">
+                    <tr>
+                        <th className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                            <div className="flex items-center">
+                                <User className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
+                                Name
+                            </div>
+                        </th>
+                        {!isDashboard && (
+                            <>
+                                <th className="hidden sm:table-cell px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                                    <div className="flex items-center">
+                                        <Mail className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
+                                        Email
+                                    </div>
                                 </th>
-                                {!isDashboard && (
-                                    <>
-                                        <th className="hidden sm:table-cell px-3 py-3 text-left text-xs font-semibold text-gray-900 dark:text-gray-200">
-                                            Email
-                                        </th>
-                                        <th className="hidden sm:table-cell px-3 py-3 text-left text-xs font-semibold text-gray-900 dark:text-gray-200">
-                                            CIN
-                                        </th>
-                                        <th className="px-3 py-3 text-left text-xs font-semibold text-gray-900 dark:text-gray-200">
-                                            Phone
-                                        </th>
-                                        <th className="hidden sm:table-cell px-3 py-3 text-left text-xs font-semibold text-gray-900 dark:text-gray-200">
-                                            Role
-                                        </th>
-
-                                    </>
-                                )}
-
-                            </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                            <AnimatePresence>
-                                {displayedUsers.length > 0 ? (
-                                    displayedUsers.map((user) => (
-                                        <motion.tr
-                                            key={user._id}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                                        >
-                                            <td className="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-200 sm:pl-4">
-                                                {user.firstName} {user.lastName}
+                                <th className="hidden sm:table-cell px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                                    <div className="flex items-center">
+                                        <FileText className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
+                                        CIN
+                                    </div>
+                                </th>
+                                <th className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                                    <div className="flex items-center">
+                                        <Phone className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
+                                        Phone
+                                    </div>
+                                </th>
+                                <th className="px-2 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 pr-4">
+                                    Actions
+                                </th>
+                            </>
+                        )}
+                    </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                    <AnimatePresence>
+                        {displayedUsers.length > 0 ? (
+                            displayedUsers.map((user) => (
+                                <motion.tr
+                                    key={user._id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                                >
+                                    <td className="py-3.5 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-200">
+                                        {user.firstName} {user.lastName}
+                                    </td>
+                                    {!isDashboard && (
+                                        <>
+                                            <td className="hidden sm:table-cell px-3 py-3.5 text-sm text-gray-500 dark:text-gray-300">
+                                                {user.email}
                                             </td>
-                                            {!isDashboard && (
-                                                <>
-                                                    <td className="hidden sm:table-cell whitespace-nowrap px-3 py-3 text-sm text-gray-500 dark:text-gray-300">
-                                                        {user.email}
-                                                    </td>
-                                                    <td className="hidden sm:table-cell whitespace-nowrap px-3 py-3 text-sm text-gray-500 dark:text-gray-300">
-                                                        {user.cin || "—"}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 dark:text-gray-300">
-                                                        {user.phoneNumber || "—"}
-                                                    </td>
-                                                    <td className="hidden sm:table-cell whitespace-nowrap px-3 py-3 text-sm text-gray-500 dark:text-gray-300">
-                                                        <span className={`px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full items-center ${getBadgeStyles(user.role)}`}>
-                                                            {getRoleIcon(user.role)}
-                                                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                                                        </span>
-                                                    </td>
-                                                </>
-                                            )}
-                                            <td className="relative whitespace-nowrap py-3 pl-3 pr-4 text-right text-sm font-medium sm:pr-4">
+                                            <td className="hidden sm:table-cell px-3 py-3.5 text-sm text-gray-500 dark:text-gray-300">
+                                                {user.cin || "—"}
+                                            </td>
+                                            <td className="px-3 py-3.5 text-sm text-gray-500 dark:text-gray-300">
+                                                {user.phoneNumber || "—"}
+                                            </td>
+                                            {/* Fixed spacing in actions column */}
+                                            <td className="py-2 pr-4 text-right text-sm font-medium">
                                                 <div className="flex items-center justify-end space-x-2">
-                                                    {!isDashboard && (
-                                                        <>
-                                                            <button
-                                                                onClick={() => handleUserAction(user, "unban")}
-                                                                className="px-2 py-1 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors duration-200 flex items-center text-xs"
-                                                                title="Unban User"
-                                                            >
-                                                                <CheckSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-1"/>
-                                                                <span className="hidden sm:inline">Unban</span>
-                                                            </button>
-                                                            <button
-                                                                onClick={() => handleUserAction(user, "ban")}
-                                                                className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center text-xs"
-                                                                title="Ban User"
-                                                            >
-                                                                <Ban className="h-3 w-3 sm:h-4 sm:w-4 mr-1"/>
-                                                                <span className="hidden sm:inline">Ban</span>
-                                                            </button>
-                                                        </>
-                                                    )}
+                                                    <button
+                                                        onClick={() => handleUserAction(user, "unban")}
+                                                        className={`px-2.5 py-1.5 bg-emerald-600 text-white rounded-md transition-colors duration-200 flex items-center text-xs ${
+                                                            !isUserBanned(user._id) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-700'
+                                                        }`}
+                                                        title="Unban User"
+                                                        disabled={!isUserBanned(user._id)}
+                                                    >
+                                                        <CheckSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5"/>
+                                                        <span className="hidden sm:inline">Unban</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleUserAction(user, "ban")}
+                                                        className={`px-2.5 py-1.5 bg-red-600 text-white rounded-md transition-colors duration-200 flex items-center text-xs ${
+                                                            isUserBanned(user._id) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'
+                                                        }`}
+                                                        title="Ban User"
+                                                        disabled={isUserBanned(user._id)}
+                                                    >
+                                                        <Ban className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5"/>
+                                                        <span className="hidden sm:inline">Ban</span>
+                                                    </button>
                                                 </div>
                                             </td>
-                                        </motion.tr>
-                                    ))
-                                ) : (
-                                    <tr className="bg-white dark:bg-gray-900">
-                                        <td colSpan={isDashboard ? 3 : 6} className="py-6 px-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                            <div className="flex flex-col items-center justify-center">
-                                                <Search className="h-6 w-6 text-gray-400 mb-2" />
-                                                <p className="font-medium">No users found</p>
-                                                {(searchTerm || roleFilter) && (
-                                                    <p className="text-xs mt-1">Try adjusting your search or filter</p>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
-                            </AnimatePresence>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                        </>
+                                    )}
+                                </motion.tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={isDashboard ? 3 : 6} className="py-8 px-4 text-center text-gray-500 dark:text-gray-400">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <Search className="h-8 w-8 text-gray-400 mb-3" />
+                                        <p className="font-medium text-base">No users found</p>
+                                        {(searchTerm || roleFilter) && (
+                                            <p className="text-sm mt-1">Try adjusting your search or filter</p>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        )}
+                    </AnimatePresence>
+                    </tbody>
+                </table>
             </div>
 
-            {/* Pagination Info */}
+            {/* Enhanced pagination info with better styling */}
             {!isDashboard && displayedUsers.length > 0 && (
-                <div className="mt-4 flex items-center justify-between">
-                    <div>
-                        <p className="text-xs text-gray-700 dark:text-gray-300">
+                <div className="mt-4 flex items-center justify-between text-sm">
+                    <div className="bg-gray-50 dark:bg-gray-800 py-1.5 px-3 rounded-md border border-gray-200 dark:border-gray-700">
+                        <p className="text-gray-700 dark:text-gray-300">
                             Showing <span className="font-medium">{displayedUsers.length}</span> of{" "}
                             <span className="font-medium">{filteredUsers.length}</span> users
                         </p>
@@ -295,19 +309,24 @@ export default function BanManagement({ isDashboard = false }) {
                 </div>
             )}
 
-            {/* Confirmation Modal */}
+            {/* Improved Modal with better visual hierarchy and animations */}
             {showConfirmModal && selectedUser && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full"
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full border border-gray-200 dark:border-gray-700"
                     >
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                            {actionType === "delete" ? "Delete User" :
-                                actionType === "ban" ? "Ban User" : "Unban User"}
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
+                            {actionType === "delete" ? (
+                                <><AlertTriangle className="h-5 w-5 mr-2 text-red-600" /> Delete User</>
+                            ) : actionType === "ban" ? (
+                                <><Ban className="h-5 w-5 mr-2 text-red-600" /> Ban User</>
+                            ) : (
+                                <><CheckSquare className="h-5 w-5 mr-2 text-emerald-600" /> Unban User</>
+                            )}
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        <p className="text-gray-600 dark:text-gray-400 mb-6 ml-7">
                             {actionType === "delete" ?
                                 `Are you sure you want to delete ${selectedUser.firstName} ${selectedUser.lastName}? This action cannot be undone.` :
                                 actionType === "ban" ?
