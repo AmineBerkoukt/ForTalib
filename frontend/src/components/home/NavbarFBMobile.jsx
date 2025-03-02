@@ -14,6 +14,9 @@ import SearchBar from "../SearchBar.jsx";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useAuthStore } from "../../store/useAuthStore.js"; // Assuming you have this hook
 
+
+const PROJECT_NAME = import.meta.env.VITE_PROJECT_NAME;
+
 const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
     const navigate = useNavigate();
     const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -56,7 +59,7 @@ const NavbarFBMobile = ({ onSidebarToggle, isDarkMode }) => {
                                             : 'text-blue-600 hover:text-blue-700'
                                     }`}
                                 >
-                                    For Talib
+                                    {PROJECT_NAME}
                                 </Link>
                             </div>
 
