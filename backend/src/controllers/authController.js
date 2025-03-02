@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import {generatePasswordResetEmailContent} from "../utils/emailContent.js";
 import {sendEmail} from "../services/emailService.js";
-import path from 'path';
+import Blacklist from "../models/Blacklist.js";
 export const register = async (req, res) => {
     try {
         const {
@@ -24,6 +24,14 @@ export const register = async (req, res) => {
             return res.status(400).json({
                 message: 'A user with this email or phone number already exists'
             });
+        }
+
+        const isBanned = await Blacklist.findOne({
+            $or: [{ email }, { phoneNumber }]
+        });
+
+        if (isBanned) {
+            return res.status(403).json({ message: "This email or phone number is banned from the platform." });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -80,6 +88,11 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        const isBanned = await Blacklist.findOne({ email });
+        if (isBanned) {
+            return res.status(400).json({ message: "You are banned from this platform." });
+        }
 
         const user = await User.findOne({ email });
         if (!user) {

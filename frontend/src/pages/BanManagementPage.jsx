@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from "../components/dashboard/Layout.jsx";
-import BanManagement from "../components/dashboard/BanManagement.jsx";
+import BannedManagement from "../components/dashboard/BannedManagement.jsx";
 
 export default function BanManagementPage() {
     return (
@@ -11,7 +11,7 @@ export default function BanManagementPage() {
                 </h1>
             </header>
             <div className="space-y-6 p-6">
-                <BanManagement/>
+                <BannedManagement/>
             </div>
         </Layout>
     )
