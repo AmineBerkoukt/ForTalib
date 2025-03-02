@@ -39,7 +39,6 @@ const Post = ({
     if (profileImageUrl !== "/avatar.png") {
         profileImageUrl = BASE_URL + user.profilePhoto;
     }
-    console.log("profileImageUrl : ", profileImageUrl);
 
     const updateAvgRate = (newRate) => {
         setAvgRate(newRate);

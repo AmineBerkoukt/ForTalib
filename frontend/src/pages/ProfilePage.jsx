@@ -8,7 +8,6 @@ import Layout from "../components/Layout"
 import ProfileInfo from "../components/profile/ProfileInfo.jsx"
 import Post from "../components/Post"
 import LoadingScene from "../components/skeletons/LoadingScene.jsx"
-import toast from "react-hot-toast"
 
 const ProfilePage = () => {
     const {id} = useParams()
