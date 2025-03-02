@@ -12,7 +12,7 @@ function RightbarFb() {
     }, [getTopFive]);
 
     return (
-        <div className="w-full lg:w-72 h-full">
+        <div className="w-full lg:w-64 h-full">
             <div 
                 className={`
                     sticky top-[60px] h-[calc(100vh-60px)] 
