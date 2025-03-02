@@ -10,6 +10,7 @@ const io = new Server(server, {
         origin: ["http://localhost:5173"],
     },
 });
+global.io = io; // Rendre accessible globalement
 
 export function getReceiverSocketId(userId) {
     return userSocketMap[userId];
@@ -27,6 +28,12 @@ io.on("connection", (socket) => {
     // io.emit() is used to send events to all the connected clients
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
+    socket.on("forceLogout", (userId) => {
+        const socketId = userSocketMap[userId];
+        if (socketId) {
+            io.to(socketId).emit("forceLogout", "You have been banned!");
+        }
+    });
     socket.on("disconnect", () => {
         console.log("A user disconnected", socket.id);
         delete userSocketMap[userId];

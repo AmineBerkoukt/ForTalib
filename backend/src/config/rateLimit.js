@@ -10,7 +10,7 @@ export const registerLimiter = rateLimit({
 
 export const loginLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 5, // Max 5 requests per IP
+    max: 50, // Max 5 requests per IP
     message: { error: 'Too many failed logins please try again after 5 minutes !' },
     standardHeaders: true,
     legacyHeaders: false,

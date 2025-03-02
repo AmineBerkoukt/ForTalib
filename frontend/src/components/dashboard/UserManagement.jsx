@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../../store/useUserStore.js";
-import { Eye, UserPlus, Trash, Search, Filter, ChevronRight, Ban, Menu } from 'lucide-react';
+import { useBanStore } from "../../store/useBanStore.js";
+import { Eye, UserPlus, Trash, Search, Filter, ChevronRight, Ban, Menu, AlertTriangle } from 'lucide-react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -12,17 +13,40 @@ export default function UserManagement({ isDashboard = false }) {
     const makeAdmin = useUserStore(state => state.makeAdmin);
     const deleteUser = useUserStore((state) => state.deleteUser);
 
+    // Ban functionality
+    const { banUser, bannedUsers, getBannedUsers } = useBanStore();
+
     const [searchTerm, setSearchTerm] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
     const [actionMenuOpen, setActionMenuOpen] = useState(null);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [actionType, setActionType] = useState("");
     const location = useLocation();
     const navigate = useNavigate();
 
-    const handleDeleteUser = async (userId) => {
-        if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-            await deleteUser(userId);
-        }
+    const handleUserAction = (user, action) => {
+        setSelectedUser(user);
+        setActionType(action);
+        setShowConfirmModal(true);
         setActionMenuOpen(null);
+    };
+
+    const confirmAction = async () => {
+        try {
+            if (actionType === "delete") {
+                await deleteUser(selectedUser._id);
+            } else if (actionType === "ban") {
+                await banUser(selectedUser._id);
+                // Refresh users list after banning
+                fetchUsers();
+            } else if (actionType === "admin") {
+                await makeAdmin(selectedUser._id);
+            }
+            setShowConfirmModal(false);
+        } catch (error) {
+            console.error(`Error performing ${actionType} action:`, error);
+        }
     };
 
     const roleDisplayNames = {
@@ -32,11 +56,12 @@ export default function UserManagement({ isDashboard = false }) {
 
     useEffect(() => {
         fetchUsers();
-    }, [fetchUsers]);
+        getBannedUsers(); // Fetch banned users when component mounts
+    }, [fetchUsers, getBannedUsers]);
 
-    const handleMakeAdmin = async (userId) => {
-        await makeAdmin(userId);
-        setActionMenuOpen(null);
+    // Check if a user is banned
+    const isUserBanned = (userId) => {
+        return bannedUsers.some(banned => banned._id === userId);
     };
 
     const filteredUsers = users.filter((user) => {
@@ -74,15 +99,6 @@ export default function UserManagement({ isDashboard = false }) {
 
     const toggleActionMenu = (userId) => {
         setActionMenuOpen(actionMenuOpen === userId ? null : userId);
-    };
-
-    const handleBanUser = (userId) => {
-        if (window.confirm('Are you sure you want to ban this user? This action cannot be undone.')) {
-            // Implement ban functionality
-            console.log(`Banning user with ID: ${userId}`);
-            // You would typically call a function from your user store here
-        }
-        setActionMenuOpen(null);
     };
 
     return (
@@ -176,7 +192,7 @@ export default function UserManagement({ isDashboard = false }) {
                                         {user.role !== "admin" ? (
                                             <button
                                                 className="px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center text-xs"
-                                                onClick={() => handleMakeAdmin(user._id)}
+                                                onClick={() => handleUserAction(user, "admin")}
                                             >
                                                 <UserPlus className="h-3 w-3 mr-1"/> Make Admin
                                             </button>
@@ -189,13 +205,13 @@ export default function UserManagement({ isDashboard = false }) {
                                             </button>
                                         )}
                                         <button
-                                            onClick={() => handleDeleteUser(user._id)}
+                                            onClick={() => handleUserAction(user, "delete")}
                                             className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center text-xs"
                                         >
                                             <Trash className="h-3 w-3 mr-1"/> Delete
                                         </button>
                                         <button
-                                            onClick={() => handleBanUser(user._id)}
+                                            onClick={() => handleUserAction(user, "ban")}
                                             className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center text-xs"
                                         >
                                             <Ban className="h-3 w-3 mr-1"/> Ban
@@ -263,7 +279,7 @@ export default function UserManagement({ isDashboard = false }) {
                                                     {user.role !== "admin" ? (
                                                         <button
                                                             className="px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center"
-                                                            onClick={() => handleMakeAdmin(user._id)}
+                                                            onClick={() => handleUserAction(user, "admin")}
                                                         >
                                                             <UserPlus className="h-4 w-4 mr-1"/> Make Admin
                                                         </button>
@@ -276,13 +292,13 @@ export default function UserManagement({ isDashboard = false }) {
                                                         </button>
                                                     )}
                                                     <button
-                                                        onClick={() => handleDeleteUser(user._id)}
+                                                        onClick={() => handleUserAction(user, "delete")}
                                                         className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center"
                                                     >
                                                         <Trash className="h-4 w-4 mr-1"/> Delete
                                                     </button>
                                                     <button
-                                                        onClick={() => handleBanUser(user._id)}
+                                                        onClick={() => handleUserAction(user, "ban")}
                                                         className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center"
                                                     >
                                                         <Ban className="h-4 w-4 mr-1"/> Ban
@@ -314,7 +330,7 @@ export default function UserManagement({ isDashboard = false }) {
                                                             <>
                                                                 {user.role !== "admin" ? (
                                                                     <button
-                                                                        onClick={() => handleMakeAdmin(user._id)}
+                                                                        onClick={() => handleUserAction(user, "admin")}
                                                                         className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
                                                                     >
                                                                         <UserPlus className="h-4 w-4 mr-2"/> Make Admin
@@ -329,14 +345,14 @@ export default function UserManagement({ isDashboard = false }) {
                                                                 )}
 
                                                                 <button
-                                                                    onClick={() => handleDeleteUser(user._id)}
+                                                                    onClick={() => handleUserAction(user, "delete")}
                                                                     className="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
                                                                 >
                                                                     <Trash className="h-4 w-4 mr-2"/> Delete
                                                                 </button>
 
                                                                 <button
-                                                                    onClick={() => handleBanUser(user._id)}
+                                                                    onClick={() => handleUserAction(user, "ban")}
                                                                     className="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
                                                                 >
                                                                     <Ban className="h-4 w-4 mr-2"/> Ban
@@ -359,6 +375,53 @@ export default function UserManagement({ isDashboard = false }) {
             {displayedUsers.length === 0 && (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                     No users found. Try adjusting your search or filter.
+                </div>
+            )}
+
+            {/* Confirmation Modal */}
+            {showConfirmModal && selectedUser && (
+                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full border border-gray-200 dark:border-gray-700"
+                    >
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
+                            {actionType === "delete" ? (
+                                <><AlertTriangle className="h-5 w-5 mr-2 text-red-600" /> Delete User</>
+                            ) : actionType === "ban" ? (
+                                <><Ban className="h-5 w-5 mr-2 text-red-600" /> Ban User</>
+                            ) : (
+                                <><UserPlus className="h-5 w-5 mr-2 text-blue-600" /> Make Admin</>
+                            )}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-6 ml-7">
+                            {actionType === "delete" ?
+                                `Are you sure you want to delete ${selectedUser.firstName} ${selectedUser.lastName}? This action cannot be undone.` :
+                                actionType === "ban" ?
+                                    `Are you sure you want to ban ${selectedUser.firstName} ${selectedUser.lastName}? This will prevent their access to the system.` :
+                                    `Are you sure you want to make ${selectedUser.firstName} ${selectedUser.lastName} an admin? This will grant them full administrative privileges.`
+                            }
+                        </p>
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => setShowConfirmModal(false)}
+                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmAction}
+                                className={`px-4 py-2 rounded-md text-white ${
+                                    actionType === "delete" ? "bg-red-600 hover:bg-red-700" :
+                                        actionType === "ban" ? "bg-red-600 hover:bg-red-700" :
+                                            "bg-blue-600 hover:bg-blue-700"
+                                } transition-colors`}
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </motion.div>
                 </div>
             )}
         </motion.div>
