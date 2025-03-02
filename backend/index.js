@@ -9,6 +9,7 @@ import authRoutes from './src/routes/authRoutes.js';
 import requestRoutes from "./src/routes/requestRoutes.js";
 import favoriseRoutes from './src/routes/saveRoutes.js';
 import evaluateRoutes from "./src/routes/evaluateRoutes.js";
+import banRoutes from "./src/routes/banRoutes.js";
 import passport from 'passport';
 import http from 'http';
 //Multer config :
@@ -66,6 +67,7 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/saved', favoriseRoutes);
 app.use('/api/rate', evaluateRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/banned-users', banRoutes);
 
 
 let fileName = "";

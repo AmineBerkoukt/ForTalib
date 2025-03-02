@@ -200,34 +200,25 @@ export const getUserById = async (req, res) => {
 };
 
 // Controller to delete a user and all related data
-export const deleteUser = async (req, res) => {
-    const { id } = req.params; // Get the user ID from the request parameters
+export const deleteUser = async (req, res, internalCall = false) => {
+    const { id } = req.params;
 
     try {
-        // Delete the user
         await User.findByIdAndDelete(id);
-
-        // Delete all posts by the user
         await Post.deleteMany({ userId: id });
-
-        // Delete all evaluations by the user
         await Evaluate.deleteMany({ userId: id });
-
-        // Delete all favorites by the user
         await Favorise.deleteMany({ userId: id });
-
-        // Delete all messages sent or received by the user
         await Message.deleteMany({ $or: [{ senderId: id }, { receiverId: id }] });
-
-        // Delete all requests by the user
         await Request.deleteMany({ userId: id });
-
-        // Send a success response
-        res.status(200).json({ message: 'User and all related data deleted successfully' });
+        if (!internalCall) {
+            res.status(200).json({ message: 'User and all related data deleted successfully' });
+        }
     } catch (error) {
-        // Send an error response
-        res.status(500).json({ message: 'Failed to delete user and related data', error: error.message });
-    }
+        if (!internalCall) {
+            res.status(500).json({ message: 'Failed to delete user and related data', error: error.message });
+        } else {
+            throw new Error(`Failed to delete user: ${error.message}`);
+        }    }
 };
 
 export const updatePassword = async (req, res) => {

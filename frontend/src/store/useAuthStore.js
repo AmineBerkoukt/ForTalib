@@ -173,6 +173,14 @@ export const useAuthStore = create((set, get) => ({
             set({onlineUsers: userIds});
         });
 
+        socket.on("forceLogout", (message) => {
+            console.warn("User banned, logging out...");
+            alert(message);
+            localStorage.removeItem("token");
+            set({ authUser: null });
+            window.location.href = "/login";
+        });
+
         socket.on("disconnect", () => {
             console.log("Socket disconnected");
         });
