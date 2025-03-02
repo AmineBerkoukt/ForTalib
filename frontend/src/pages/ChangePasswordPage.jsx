@@ -1,13 +1,12 @@
-"use client";
-
 import {useState, useRef} from "react";
-import {useTheme} from "../../contexts/ThemeContext.jsx";
+import {useTheme} from "../contexts/ThemeContext.jsx";
 import {Eye, EyeOff} from "lucide-react";
 import {useNavigate} from "react-router-dom";
-import {useProfileStore} from "../../store/useProfileStore.js";
+import {useProfileStore} from "../store/useProfileStore.js";
+import {validatePassword} from "../utils/validators_filters.js";
 import toast from "react-hot-toast";
 
-export default function ChangePassword() {
+export default function ChangePasswordPage() {
     const {isDarkMode} = useTheme();
     const navigate = useNavigate();
 
@@ -18,13 +17,12 @@ export default function ChangePassword() {
     const [showExistingPassword, setShowExistingPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-    const changePassword = useProfileStore((state) => state.changePassword);
+    const { changePassword } = useProfileStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const existingPassword = existingPasswordRef.current.value;
+        const oldPassword = existingPasswordRef.current.value;
         const newPassword = newPasswordRef.current.value;
         const confirmPassword = confirmPasswordRef.current.value;
 
@@ -34,12 +32,19 @@ export default function ChangePassword() {
             return;
         }
 
+        if(!validatePassword(newPassword)){
+            return;
+        }
+
         try {
-            await changePassword({
-                existingPassword,
+            const response = await changePassword({
+                oldPassword,
                 newPassword
             });
-            toast.success("Password changed successfully!");
+            if(response.status === 200 ){
+                toast.success("Password changed successfully!");
+                navigate("/");
+            }
         } catch (e) {
             toast.error("Password was NOT changed!");
         }

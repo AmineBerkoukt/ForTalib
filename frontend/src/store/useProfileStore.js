@@ -71,20 +71,15 @@ export const useProfileStore = create((set, get) => ({
         }
     },
 
-    changePassword: async (newPassword) => {
-        // Validate the new password before changing it
-        const passwordValid = validatePassword(newPassword);
-        if (!passwordValid) {
-            toast.error("Password is invalid");
-            return; // Stop the password change process if validation fails
-        }
-
+    changePassword: async (passwords) => {
         try {
-            await api.post(`/users/change-password`, {password: newPassword});
+            const response = await api.patch(`/users/change-password`, passwords);
             toast.success("Password changed successfully !");
+            return response;
         } catch (error) {
             console.log("usePostStore.getPostsFilter err", error.message);
             toast.error("Password was NOT changed !");
         }
     },
+
 }));

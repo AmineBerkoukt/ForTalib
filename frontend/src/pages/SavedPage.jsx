@@ -102,11 +102,11 @@ const SavedPage = () => {
                                 {(() => {
                                     const processedImages = (savedPost.images || []).map((image) => {
                                         // Check if the image already starts with the base URL
-                                        if (image.startsWith('http://localhost:5000')) {
+                                        if (image.startsWith(BASE_URL)) {
                                             return image; // Return as is if it already starts with the base URL
                                         }
                                         // Otherwise, prepend the base URL
-                                        return `http://localhost:5000${image}`;
+                                        return `${BASE_URL+image}`;
                                     });
 
                                     return (

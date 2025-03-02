@@ -3,39 +3,44 @@ import Layout from "../components/Layout";
 import Post from "../components/Post";
 import CreatePost from "../components/CreatePost";
 import { useTheme } from "../contexts/ThemeContext";
-import { useModalStore } from "../store/useModalStore";
 import { usePostStore } from "../store/usePostStore";
-import PostDetailsModal from "../components/modals/PostDetailsModal.jsx";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Loader2, Newspaper, RefreshCcw } from 'lucide-react';
 import ScrollToTop from "../components/ScrollToTop";
 import { useSavedPostStore } from "../store/useSavedPostStore.js";
+import FeedSkeleton from "../components/skeletons/FeedSkeleton.jsx";
 
 const POSTS_PER_PAGE = 10;
 
 const HomePage = () => {
     const { isDarkMode } = useTheme();
-    const { activateModal } = useModalStore();
     const { posts, getPosts } = usePostStore();
-    const { getSavedPostsIds, savedPostsIds, loading } = useSavedPostStore();
+    const { getSavedPostsIds, savedPostsIds } = useSavedPostStore();
+
     const [displayedPosts, setDisplayedPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     useEffect(() => {
-        getPosts();
-        getSavedPostsIds();
+        const fetchData = async () => {
+            setLoading(true);
+            await getPosts();
+            await getSavedPostsIds();
+            setLoading(false);
+        };
+
+        fetchData();
     }, [getPosts, getSavedPostsIds]);
 
     useEffect(() => {
-        if (posts) {
+        if (posts?.length) {
             const endIndex = currentPage * POSTS_PER_PAGE;
             setDisplayedPosts(posts.slice(0, endIndex));
         }
     }, [posts, currentPage]);
 
-    const isLoading = posts === null;
     const hasMorePosts = posts?.length > displayedPosts.length;
 
     const handleLoadMore = async () => {
@@ -47,9 +52,12 @@ const HomePage = () => {
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
+        setLoading(true);
         await getPosts();
         await getSavedPostsIds();
+        setCurrentPage(1);
         setIsRefreshing(false);
+        setLoading(false);
         toast.success("Page refreshed successfully!");
     };
 
@@ -87,13 +95,8 @@ const HomePage = () => {
                         </div>
                     </div>
 
-                    {isLoading ? (
-                        <div className="flex flex-col items-center justify-center p-8 sm:p-12 space-y-4">
-                            <Loader2 className="h-8 w-8 animate-spin text-blue-500"/>
-                            <p className="text-base sm:text-lg">
-                                Loading posts...
-                            </p>
-                        </div>
+                    {loading ? (
+                        <FeedSkeleton/>
                     ) : posts.length === 0 ? (
                         <div
                             className={`text-center p-10 sm:p-14 rounded-xl shadow-md space-y-4 transition-all duration-200 ${
@@ -105,7 +108,7 @@ const HomePage = () => {
                                 No posts available
                             </h2>
                             <p className="text-sm sm:text-base">
-                                It seems a bit quiet here. Be the first to find your colocator !
+                                It seems a bit quiet here. Be the first to find your colocator!
                             </p>
                         </div>
 
@@ -116,7 +119,6 @@ const HomePage = () => {
                                     ? post.images.map((image) => `http://localhost:5000${image}`)
                                     : [];
 
-                                // Check if this post is in the savedPostsIds array
                                 const isPostSaved = Array.isArray(savedPostsIds) && savedPostsIds.includes(post._id);
 
                                 return (
@@ -163,8 +165,6 @@ const HomePage = () => {
                                             : 'bg-blue-500 hover:bg-blue-600 text-white'
                                         }
                                             ${isLoadingMore ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-md'}
-                                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                                            ${isDarkMode ? 'focus:ring-offset-gray-900' : 'focus:ring-offset-white'}
                                         `}
                                     >
                                         {isLoadingMore ? (

@@ -1,3 +1,8 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+const FRONTEND_URL = process.env.EMAIL_REDIRECT;
+
 export const generatePostEmailTemplate = (post) => {
     const { _id, title, description, price, address, elevator, maximumCapacity, images } = post;
 
@@ -19,7 +24,7 @@ export const generatePostEmailTemplate = (post) => {
             ` : ''}
 
             <div style="text-align: center; margin-top: 20px;">
-                <a href="http://localhost:5000/api/posts/${_id}" style="display: inline-block; background-color: #007BFF; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                <a href="${FRONTEND_URL}" style="display: inline-block; background-color: #007BFF; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">
                     View Post
                 </a>
             </div>

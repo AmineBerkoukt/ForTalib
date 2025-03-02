@@ -19,7 +19,7 @@ export const loginLimiter = rateLimit({
 export const createPostLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 3,
-    message: { error: 'Too many posts !\n Try again after an hour !' },
+    message: { error: 'Too many posts creations !\n Try again after an hour !' },
     standardHeaders: true,
     legacyHeaders: false,
 });

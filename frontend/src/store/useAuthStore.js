@@ -80,6 +80,9 @@ export const useAuthStore = create((set, get) => ({
             }
 
         } catch (error) {
+            if (error.status === 429) {
+                toast.error(error.response.data.error);
+            }
             toast.error(error.response.data.message || "Failed to create account");
         } finally {
             set({isSigningUp: false});
@@ -120,6 +123,9 @@ export const useAuthStore = create((set, get) => ({
             get().connectSocket();
             return res.data;
         } catch (error) {
+            if (error.status === 429) {
+                toast.error(error.response.data.error);
+            }
             toast.error(error.response.data.message || "Login failed");
             get().logout();
         } finally {

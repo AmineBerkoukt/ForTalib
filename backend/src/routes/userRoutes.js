@@ -21,7 +21,7 @@ router.post('/', restrictTo("admin") , createUser);
 router.get('/search', searchUsers);
 
 router.patch('/promote/:userId', restrictTo("admin"), promoteToAdmin);
-router.delete('/:id', restrictTo("admin"), deleteUser);
+router.delete('/delete/:id', restrictTo("admin"), deleteUser);
 
 router.patch('/update-profile', validateProfile, uploadPfp.single('profilePhoto'),  updateProfile);
 router.get('/me', getCurrentUser);

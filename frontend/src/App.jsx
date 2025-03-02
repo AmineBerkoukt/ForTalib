@@ -18,9 +18,10 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import SavedPage from "./pages/SavedPage.jsx";
 import UserManagementPage from "./pages/UserManagementPage.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
-import ChangePassword from "./components/profile/ChangePassword.jsx";
+import ChangePasswordPage from "./pages/ChangePasswordPage.jsx";
 import CompleteSignUpPage from "./pages/CompleteSignUpPage.jsx";
 import BanManagementPage from "./pages/BanManagementPage.jsx";
+import HomeLoading from "./components/skeletons/HomeLoading.jsx";
 
 const ProtectedRoute = ({ element, isAuthenticated, redirectTo }) => {
     return isAuthenticated ? element : <Navigate to={redirectTo} />;
@@ -37,17 +38,7 @@ const RoleProtectedRoute = ({
     return allowedRoles.includes(userRole) ? element : <Navigate to={redirectTo} />;
 };
 
-// Loading Spinner
-const LoadingSpinner = () => (
-    <div className="flex items-center justify-center h-screen bg-gray-300 dark:bg-gray-900">
-        <div className="text-5xl font-bold text-blue-500 dark:text-blue-300">
-            <span className="inline-block animate-pulse delay-100">e</span>
-            <span className="inline-block animate-bounce delay-200">L</span>
-            <span className="inline-block animate-pulse delay-300">o</span>
-            <span className="inline-block animate-bounce delay-400">c</span>
-        </div>
-    </div>
-);
+
 
 const App = () => {
     const { authUser, checkAuth, isCheckingAuth, role, logout } = useAuthStore();
@@ -137,7 +128,7 @@ const App = () => {
     */
 
     if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
-        return <LoadingSpinner />;
+        return <HomeLoading />;
     }
 
     return (
@@ -209,7 +200,7 @@ const App = () => {
                     path="/change-password"
                     element={
                         <ProtectedRoute
-                            element={<ChangePassword />}
+                            element={<ChangePasswordPage />}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />

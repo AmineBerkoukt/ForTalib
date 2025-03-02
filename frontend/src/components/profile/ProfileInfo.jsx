@@ -5,9 +5,7 @@ import { useProfileStore } from "../../store/useProfileStore.js";
 import { useAuthStore } from "../../store/useAuthStore.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import ProfileField from "./ProfileField.jsx";
 import DeleteAccountModal from "../modals/DeleteAccountModal.jsx";
-import { getInputClassName } from "./formUtils.jsx";
 import ProfileActions from "./ProfileActions.jsx";
 import ProfileHeader from "./ProfileHeader.jsx";
 import ProfileDetails from "./ProfileDetails.jsx";
@@ -158,6 +156,7 @@ export default function ProfileInfo({ user, isDarkMode, isUpdating }) {
                         formData={formData}
                         handleChange={handleChange}
                         isEditing={isEditing}
+                        isOwnerConsultingProfile={isOwnerConsultingProfile}
                         isDarkMode={isDarkMode}
                         isSubmitting={isSubmitting}
                         fullName={fullName}

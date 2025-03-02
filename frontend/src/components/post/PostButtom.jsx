@@ -16,12 +16,10 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
     const [hoveredRating, setHoveredRating] = useState(0);
     const [isRatingAnimating, setIsRatingAnimating] = useState(false);
 
-    // Load saved posts IDs when component mounts
     useEffect(() => {
         getSavedPostsIds();
     }, [getSavedPostsIds]);
 
-    // Update isSaved state when savedPostsIds changes
     useEffect(() => {
         setIsSaved(savedPostsIds.includes(postId));
     }, [savedPostsIds, postId]);
@@ -30,8 +28,8 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
         try {
             setIsRatingAnimating(true);
             const rateResponse = await ratePost(postId, newRating);
-            setRating(rateResponse.avgRate); // Local state
-            updateAvgRate(rateResponse.avgRate); // Update parent state
+            setRating(rateResponse.avgRate);
+            updateAvgRate(rateResponse.avgRate);
             toast.success(`You rated this post ${newRating} stars!`, {
                 icon: '⭐',
                 style: {
@@ -78,13 +76,21 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
     };
 
     return (
-        <div className="flex flex-col sm:flex-row justify-between items-center border-t dark:border-gray-600 pt-3 mt-2 transition-all duration-300 group-hover:opacity-100 opacity-90">
+        <div className="flex flex-row justify-between items-center border-t dark:border-gray-600 pt-3 mt-2 transition-all duration-300 group-hover:opacity-100 opacity-90 w-full gap-3 sm:gap-6">
+            {/* Rating Section */}
             <div
-                className="flex items-center mb-2 sm:mb-0 relative"
+                className="flex items-center relative flex-shrink-0"
                 onMouseEnter={() => setIsRatingHovered(true)}
                 onMouseLeave={() => {
                     setIsRatingHovered(false);
                     setHoveredRating(0);
+                }}
+                onTouchStart={() => setIsRatingHovered(true)}
+                onTouchEnd={() => {
+                    setTimeout(() => {
+                        setIsRatingHovered(false);
+                        setHoveredRating(0);
+                    }, 1500);
                 }}
             >
                 <div className="flex">
@@ -95,47 +101,51 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
                                 key={index}
                                 onClick={() => handleRatePost(index + 1)}
                                 onMouseEnter={() => setHoveredRating(index + 1)}
-                                className={`cursor-pointer transition-all duration-300 hover:scale-110 ${
+                                onTouchStart={() => setHoveredRating(index + 1)}
+                                className={`cursor-pointer transition-all duration-300 hover:scale-110 p-1 sm:p-0.5 ${
                                     isRatingAnimating ? 'animate-pulse' : ''
                                 }`}
                                 aria-label={`Rate ${index + 1} stars`}
                             >
                                 {(hoveredRating > 0 ? index + 1 <= hoveredRating : index + 1 <= rating) ? (
-                                    <StarIcon className={`h-6 w-6 text-yellow-500 dark:text-yellow-400 ${
+                                    <StarIcon className={`h-6 w-6 sm:h-5 sm:w-5 text-yellow-500 dark:text-yellow-400 ${
                                         isRatingAnimating ? 'animate-bounce' : ''
                                     }`} />
                                 ) : (
-                                    <StarOutlineIcon className="h-6 w-6 text-yellow-500 dark:text-yellow-400" />
+                                    <StarOutlineIcon className="h-6 w-6 sm:h-5 sm:w-5 text-yellow-500 dark:text-yellow-400" />
                                 )}
                             </div>
                         ))}
                 </div>
 
                 {isRatingHovered && (
-                    <div className="absolute -top-8 left-0 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded-md shadow-sm dark:bg-gray-800 whitespace-nowrap z-10">
+                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded-md shadow-sm dark:bg-gray-800 whitespace-nowrap z-10">
                         {hoveredRating > 0 ? `Rate ${hoveredRating} stars` : `Current rating: ${rating}`}
-                        <div className="absolute top-full left-4 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-800"></div>
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-800"></div>
                     </div>
                 )}
             </div>
 
-            <div className="relative">
+            {/* Save Button */}
+            <div className="relative flex-shrink-0">
                 <button
                     onClick={handleSaveUnsave}
                     onMouseEnter={() => setIsHovering(true)}
                     onMouseLeave={() => setIsHovering(false)}
+                    onTouchStart={() => setIsHovering(true)}
+                    onTouchEnd={() => setTimeout(() => setIsHovering(false), 1500)}
                     aria-label={isSaved ? "Unsave post" : "Save post"}
                     className={`
-            flex items-center gap-2 px-3 py-2 rounded-md
-            transition-all duration-300 
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-700
-            active:scale-95
-            ${
-                        isSaved
-                            ? "text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30 dark:hover:bg-blue-900/50"
-                            : "text-gray-600 hover:text-gray-800 bg-transparent hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
-                    }
-          `}
+                        flex items-center justify-center gap-2 px-3 py-2 rounded-md
+                        transition-all duration-300 w-full sm:w-auto
+                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-700
+                        active:scale-95
+                        ${
+                            isSaved
+                                ? "text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30 dark:hover:bg-blue-900/50"
+                                : "text-gray-600 hover:text-gray-800 bg-transparent hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                        }
+                    `}
                 >
                     <span className="hidden sm:inline text-sm font-medium">{isSaved ? "Saved" : "Save"}</span>
                     {isSaved ? (
