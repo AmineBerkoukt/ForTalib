@@ -36,7 +36,7 @@ const PostHeader = ({
     const handleNavigateToProfile = (userId) => {
         if (userId) navigate(`/profile/${userId}`);
     };
-
+    console.log("profileImageUrl : ", profileImageUrl);
     return (
         <div className="flex items-center justify-between mb-2">
             <div className="flex items-center cursor-pointer" onClick={() => handleNavigateToProfile(user._id)}>

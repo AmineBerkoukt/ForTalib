@@ -33,12 +33,13 @@ const Post = ({
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const { toggleEditModal } = useModalStore();
+        
+    let profileImageUrl = user.profilePhoto ? BASE_URL + user.profilePhoto : "/avatar.png";
 
-    let profileImageUrl = user.profilePhoto ? BASE_URL + user.profilePhoto : "./avatar.png";
-
-    if (profileImageUrl !== "./avatar.png") {
+    if (profileImageUrl !== "/avatar.png") {
         profileImageUrl = BASE_URL + user.profilePhoto;
     }
+    console.log("profileImageUrl : ", profileImageUrl);
 
     const updateAvgRate = (newRate) => {
         setAvgRate(newRate);

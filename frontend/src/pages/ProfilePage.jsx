@@ -88,7 +88,6 @@ const ProfilePage = () => {
     const currentUser = isOwnProfile ? authUser : user
     const postsToDisplay = isOwnProfile ? userPosts : profilePosts
 
-
     return (
         <Layout isDarkMode={isDarkMode}>
             <div className={`min-h-screen py-8 ${isDarkMode ? "bg-gray-900" : "bg-gray-100"}`}>
