@@ -16,12 +16,10 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
     const [hoveredRating, setHoveredRating] = useState(0);
     const [isRatingAnimating, setIsRatingAnimating] = useState(false);
 
-    // Load saved posts IDs when component mounts
     useEffect(() => {
         getSavedPostsIds();
     }, [getSavedPostsIds]);
 
-    // Update isSaved state when savedPostsIds changes
     useEffect(() => {
         setIsSaved(savedPostsIds.includes(postId));
     }, [savedPostsIds, postId]);
@@ -30,8 +28,8 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
         try {
             setIsRatingAnimating(true);
             const rateResponse = await ratePost(postId, newRating);
-            setRating(rateResponse.avgRate); // Local state
-            updateAvgRate(rateResponse.avgRate); // Update parent state
+            setRating(rateResponse.avgRate);
+            updateAvgRate(rateResponse.avgRate);
             toast.success(`You rated this post ${newRating} stars!`, {
                 icon: '⭐',
                 style: {
@@ -78,9 +76,10 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
     };
 
     return (
-        <div className="flex flex-col sm:flex-row justify-between items-center border-t dark:border-gray-600 pt-3 mt-2 transition-all duration-300 group-hover:opacity-100 opacity-90 w-full gap-3 sm:gap-0">
+        <div className="flex flex-row justify-between items-center border-t dark:border-gray-600 pt-3 mt-2 transition-all duration-300 group-hover:opacity-100 opacity-90 w-full gap-3 sm:gap-6">
+            {/* Rating Section */}
             <div
-                className="flex items-center relative w-full sm:w-auto justify-center sm:justify-start"
+                className="flex items-center relative flex-shrink-0"
                 onMouseEnter={() => setIsRatingHovered(true)}
                 onMouseLeave={() => {
                     setIsRatingHovered(false);
@@ -109,25 +108,26 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
                                 aria-label={`Rate ${index + 1} stars`}
                             >
                                 {(hoveredRating > 0 ? index + 1 <= hoveredRating : index + 1 <= rating) ? (
-                                    <StarIcon className={`h-6 w-6 md:h-5 md:w-5 text-yellow-500 dark:text-yellow-400 ${
+                                    <StarIcon className={`h-6 w-6 sm:h-5 sm:w-5 text-yellow-500 dark:text-yellow-400 ${
                                         isRatingAnimating ? 'animate-bounce' : ''
                                     }`} />
                                 ) : (
-                                    <StarOutlineIcon className="h-6 w-6 md:h-5 md:w-5 text-yellow-500 dark:text-yellow-400" />
+                                    <StarOutlineIcon className="h-6 w-6 sm:h-5 sm:w-5 text-yellow-500 dark:text-yellow-400" />
                                 )}
                             </div>
                         ))}
                 </div>
 
                 {isRatingHovered && (
-                    <div className="absolute -top-8 left-1/2 sm:left-0 transform -translate-x-1/2 sm:-translate-x-0 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded-md shadow-sm dark:bg-gray-800 whitespace-nowrap z-10">
+                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded-md shadow-sm dark:bg-gray-800 whitespace-nowrap z-10">
                         {hoveredRating > 0 ? `Rate ${hoveredRating} stars` : `Current rating: ${rating}`}
-                        <div className="absolute top-full left-1/2 sm:left-4 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-800"></div>
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-800"></div>
                     </div>
                 )}
             </div>
 
-            <div className="relative w-full sm:w-auto">
+            {/* Save Button */}
+            <div className="relative flex-shrink-0">
                 <button
                     onClick={handleSaveUnsave}
                     onMouseEnter={() => setIsHovering(true)}
@@ -136,7 +136,7 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
                     onTouchEnd={() => setTimeout(() => setIsHovering(false), 1500)}
                     aria-label={isSaved ? "Unsave post" : "Save post"}
                     className={`
-                        flex items-center justify-center sm:justify-start gap-2 px-3 py-2 rounded-md
+                        flex items-center justify-center gap-2 px-3 py-2 rounded-md
                         transition-all duration-300 w-full sm:w-auto
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-700
                         active:scale-95
@@ -147,7 +147,7 @@ const PostBottom = ({ postId, avgRate, updateAvgRate }) => {
                         }
                     `}
                 >
-                    <span className="inline text-sm font-medium">{isSaved ? "Saved" : "Save"}</span>
+                    <span className="hidden sm:inline text-sm font-medium">{isSaved ? "Saved" : "Save"}</span>
                     {isSaved ? (
                         <Bookmark className={`h-5 w-5 ${isHovering ? "text-red-500 animate-pulse" : ""}`} />
                     ) : (
