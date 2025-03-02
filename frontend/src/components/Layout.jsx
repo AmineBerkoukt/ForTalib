@@ -49,7 +49,7 @@ const LayoutContent = ({ children, isChatPage, isDarkMode }) => {
 
                     {/* Right Sidebar */}
                     {!isChatPage && (
-                        <div className="hidden lg:block lg:w-72 lg:h-auto lg:sticky lg:top-[60px] lg:mr-6">
+                        <div className="hidden lg:block lg:w-72 lg:h-auto lg:sticky lg:top-[60px] ">
                             <RightbarFb isDarkMode={isDarkMode} />
                         </div>
                     )}
