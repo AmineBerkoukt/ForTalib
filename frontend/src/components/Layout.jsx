@@ -10,16 +10,18 @@ const LayoutContent = ({ children, isChatPage, isDarkMode }) => {
     return (
         <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
             <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
-                {/* Desktop Navbar */}
-                <div className="hidden lg:block">
+                {/* Desktop Navbar - Now Fixed */}
+                <div className="hidden lg:block fixed top-0 left-0 right-0 z-50">
                     <NavbarFB isDarkMode={isDarkMode} />
                 </div>
 
-                {/* Mobile Navbar */}
-                <NavbarFBMobile
-                    isDarkMode={isDarkMode}
-                    onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-                />
+                {/* Mobile Navbar - Already Fixed */}
+                <div className="fixed top-0 left-0 right-0 z-50 lg:hidden">
+                    <NavbarFBMobile
+                        isDarkMode={isDarkMode}
+                        onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+                    />
+                </div>
 
                 {/* Mobile Sidebar Overlay */}
                 {isSidebarOpen && (
@@ -29,10 +31,10 @@ const LayoutContent = ({ children, isChatPage, isDarkMode }) => {
                     />
                 )}
 
-                <div className="flex pt-[60px] lg:pt-0">
+                <div className="flex pt-[60px]">
                     {/* Sidebar */}
                     <div className={`
-                        fixed lg:static lg:block lg:w-64 lg:sticky lg:top-0 lg:h-screen
+                        fixed lg:static lg:block lg:w-64 lg:sticky lg:top-[60px] lg:h-[calc(100vh-60px)]
                         w-64 h-full bg-white dark:bg-gray-800 z-50 transform transition-transform duration-300 ease-in-out
                         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
                         lg:translate-x-0
@@ -45,9 +47,9 @@ const LayoutContent = ({ children, isChatPage, isDarkMode }) => {
                         {children}
                     </main>
 
-                    {/* Right Sidebar (Increased Width to 18rem) */}
+                    {/* Right Sidebar */}
                     {!isChatPage && (
-                        <div className="hidden lg:block lg:w-72 lg:h-auto lg:sticky lg:top-0 lg:mr-6">
+                        <div className="hidden lg:block lg:w-72 lg:h-auto lg:sticky lg:top-[60px] lg:mr-6">
                             <RightbarFb isDarkMode={isDarkMode} />
                         </div>
                     )}

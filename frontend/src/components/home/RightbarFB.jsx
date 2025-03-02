@@ -30,7 +30,7 @@ function RightbarFb() {
             <div className="flex flex-col gap-4 h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
                 {/* SearchBar Sticky */}
                 <div
-                    className={`fixed w-full lg:w-72 ${
+                    className={`fixed w-full lg:w-64 ${
                         isDarkMode ? "bg-gray-800" : "bg-white"
                     } rounded-lg shadow-md p-4 z-20 transition-transform duration-200`}
                     style={{
@@ -46,7 +46,7 @@ function RightbarFb() {
 
                 {/* Right Sidebar Content */}
                 <div
-                    className={`fixed w-full lg:w-72 top-32 ${
+                    className={`fixed w-full lg:w-64 top-32 ${
                         isDarkMode ? "bg-gray-800" : "bg-white"
                     } rounded-lg shadow-md p-4 overflow-y-auto z-10 transition-transform duration-200`}
                     style={{
@@ -65,3 +65,4 @@ function RightbarFb() {
 }
 
 export default RightbarFb;
+
