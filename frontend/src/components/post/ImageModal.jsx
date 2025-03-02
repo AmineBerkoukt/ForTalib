@@ -204,9 +204,6 @@ const ImageModal = ({
                     </div>
 
                     <div className="flex items-center space-x-1 md:space-x-2">
-
-
-
                         {/* Close button */}
                         <button
                             className="p-2 text-white hover:text-red-300 transition-colors rounded-full hover:bg-white/10"
@@ -223,7 +220,9 @@ const ImageModal = ({
 
                 {/* Navigation buttons */}
                 <div className={`w-full absolute top-1/2 -translate-y-1/2 flex justify-between px-2 md:px-4 
-                      transition-opacity duration-300 ease-in-out ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      transition-opacity duration-300 ease-in-out ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                    style={{ zIndex: 9999 }} // Ensure navigation buttons are always on top
+                >
                     {/* Previous button */}
                     {hasPrevious ? (
                         <button
@@ -299,8 +298,6 @@ const ImageModal = ({
                             <p className="text-sm opacity-80">Position: {currentIndex + 1} of {images.length}</p>
                         </div>
                     )}
-
-
                 </div>
 
                 {/* Touch navigation hints for mobile */}
@@ -309,20 +306,10 @@ const ImageModal = ({
                       transition-opacity duration-300 ease-in-out ${showControls ? 'opacity-100' : 'opacity-0'}`}>
                     {isZoomed ? 'Pinch to zoom, drag to pan' : 'Swipe to navigate'}
                 </div>
-
-                {/* Keyboard shortcuts indicator */}
-                <div className={`hidden md:flex absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-xs
-                      space-x-4 px-4 py-2 bg-black/40 backdrop-blur-sm rounded-full
-                      transition-opacity duration-300 ease-in-out ${showControls ? 'opacity-100' : 'opacity-0'}`}>
-                    <span>Space: Zoom</span>
-                    <span>←/→: Navigate</span>
-                    <span>Esc: Close</span>
-                </div>
             </div>
         </div>
     );
 
-    // Use createPortal to render the modal directly to the document body
     return createPortal(modalContent, document.body);
 };
 
