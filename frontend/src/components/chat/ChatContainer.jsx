@@ -79,8 +79,7 @@ const ChatContainer = () => {
     }
 
     const noMessages = messages.length === 0;
-    console.info(authUser.profilePhoto)
-    console.info(selectedUser)
+
 
     const mainUserPfp = authUser?.profilePhoto ? BASE_URL + authUser?.profilePhoto : "./avatar.png"
     const otherUserPfp = selectedUser.profilePhoto ? BASE_URL + selectedUser.profilePhoto : "./avatar.png"
@@ -146,10 +145,10 @@ const ChatContainer = () => {
                             >
                                 {message.media && (
                                     <img
-                                        src={BASE_URL + message.media}
+                                        src={BASE_URL + "/" + message?.media}
                                         alt="Attachment"
                                         className="max-w-[150px] sm:max-w-[200px] rounded-md mb-2 cursor-pointer"
-                                        onClick={() => handleImageClick(BASE_URL + message.media)}
+                                        onClick={() => handleImageClick(BASE_URL + "/" + message.media)}
                                     />
                                 )}
                                 {message.text && <p className="text-sm sm:text-base">{message.text}</p>}
