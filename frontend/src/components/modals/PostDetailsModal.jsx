@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import {useState, useEffect, useRef} from "react"
 import ReactDOM from "react-dom"
 import {
     X,
@@ -13,20 +13,28 @@ import {
     Users,
     Calendar,
 } from "lucide-react"
-import { useModalStore } from "../../store/useModalStore.js"
-import { useTheme } from "../../contexts/ThemeContext.jsx"
-import { useNavigate } from "react-router-dom"
-import { useChatStore } from "../../store/useChatStore.js"
-import { motion, AnimatePresence } from "framer-motion"
+import {useModalStore} from "../../store/useModalStore.js"
+import {useTheme} from "../../contexts/ThemeContext.jsx"
+import {useNavigate, Link} from "react-router-dom"
+import {useChatStore} from "../../store/useChatStore.js"
+import {motion, AnimatePresence} from "framer-motion"
+import {useAuthStore} from "../../store/useAuthStore.js";
+
 
 const PostDetailsModal = () => {
-    const { isModalActive, modalData, disactivateModal } = useModalStore()
-    const { isDarkMode } = useTheme()
+    const {authUser} = useAuthStore();
+    const {isModalActive, modalData, disactivateModal} = useModalStore()
+    const {isDarkMode} = useTheme()
     const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
-    const { setSelectedUser } = useChatStore()
+    const {setSelectedUser} = useChatStore()
     const navigate = useNavigate()
     const modalRef = useRef(null)
     const mediaContainerRef = useRef(null)
+
+    const isPostOwner = authUser?._id == modalData?.user?.id;
+
+    console.log(isPostOwner)
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -83,16 +91,16 @@ const PostDetailsModal = () => {
     if (!isModalActive || !modalData) return null
 
     const propertyDetails = [
-        { icon: <MapPin className="w-4 h-4" />, label: "Address", value: modalData.address },
-        { icon: <Phone className="w-4 h-4" />, label: "Phone", value: modalData.user?.phoneNumber },
+        {icon: <MapPin className="w-4 h-4"/>, label: "Address", value: modalData.address},
+        {icon: <Phone className="w-4 h-4"/>, label: "Phone", value: modalData.user?.phoneNumber},
         {
-            icon: <Star className="w-4 h-4" />,
+            icon: <Star className="w-4 h-4"/>,
             label: "Rating",
             value: modalData.avgRate ? `${modalData.avgRate}/5` : "N/A",
         },
-        { icon: <Users className="w-4 h-4" />, label: "Capacity", value: `${modalData.maximumCapacity} people` },
+        {icon: <Users className="w-4 h-4"/>, label: "Capacity", value: `${modalData.maximumCapacity} people`},
         {
-            icon: <Calendar className="w-4 h-4" />,
+            icon: <Calendar className="w-4 h-4"/>,
             label: "Published",
             value: new Date(modalData.createdAt).toLocaleDateString(),
         },
@@ -101,16 +109,16 @@ const PostDetailsModal = () => {
     return ReactDOM.createPortal(
         <AnimatePresence>
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                exit={{opacity: 0}}
                 className={`fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 ${isDarkMode ? "bg-black/80" : "bg-black/60"} backdrop-blur-sm`}
             >
                 <motion.div
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.95, opacity: 0 }}
-                    transition={{ type: "spring", duration: 0.5 }}
+                    initial={{scale: 0.95, opacity: 0}}
+                    animate={{scale: 1, opacity: 1}}
+                    exit={{scale: 0.95, opacity: 0}}
+                    transition={{type: "spring", duration: 0.5}}
                     className={`relative w-full max-w-6xl rounded-2xl shadow-2xl overflow-hidden ${isDarkMode ? "bg-gray-900" : "bg-white"}`}
                     ref={modalRef}
                 >
@@ -118,7 +126,7 @@ const PostDetailsModal = () => {
                         onClick={disactivateModal}
                         className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/20 backdrop-blur-sm hover:bg-black/30 transition-colors"
                     >
-                        <X className="w-5 h-5 text-white" />
+                        <X className="w-5 h-5 text-white"/>
                     </button>
 
                     <div className="flex flex-col lg:flex-row h-full">
@@ -129,14 +137,15 @@ const PostDetailsModal = () => {
                                     <div className="relative w-full h-full overflow-hidden">
                                         <motion.div
                                             key={selectedMediaIndex}
-                                            initial={{ opacity: 0, x: 0 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0 }}
-                                            transition={{ duration: 0.3 }}
+                                            initial={{opacity: 0, x: 0}}
+                                            animate={{opacity: 1, x: 0}}
+                                            exit={{opacity: 0}}
+                                            transition={{duration: 0.3}}
                                             className="absolute inset-0 flex items-center justify-center"
                                         >
                                             {mediaItems[selectedMediaIndex].match(/\.(mp4|webm|ogg)$/i) ? (
-                                                <video src={mediaItems[selectedMediaIndex]} controls className="w-full h-full object-contain" />
+                                                <video src={mediaItems[selectedMediaIndex]} controls
+                                                       className="w-full h-full object-contain"/>
                                             ) : (
                                                 <img
                                                     src={mediaItems[selectedMediaIndex] || "/placeholder.svg"}
@@ -151,9 +160,9 @@ const PostDetailsModal = () => {
                                         className={`w-full h-full flex items-center justify-center ${isDarkMode ? "bg-gradient-to-b from-gray-800 to-gray-900" : "bg-gradient-to-b from-gray-50 to-gray-100"}`}
                                     >
                                         <motion.div
-                                            initial={{ opacity: 0, y: -10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.5, ease: "easeOut" }}
+                                            initial={{opacity: 0, y: -10}}
+                                            animate={{opacity: 1, y: 0}}
+                                            transition={{duration: 0.5, ease: "easeOut"}}
                                             className="text-center p-8 max-w-md"
                                         >
                                             <div
@@ -169,7 +178,8 @@ const PostDetailsModal = () => {
                                             <p
                                                 className={`${isDarkMode ? "text-gray-400" : "text-gray-500"} text-lg max-w-xs mx-auto leading-relaxed`}
                                             >
-                                                This property listing doesn't have any photos yet. Contact the owner for more details.
+                                                This property listing doesn't have any photos yet. Contact the owner for
+                                                more details.
                                             </p>
                                             <motion.button
                                                 className={`mt-6 inline-flex items-center justify-center px-4 py-2 rounded-lg ${
@@ -177,11 +187,11 @@ const PostDetailsModal = () => {
                                                         ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
                                                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                                 } transition-colors duration-200`}
-                                                whileHover={{ scale: 1.03 }}
-                                                whileTap={{ scale: 0.98 }}
+                                                whileHover={{scale: 1.03}}
+                                                whileTap={{scale: 0.98}}
                                                 onClick={() => handleTalkToOwner(modalData.user)}
                                             >
-                                                <MessageCircle className="w-4 h-4 mr-2" />
+                                                <MessageCircle className="w-4 h-4 mr-2"/>
                                                 <span>Ask owner for photos</span>
                                             </motion.button>
                                         </motion.div>
@@ -196,13 +206,13 @@ const PostDetailsModal = () => {
                                         onClick={previousImage}
                                         className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 hover:bg-black/60 transition-colors transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
-                                        <ChevronLeft className="w-6 h-6 text-white" />
+                                        <ChevronLeft className="w-6 h-6 text-white"/>
                                     </button>
                                     <button
                                         onClick={nextImage}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 hover:bg-black/60 transition-colors transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
-                                        <ChevronRight className="w-6 h-6 text-white" />
+                                        <ChevronRight className="w-6 h-6 text-white"/>
                                     </button>
                                 </>
                             )}
@@ -210,14 +220,15 @@ const PostDetailsModal = () => {
 
                         {/* Thumbnail Strip - Only show if there are multiple media items */}
                         {mediaItems.length > 1 && (
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent">
+                            <div
+                                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent">
                                 <div className="p-4 overflow-x-auto">
                                     <div className="flex space-x-2 justify-center">
                                         {mediaItems.map((item, index) => (
                                             <motion.button
                                                 key={index}
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
+                                                whileHover={{scale: 1.05}}
+                                                whileTap={{scale: 0.95}}
                                                 onClick={() => setSelectedMediaIndex(index)}
                                                 className={`relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden transition-all ${
                                                     selectedMediaIndex === index
@@ -226,8 +237,9 @@ const PostDetailsModal = () => {
                                                 }`}
                                             >
                                                 {item.match(/\.(mp4|webm|ogg)$/i) ? (
-                                                    <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                                                        <Play className="w-6 h-6 text-white" />
+                                                    <div
+                                                        className="w-full h-full bg-gray-800 flex items-center justify-center">
+                                                        <Play className="w-6 h-6 text-white"/>
                                                     </div>
                                                 ) : (
                                                     <img
@@ -243,11 +255,14 @@ const PostDetailsModal = () => {
                             </div>
                         )}
 
-                        <div className={`lg:w-2/5 p-4 sm:p-6 overflow-y-auto ${isDarkMode ? "text-gray-200" : "text-gray-800"}`}>
-                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                        <div
+                            className={`lg:w-2/5 p-4 sm:p-6 overflow-y-auto ${isDarkMode ? "text-gray-200" : "text-gray-800"}`}>
+                            <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}}
+                                        transition={{delay: 0.2}}>
                                 <div className="flex items-start space-x-4 mb-6">
                                     <div className={`p-3 rounded-xl ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
-                                        <Building2 className={`w-6 h-6 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`} />
+                                        <Building2
+                                            className={`w-6 h-6 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}/>
                                     </div>
                                     <div>
                                         <h2 className="font-semibold text-2xl leading-tight mb-2">{modalData.title}</h2>
@@ -255,23 +270,27 @@ const PostDetailsModal = () => {
                       <span className={`text-2xl font-bold ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
                         {modalData.price} Dhs
                       </span>
-                                            <span className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>{`/month`}</span>
+                                            <span
+                                                className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>{`/month`}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className={`mb-6 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>{modalData.description}</div>
+                                <div
+                                    className={`mb-6 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>{modalData.description}</div>
 
-                                <div className={`space-y-6 pt-6 border-t ${isDarkMode ? "border-gray-800" : "border-gray-200"}`}>
+                                <div
+                                    className={`space-y-6 pt-6 border-t ${isDarkMode ? "border-gray-800" : "border-gray-200"}`}>
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-3">
                       <span className={`text-2xl font-bold ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
                         {modalData.user?.firstName} {modalData.user?.lastName}
                       </span>
+
                                         </div>
-                                        <motion.button
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
+                                        {!isPostOwner && <motion.button
+                                            whileHover={{scale: 1.05}}
+                                            whileTap={{scale: 0.95}}
                                             onClick={() => handleTalkToOwner(modalData.user)}
                                             className={`py-2 px-4 rounded-lg transition-colors duration-200 flex items-center space-x-2 ${
                                                 isDarkMode
@@ -279,9 +298,11 @@ const PostDetailsModal = () => {
                                                     : "bg-blue-500 text-white hover:bg-blue-600"
                                             }`}
                                         >
-                                            <MessageCircle className="w-4 h-4" />
-                                            <span>Contact</span>
+                                            <MessageCircle className="w-4 h-4"/>
+                                            <Link to="/chat">Contact</Link>
                                         </motion.button>
+                                        }
+
                                     </div>
 
                                     <div
@@ -291,7 +312,8 @@ const PostDetailsModal = () => {
                                     >
                                         {propertyDetails.map((detail, index) => (
                                             <div key={index} className="flex items-center space-x-3">
-                                                <div className={`p-2 rounded-lg ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>{detail.icon}</div>
+                                                <div
+                                                    className={`p-2 rounded-lg ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>{detail.icon}</div>
                                                 <div>
                                                     <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>{detail.label}</p>
                                                     <p className="font-medium">{detail.value}</p>
