@@ -6,6 +6,7 @@ import Favorise from '../models/Save.js';
 import Message from '../models/Message.js';
 import path from "path";
 import bcrypt from 'bcryptjs';
+import Save from "../models/Save.js";
 
 
 // Controller to fetch all users
@@ -200,25 +201,21 @@ export const getUserById = async (req, res) => {
 };
 
 // Controller to delete a user and all related data
-export const deleteUser = async (req, res, internalCall = false) => {
-    const { id } = req.params;
+export const deleteUser = async (req, res) => {
+    const { id } = req.params; // Get the user ID from the request parameters
 
     try {
         await User.findByIdAndDelete(id);
         await Post.deleteMany({ userId: id });
         await Evaluate.deleteMany({ userId: id });
-        await Favorise.deleteMany({ userId: id });
+        await Save.deleteMany({ userId: id });
         await Message.deleteMany({ $or: [{ senderId: id }, { receiverId: id }] });
         await Request.deleteMany({ userId: id });
-        if (!internalCall) {
-            res.status(200).json({ message: 'User and all related data deleted successfully' });
-        }
+
+        res.status(200).json({ message: 'User and all related data deleted successfully' });
     } catch (error) {
-        if (!internalCall) {
-            res.status(500).json({ message: 'Failed to delete user and related data', error: error.message });
-        } else {
-            throw new Error(`Failed to delete user: ${error.message}`);
-        }    }
+        res.status(500).json({ message: 'Failed to delete user and related data', error: error.message });
+    }
 };
 
 export const updatePassword = async (req, res) => {
