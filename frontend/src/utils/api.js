@@ -1,8 +1,7 @@
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const navigate = useNavigate();
+const BASE_URL = "http://localhost:5000/api";
+
 // Create an Axios instance
 const api = axios.create({
   baseURL: BASE_URL,
@@ -18,6 +17,7 @@ api.interceptors.request.use(
       return config;
     },
     (error) => {
+      // Handle errors before the request is sent
       return Promise.reject(error);
     }
 );
@@ -27,8 +27,10 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
       if (error.response && error.response.status === 401) {
+        // Handle token expiration (optional: redirect to login or refresh token)
         console.error("Unauthorized! Redirecting to login...");
-        navigate("/login");
+        // For example:
+        window.location.href = "/login";
       }
       return Promise.reject(error);
     }
