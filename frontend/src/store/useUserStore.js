@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 import toast from 'react-hot-toast';
 import api from "../utils/api.js";
 
@@ -12,7 +12,7 @@ export const useUserStore = create((set) => ({
     user: {},
 
     fetchUsers: async () => {
-        set({ loading: true, error: null });
+        set({loading: true, error: null});
         try {
             const response = await api.get("/users"); // Your backend endpoint to fetch users
             set({
@@ -34,7 +34,7 @@ export const useUserStore = create((set) => ({
                 // First update the local state
                 set((state) => ({
                     users: state.users.map((user) =>
-                        user._id === userId ? { ...user, role: 'admin' } : user
+                        user._id === userId ? {...user, role: 'admin'} : user
                     ),
                 }));
 
@@ -53,17 +53,12 @@ export const useUserStore = create((set) => ({
 
     deleteUser: async (userId) => {
         try {
-            console.log(userId)
             const response = await api.delete(`/users/delete/${userId}`);
-            if (response.status === 200) {
-                set((state) => ({
-                    users: state.users.filter(user => user._id !== userId)
-                }));
-
-                toast.success("User has been deleted successfully!");
-            }
+            toast.success("User has been deleted successfully!");
         } catch (err) {
             toast.error(err.message || "Failed to delete user");
+        }finally {
+
         }
     }
 }));

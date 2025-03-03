@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { RefreshCw } from "lucide-react";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import {useTheme} from "../../contexts/ThemeContext.jsx";
 
-const LoadingDelete = ({ message = "Deleting user..." }) => {
-  const { isDarkMode } = useContext(ThemeContext);
+const LoadingDelete = ({ message = "Banning user..." }) => {
+  const { isDarkMode } = useTheme();
   
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -28,7 +28,7 @@ const LoadingDelete = ({ message = "Deleting user..." }) => {
           </h3>
          
           <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>
-            Please wait while we process your request.
+            Please wait !
           </p>
          
           <div className="w-full mt-6">

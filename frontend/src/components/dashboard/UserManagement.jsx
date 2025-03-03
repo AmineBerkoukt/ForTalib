@@ -4,6 +4,7 @@ import { useBanStore } from "../../store/useBanStore.js";
 import { Eye, UserPlus, Trash, Search, Filter, ChevronRight, Ban, Menu, AlertTriangle } from 'lucide-react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
+import LoadingDelete from "../skeletons/LoadingDelete.jsx";
 
 export default function UserManagement({ isDashboard = false }) {
     const users = useUserStore(state => state.users);
@@ -12,6 +13,7 @@ export default function UserManagement({ isDashboard = false }) {
     const fetchUsers = useUserStore(state => state.fetchUsers);
     const makeAdmin = useUserStore(state => state.makeAdmin);
     const deleteUser = useUserStore((state) => state.deleteUser);
+    const { loading: banLoading, toggleLoading } = useBanStore();
 
     // Ban functionality
     const { banUser, bannedUsers, getBannedUsers } = useBanStore();
@@ -22,8 +24,8 @@ export default function UserManagement({ isDashboard = false }) {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [actionType, setActionType] = useState("");
-    const location = useLocation();
     const navigate = useNavigate();
+
 
     const handleUserAction = (user, action) => {
         setSelectedUser(user);
@@ -38,8 +40,7 @@ export default function UserManagement({ isDashboard = false }) {
                 await deleteUser(selectedUser._id);
             } else if (actionType === "ban") {
                 await banUser(selectedUser._id);
-                // Refresh users list after banning
-                fetchUsers();
+                await fetchUsers();
             } else if (actionType === "admin") {
                 await makeAdmin(selectedUser._id);
             }
@@ -74,11 +75,9 @@ export default function UserManagement({ isDashboard = false }) {
 
     const displayedUsers = isDashboard ? filteredUsers.slice(0, 5) : filteredUsers;
 
-    if (loading) {
+    if (banLoading) {
         return (
-            <div className="flex justify-center items-center h-48">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
-            </div>
+            <LoadingDelete/>
         );
     }
 
