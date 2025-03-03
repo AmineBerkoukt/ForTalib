@@ -36,11 +36,13 @@ export const banUser = async (req, res) => {
             io.to(socketId).emit("forceLogout", "You have been banned!");
         }
 
-        const subject = "Your account has been banned";
+        const subject = "Your CoRent account has been banned";
         const htmlContent = `
             <p>Dear ${user.firstName},</p>
-            <p>We regret to inform you that your account has been banned due to violation of platform rules.</p>
-            <p>If you believe this is a mistake, please contact our support team.</p>
+            <p>We regret to inform you that your account has been banned due to violation of our rules.</p>
+            <p>If you believe this is a mistake, please contact our support team.
+            <a href="mailto:amine.docs0@gmail.com"> Contact support </a> 
+            </p>
             <p>Best regards,<br>Platform Team</p>
         `;
         await sendEmail(user.email, subject, htmlContent);
@@ -65,15 +67,6 @@ export const unbanUser = async (req, res) => {
 
         await Blacklist.findByIdAndDelete(userId);
 
-        // Envoyer un email de réactivation
-        const subject = "Your account has been restored";
-        const htmlContent = `
-            <p>Dear ${bannedUser.firstName},</p>
-            <p>Your account has been reinstated. You can now log in again.</p>
-            <p>Welcome back!</p>
-            <p>Best regards,<br>Platform Team</p>
-        `;
-        await sendEmail(bannedUser.email, subject, htmlContent);
 
         res.status(200).json({ message: "User unbanned successfully" });
     } catch (error) {
