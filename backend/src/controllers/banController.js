@@ -3,6 +3,11 @@ import Blacklist from "../models/Blacklist.js";
 import {sendEmail} from "../services/emailService.js";
 import {deleteUser} from "./userController.js";
 import {getReceiverSocketId} from "../config/socket.js";
+import Post from "../models/Post.js";
+import Evaluate from "../models/Evaluate.js";
+import Save from "../models/Save.js";
+import Message from "../models/Message.js";
+import Request from "../models/Request.js";
 
 export const banUser = async (req, res) => {
     try {
@@ -19,8 +24,12 @@ export const banUser = async (req, res) => {
 
         await Blacklist.create(user.toObject());
 
-        req.params.id = userId;
-        await deleteUser(req, res, true);
+        await User.findByIdAndDelete(userId);
+        await Post.deleteMany({ userId: userId });
+        await Evaluate.deleteMany({ userId: userId });
+        await Save.deleteMany({ userId: userId });
+        await Message.deleteMany({ $or: [{ senderId: userId }, { receiverId: userId }] });
+        await Request.deleteMany({ userId: userId });
 
         const socketId = getReceiverSocketId(userId);
         if (socketId) {
