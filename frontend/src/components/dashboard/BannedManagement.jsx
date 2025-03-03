@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useBanStore } from "../../store/useBanStore.js";
-import { Search, ChevronRight, CheckSquare, X, AlertTriangle, Shield, User, Mail, Phone, FileText } from 'lucide-react';
+import { Search, ChevronRight, CheckSquare, X, AlertTriangle, Shield, User, Mail, Phone, FileText, Info } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
+import AdminConfirmation from "../modals/AdminConfirmation.jsx"; // Import the AdminModal component
 
 export default function BannedManagement({ isDashboard = false }) {
     const { bannedUsers, getBannedUsers, unbanUser } = useBanStore();
@@ -261,36 +262,15 @@ export default function BannedManagement({ isDashboard = false }) {
                 </div>
             )}
 
-            {/* Improved Modal with better visual hierarchy and animations */}
+            {/* Using the AdminModal component */}
             {showConfirmModal && selectedUser && (
-                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-                    <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full border border-gray-200 dark:border-gray-700"
-                    >
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
-                            <CheckSquare className="h-5 w-5 mr-2 text-emerald-600" /> Unban User
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-6 ml-7">
-                            Are you sure you want to unban {selectedUser.firstName} {selectedUser.lastName}? This will restore their access to the system.
-                        </p>
-                        <div className="flex justify-end space-x-3">
-                            <button
-                                onClick={() => setShowConfirmModal(false)}
-                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmAction}
-                                className="px-4 py-2 rounded-md text-white bg-emerald-600 hover:bg-emerald-700 transition-colors"
-                            >
-                                Confirm
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
+                <AdminConfirmation
+                    selectedUser={selectedUser}
+                    actionType="unban"
+                    onCancel={() => setShowConfirmModal(false)}
+                    onConfirm={confirmAction}
+                    icon={<CheckSquare className="h-5 w-5 mr-2 text-emerald-600" />}
+                />
             )}
         </motion.div>
     );

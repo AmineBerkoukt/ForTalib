@@ -30,7 +30,7 @@ api.interceptors.response.use(
         // Handle token expiration (optional: redirect to login or refresh token)
         console.error("Unauthorized! Redirecting to login...");
         // For example:
-        // window.location.href = "/login";
+        window.location.href = "/login";
       }
       return Promise.reject(error);
     }
