@@ -29,7 +29,7 @@ const PostHeader = ({
     }
 
     const handleTalkToOwner = async (userToTalkTo) => {
-        setSelectedUser(userToTalkTo);
+        await setSelectedUser(userToTalkTo);
         navigate("/chat");
     };
 

@@ -15,10 +15,11 @@ import {
 } from "lucide-react"
 import {useModalStore} from "../../store/useModalStore.js"
 import {useTheme} from "../../contexts/ThemeContext.jsx"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, Link} from "react-router-dom"
 import {useChatStore} from "../../store/useChatStore.js"
 import {motion, AnimatePresence} from "framer-motion"
 import {useAuthStore} from "../../store/useAuthStore.js";
+
 
 const PostDetailsModal = () => {
     const {authUser} = useAuthStore();
@@ -35,7 +36,6 @@ const PostDetailsModal = () => {
     console.log(isPostOwner)
 
 
-    console.log(modalData)
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -299,7 +299,7 @@ const PostDetailsModal = () => {
                                             }`}
                                         >
                                             <MessageCircle className="w-4 h-4"/>
-                                            <span>Contact</span>
+                                            <Link to="/chat">Contact</Link>
                                         </motion.button>
                                         }
 
