@@ -31,7 +31,7 @@ const PostDetailsModal = () => {
     const modalRef = useRef(null)
     const mediaContainerRef = useRef(null)
 
-    const isPostOwner = authUser._id == modalData?.user?.id;
+    const isPostOwner = authUser?._id == modalData?.user?.id;
 
     console.log(isPostOwner)
 

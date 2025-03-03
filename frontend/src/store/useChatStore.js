@@ -92,7 +92,19 @@ export const useChatStore = create((set, get) => ({
 
   setSelectedUser: async (selectedUser) => {
     let selectedUserInfos = selectedUser;
-    let searchId = selectedUser._id ? selectedUser._id : selectedUser.id;
+    let searchId = null;
+    if (selectedUser == null){
+      searchId = null
+      set({selectedUser: null })
+    }
+    if(selectedUser?._id){
+      searchId = selectedUser._id
+    }
+    if(selectedUser?.id){
+      searchId = selectedUser.id
+    }
+
+
     if(selectedUser) {selectedUserInfos = await get().getSelectedUserInfo(searchId)}
 
     set({selectedUser: selectedUserInfos })
