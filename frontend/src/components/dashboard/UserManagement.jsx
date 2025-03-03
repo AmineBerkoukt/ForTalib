@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../../store/useUserStore.js";
 import { useBanStore } from "../../store/useBanStore.js";
-import { Eye, UserPlus, Trash, Search, Filter, ChevronRight, Ban, Menu } from 'lucide-react';
+import {Eye, UserPlus, Trash, Search, Filter, ChevronRight, Ban, Menu, CheckSquare} from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 import LoadingDelete from "../skeletons/LoadingDelete.jsx";
 import AdminModal from "../modals/AdminConfirmation.jsx";
+import {useAuthStore} from "../../store/useAuthStore.js";
 
 export default function UserManagement({ isDashboard = false }) {
-    const users = useUserStore(state => state.users);
+    let users = useUserStore(state => state.users);
+    const {authUser} = useAuthStore();
+    users = users.filter(user => user._id != authUser._id)
+
     const loading = useUserStore(state => state.loading);
     const error = useUserStore(state => state.error);
     const fetchUsers = useUserStore(state => state.fetchUsers);
@@ -382,6 +386,7 @@ export default function UserManagement({ isDashboard = false }) {
                     actionType={actionType}
                     onCancel={() => setShowConfirmModal(false)}
                     onConfirm={handleConfirmAction}
+                    icon={<Ban className="h-5 w-5 mr-2 text-red-700" />}
                 />
             )}
         </motion.div>

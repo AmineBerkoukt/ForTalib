@@ -36,16 +36,7 @@ export const banUser = async (req, res) => {
             io.to(socketId).emit("forceLogout", "You have been banned!");
         }
 
-        const subject = "Your CoRent account has been banned";
-        const htmlContent = `
-            <p>Dear ${user.firstName},</p>
-            <p>We regret to inform you that your account has been banned due to violation of our rules.</p>
-            <p>If you believe this is a mistake, please contact our support team.
-            <a href="mailto:amine.docs0@gmail.com"> Contact support </a> 
-            </p>
-            <p>Best regards,<br>Platform Team</p>
-        `;
-        await sendEmail(user.email, subject, htmlContent);
+
         res.status(200).json({ message: "User banned successfully" });
 
     } catch (error) {
