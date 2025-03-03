@@ -7,6 +7,7 @@ import { useAuthStore } from "../../store/useAuthStore.js";
 import { formatMessageTime } from "../../utils/utils.js";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+
 const BASE_URL = import.meta.env.VITE_PFP_URL;
 
 const ChatContainer = () => {
@@ -81,6 +82,7 @@ const ChatContainer = () => {
     console.info(authUser.profilePhoto)
     console.info(selectedUser)
 
+    const mainUserPfp = authUser?.profilePhoto ? BASE_URL + authUser?.profilePhoto : "./avatar.png"
     const otherUserPfp = selectedUser.profilePhoto ? BASE_URL + selectedUser.profilePhoto : "./avatar.png"
 
 
@@ -119,7 +121,7 @@ const ChatContainer = () => {
                                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border">
                                     <img
                                         src={message.senderId === authUser._id
-                                            ? BASE_URL + authUser.profilePhoto || "./avatar.png"
+                                            ? mainUserPfp
                                             : otherUserPfp}
                                         alt="profile pic"
                                         className="w-full h-full object-cover rounded-full"
