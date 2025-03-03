@@ -4,7 +4,7 @@ import api from "../utils/api.js";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const useUserStore = create((set) => ({
+export const useUserStore = create((set, get) => ({
     isLoading: false,
     error: null,
     users: [],
@@ -55,6 +55,7 @@ export const useUserStore = create((set) => ({
         try {
             const response = await api.delete(`/users/delete/${userId}`);
             toast.success("User has been deleted successfully!");
+            await get().fetchUsers();
         } catch (err) {
             toast.error(err.message || "Failed to delete user");
         }finally {
