@@ -73,7 +73,6 @@ const App = () => {
         initializeAuth();
     }, [checkAuth, logout, location.pathname, navigate]);
 
-    {/*
     //Console access
     useEffect(() => {
         // Handle Right Click
@@ -99,24 +98,10 @@ const App = () => {
             }
         };
 
-        // Detect if dev tools are open
-        const detectDevTools = () => {
-            const devtools = /./;
-            devtools.toString = function () {
-                // If this function is called, dev tools are open
-                toast("🤓 You can't inspect me", {
-                    duration: 1000,
-                    className: isDarkMode ? "!bg-gray-800 !text-white" : "",
-                });
-            };
-
-            console.log(devtools);
-        };
 
         // Add event listeners
         document.addEventListener("contextmenu", handleRightClick);
         document.addEventListener("keydown", handleKeyboardShortcut);
-        setInterval(detectDevTools, 1000); // Check for dev tools every second
 
         return () => {
             // Cleanup
@@ -124,7 +109,6 @@ const App = () => {
             document.removeEventListener("keydown", handleKeyboardShortcut);
         };
     }, [isDarkMode]);
-    */}
 
     if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
         return <HomeLoading/>;
