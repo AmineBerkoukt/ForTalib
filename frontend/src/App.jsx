@@ -54,8 +54,8 @@ const App = () => {
         const initializeAuth = async () => {
             const token = localStorage.getItem("token");
 
-            if (!token && !publicRoutes.includes(location.pathname)) {
-                logout();
+            if (!token && !publicRoutes.includes(location.pathname) ) {
+                await logout();
                 navigate("/login");
                 return;
             }

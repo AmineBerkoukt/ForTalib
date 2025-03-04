@@ -27,9 +27,7 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
       if (error.response && error.response.status === 401) {
-        // Handle token expiration (optional: redirect to login or refresh token)
         console.error("Unauthorized! Redirecting to login...");
-        // For example:
         window.location.href = "/login";
       }
       return Promise.reject(error);

@@ -23,18 +23,23 @@ export const useAuthStore = create((set, get) => ({
 
     oAuthLogin: async (authData) => {
         try {
-            // Save token in localStorage
-            const response = await axios.post(BASE_URL + "/auth/google/register", authData);
+            const response = await axios.post(`${BASE_URL}/auth/google/register`, authData);
 
-            await localStorage.setItem("token", response.data.token);
+            if (!response.data.token || !response.data.user) {
+                throw new Error("Invalid response from server");
+            }
 
+            try {
+                localStorage.setItem("token", response.data.token);
+            } catch (storageError) {
+                console.warn("Could not save token to localStorage", storageError);
+            }
 
-            set({authUser: response.data.user, role: response.data.user.role});
+            set({ authUser: response.data.user, role: response.data.user.role });
 
-            // Connect the user to the socket
             get().connectSocket();
         } catch (error) {
-            console.error("Error in OAuth login:", error.message);
+            console.error("Error in OAuth login:", error.response?.data?.message || error.message);
             toast.error("OAuth login failed");
         }
     },
@@ -45,7 +50,7 @@ export const useAuthStore = create((set, get) => ({
             const storedToken = localStorage.getItem("token");
 
             if (!storedToken) {
-                set({authUser: null});
+                set({authUser: undefined});
                 return;
             }
 
