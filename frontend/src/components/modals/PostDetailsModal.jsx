@@ -33,8 +33,6 @@ const PostDetailsModal = () => {
 
     const isPostOwner = authUser?._id == modalData?.user?.id;
 
-    console.log(isPostOwner)
-
 
     useEffect(() => {
         const handleClickOutside = (event) => {

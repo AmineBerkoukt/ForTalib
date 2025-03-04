@@ -38,7 +38,7 @@ const SidebarFB = () => {
 
 
     const navItems = [
-        { Icon: UserIcon, text: "Profile", path: `/profile/${authUser._id}` },
+        { Icon: UserIcon, text: "Profile", path: `/profile/${authUser?._id}` },
         { Icon: BookmarkIcon, text: "Saved", path: "/saved" },
         ...(role === "admin" ? [{
             Icon: CalendarIcon,

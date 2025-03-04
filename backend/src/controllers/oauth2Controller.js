@@ -5,29 +5,63 @@ export const googleOAuthRegister = async (req, res) => {
     try {
         const { firstName, lastName, email, googleId } = req.body;
 
-        // Check if a user with the same email or googleId already exists
-        let existingUser = await User.findOne({
-            $or: [{ email }, { googleId }]
-        });
+        let existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            return res.status(400).json({
-                message: 'A user with this email or Google ID already exists'
-            });
+            // If the user exists but doesn't have a googleId, update and save it
+            if (!existingUser.googleId) {
+                existingUser.googleId = googleId;
+                await existingUser.save();  // <-- Ensure the change is saved!
+                console.log("Updated user with Google ID:", existingUser);
+            }
+
+            // If googleId matches, log the user in
+            if (existingUser.googleId === googleId) {
+                const token = jwt.sign(
+                    {
+                        id: existingUser._id,
+                        role: existingUser.role,
+                    },
+                    process.env.JWT_SECRET || 'my_jwt_secret',
+                    {
+                        expiresIn: '40d',
+                        algorithm: 'HS256'
+                    }
+                );
+
+                return res.status(200).json({
+                    message: 'User logged in successfully',
+                    token,
+                    user: {
+                        id: existingUser._id,
+                        firstName: existingUser.firstName,
+                        lastName: existingUser.lastName,
+                        email: existingUser.email,
+                        googleId: existingUser.googleId,  // <-- Verify response contains googleId
+                        role: existingUser.role
+                    }
+                });
+            } else {
+                return res.status(400).json({
+                    message: 'Google ID mismatch. Please log in with the correct Google account.'
+                });
+            }
         }
 
-        // Create a new user
+        // If user does not exist, create a new one
         const newUser = new User({
             firstName,
             lastName,
             email,
-            googleId,
+            googleId: googleId,
+            hasAcceptedTermsAndConditions: true,
             role: "student"
         });
 
         await newUser.save();
+        console.log("New user created:", newUser);
 
-        // Generate a JWT token
+        // Generate a JWT token for the new user
         const token = jwt.sign(
             {
                 id: newUser._id,
@@ -35,12 +69,12 @@ export const googleOAuthRegister = async (req, res) => {
             },
             process.env.JWT_SECRET || 'my_jwt_secret',
             {
-                expiresIn: '30d',
+                expiresIn: '40d',
                 algorithm: 'HS256'
             }
         );
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'User successfully registered',
             token,
             user: {
@@ -48,12 +82,15 @@ export const googleOAuthRegister = async (req, res) => {
                 firstName: newUser.firstName,
                 lastName: newUser.lastName,
                 email: newUser.email,
+                googleId: newUser.googleId,  // <-- Verify response contains googleId
                 role: newUser.role
             }
         });
+
     } catch (error) {
-        res.status(500).json({
-            message: 'Error during registration',
+        console.error("OAuth Error:", error);
+        return res.status(500).json({
+            message: 'Error during registration/login',
             error: error.message
         });
     }

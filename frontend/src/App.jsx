@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
-import { useAuthStore } from "./store/useAuthStore";
-import { useTheme } from "./contexts/ThemeContext.jsx";
-import { Toaster, toast } from "react-hot-toast";
+import React, {useState, useEffect} from "react";
+import {Routes, Route, Navigate, useLocation, useNavigate} from "react-router-dom";
+import {useAuthStore} from "./store/useAuthStore";
+import {useTheme} from "./contexts/ThemeContext.jsx";
+import {Toaster, toast} from "react-hot-toast";
 import PostDetailsModal from "./components/modals/PostDetailsModal.jsx";
-import { useModalStore } from "./store/useModalStore.js";
+import {useModalStore} from "./store/useModalStore.js";
 
 // Components and Pages
 import HomePage from "./pages/HomePage.jsx";
@@ -23,8 +23,8 @@ import CompleteSignUpPage from "./pages/CompleteSignUpPage.jsx";
 import BanManagementPage from "./pages/BanManagementPage.jsx";
 import HomeLoading from "./components/skeletons/HomeLoading.jsx";
 
-const ProtectedRoute = ({ element, isAuthenticated, redirectTo }) => {
-    return isAuthenticated ? element : <Navigate to={redirectTo} />;
+const ProtectedRoute = ({element, isAuthenticated, redirectTo}) => {
+    return isAuthenticated ? element : <Navigate to={redirectTo}/>;
 };
 
 const RoleProtectedRoute = ({
@@ -34,18 +34,17 @@ const RoleProtectedRoute = ({
                                 allowedRoles,
                                 redirectTo,
                             }) => {
-    if (!isAuthenticated) return <Navigate to={redirectTo} />;
-    return allowedRoles.includes(userRole) ? element : <Navigate to={redirectTo} />;
+    if (!isAuthenticated) return <Navigate to={redirectTo}/>;
+    return allowedRoles.includes(userRole) ? element : <Navigate to={redirectTo}/>;
 };
 
 
-
 const App = () => {
-    const { authUser, checkAuth, isCheckingAuth, role, logout } = useAuthStore();
-    const { isDarkMode } = useTheme();
+    const {authUser, checkAuth, isCheckingAuth, role, logout} = useAuthStore();
+    const {isDarkMode} = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
-    const { isModalOpen, modalData, disactivateModal } = useModalStore();
+    const {isModalOpen, modalData, disactivateModal} = useModalStore();
     const [isLoading, setIsLoading] = useState(true);
 
     const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
@@ -55,7 +54,7 @@ const App = () => {
             const token = localStorage.getItem("token");
 
             if (!token && !publicRoutes.includes(location.pathname)) {
-                logout();
+                await logout();
                 navigate("/login");
                 return;
             }
@@ -74,8 +73,7 @@ const App = () => {
         initializeAuth();
     }, [checkAuth, logout, location.pathname, navigate]);
 
-    /*
-    Console access
+    //Console access
     useEffect(() => {
         // Handle Right Click
         const handleRightClick = (event) => {
@@ -100,24 +98,10 @@ const App = () => {
             }
         };
 
-        // Detect if dev tools are open
-        const detectDevTools = () => {
-            const devtools = /./;
-            devtools.toString = function () {
-                // If this function is called, dev tools are open
-                toast("🤓 You can't inspect me", {
-                    duration: 1000,
-                    className: isDarkMode ? "!bg-gray-800 !text-white" : "",
-                });
-            };
-
-            console.log(devtools);
-        };
 
         // Add event listeners
         document.addEventListener("contextmenu", handleRightClick);
         document.addEventListener("keydown", handleKeyboardShortcut);
-        setInterval(detectDevTools, 1000); // Check for dev tools every second
 
         return () => {
             // Cleanup
@@ -125,10 +109,9 @@ const App = () => {
             document.removeEventListener("keydown", handleKeyboardShortcut);
         };
     }, [isDarkMode]);
-    */
 
     if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
-        return <HomeLoading />;
+        return <HomeLoading/>;
     }
 
     return (
@@ -147,20 +130,20 @@ const App = () => {
                 post={modalData}
             />
 
-            <ScrollToTop />
+            <ScrollToTop/>
 
             <Routes>
                 {/* Public Routes */}
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/" element={<HomePage />} />
+                <Route path="/signup" element={<SignUpPage/>}/>
+                <Route path="/login" element={<LoginPage/>}/>
+                <Route path="/" element={<HomePage/>}/>
 
                 {/* Protected Routes */}
                 <Route
                     path="/chat"
                     element={
                         <ProtectedRoute
-                            element={<ChatPage />}
+                            element={<ChatPage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />
@@ -170,7 +153,7 @@ const App = () => {
                     path="/saved"
                     element={
                         <ProtectedRoute
-                            element={<SavedPage />}
+                            element={<SavedPage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />
@@ -180,7 +163,7 @@ const App = () => {
                     path="/profile/:id?"
                     element={
                         <ProtectedRoute
-                            element={<ProfilePage />}
+                            element={<ProfilePage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />
@@ -190,7 +173,7 @@ const App = () => {
                     path="/complete-signup"
                     element={
                         <CompleteSignUpPage
-                            element={<ChatPage />}
+                            element={<ChatPage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />
@@ -200,7 +183,7 @@ const App = () => {
                     path="/change-password"
                     element={
                         <ProtectedRoute
-                            element={<ChangePasswordPage />}
+                            element={<ChangePasswordPage/>}
                             isAuthenticated={!!authUser}
                             redirectTo="/login"
                         />
@@ -212,7 +195,7 @@ const App = () => {
                     path="/dashboard"
                     element={
                         <RoleProtectedRoute
-                            element={<DashboardPage />}
+                            element={<DashboardPage/>}
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
@@ -224,7 +207,7 @@ const App = () => {
                     path="/management"
                     element={
                         <RoleProtectedRoute
-                            element={<UserManagementPage />}
+                            element={<UserManagementPage/>}
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
@@ -236,7 +219,7 @@ const App = () => {
                     path="/bans"
                     element={
                         <RoleProtectedRoute
-                            element={<BanManagementPage />}
+                            element={<BanManagementPage/>}
                             isAuthenticated={!!authUser}
                             userRole={role}
                             allowedRoles={["admin"]}
@@ -246,8 +229,8 @@ const App = () => {
                 />
 
                 {/* Error Pages */}
-                <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                <Route path="*" element={<PageNotFoundPage />} />
+                <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
+                <Route path="*" element={<PageNotFoundPage/>}/>
             </Routes>
         </>
     );

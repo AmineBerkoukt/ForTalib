@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import {useAuthStore} from "../store/useAuthStore";
-import {HomeIcon, BadgeIcon, Loader2, Lock, Mail, MessageSquare, Moon, Sun, User, Phone} from 'lucide-react';
+import {HomeIcon, BadgeIcon, Loader2, Lock, Mail, MessageSquare, Moon, Sun, User, Phone, Info} from 'lucide-react';
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
 import {useTheme} from "../contexts/ThemeContext.jsx";
@@ -54,7 +54,6 @@ const SignUpPage = () => {
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
         if (validateForm()) {
             const formData = {
@@ -66,7 +65,6 @@ const SignUpPage = () => {
                 hasAcceptedTermsAndConditions: acceptTerms
             };
 
-
             try {
                 const response = await signup(formData);
                 if(response) navigate("/complete-signup")
@@ -76,14 +74,12 @@ const SignUpPage = () => {
         }
     };
 
-
     return (
         <div className={`min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
             <div className="flex-1 flex flex-col lg:flex-row">
-                <div
-                    className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200 relative">
+                <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 bg-white dark:bg-gray-900 transition-colors duration-200 relative">
                     {/* Dark Mode Toggle */}
-                    <div className="absolute top-4 right-4 z-20">
+                    <div className="absolute top-4 right-4 z-20 flex items-center space-x-4">
                         <button
                             onClick={toggleDarkMode}
                             className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 transition-all duration-300 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -104,16 +100,21 @@ const SignUpPage = () => {
                                     className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                                     <MessageSquare className="w-8 h-8 text-primary"/>
                                 </div>
-                                <h1 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Create your
-                                    account</h1>
-                                <p className="text-base text-gray-600 dark:text-gray-400">Get started with your free
-                                    account</p>
+                                <h1 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Create your account</h1>
+                                <p className="text-base text-gray-600 dark:text-gray-400">Get started with your free account</p>
                             </div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="w-full">
+                            {/* Google Login Button with Information */}
+                            <div className="w-full space-y-2">
                                 <GoogleLoginButton/>
+                                <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-md">
+                                    <Info className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400"/>
+                                    <span>
+                                        Note: Signing up with Google automatically accepts our Terms and Conditions
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="relative">
@@ -121,34 +122,77 @@ const SignUpPage = () => {
                                     <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
                                 </div>
                                 <div className="relative flex justify-center text-sm">
-                                    <span
-                                        className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">Or</span>
+                                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
+                                        Or continue with email
+                                    </span>
                                 </div>
                             </div>
 
-                            <FormInput label="First Name" icon={User} inputRef={firstNameRef}
-                                       placeholder="Enter your first name"/>
-                            <FormInput label="Last Name" icon={User} inputRef={lastNameRef}
-                                       placeholder="Enter your last name"/>
-                            <FormInput label="Email" icon={Mail} inputRef={emailRef} placeholder="Enter your email"
-                                       type="email"/>
-                            <FormInput label="Password" icon={Lock} inputRef={passwordRef} placeholder="8 Characters"
-                                       type="password" showPassword={showPassword} setShowPassword={setShowPassword}/>
-                            <FormInput label="Phone" icon={Phone} inputRef={phoneNumberRef}
-                                       placeholder="Enter your phone number"/>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <FormInput
+                                    label="First Name"
+                                    icon={User}
+                                    inputRef={firstNameRef}
+                                    placeholder="Enter first name"
+                                    className="w-full"
+                                />
+                                <FormInput
+                                    label="Last Name"
+                                    icon={User}
+                                    inputRef={lastNameRef}
+                                    placeholder="Enter last name"
+                                    className="w-full"
+                                />
+                            </div>
+
+                            <FormInput
+                                label="Email"
+                                icon={Mail}
+                                inputRef={emailRef}
+                                placeholder="Enter your email"
+                                type="email"
+                            />
+                            <FormInput
+                                label="Password"
+                                icon={Lock}
+                                inputRef={passwordRef}
+                                placeholder="8+ characters, mix of letters & numbers"
+                                type="password"
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                            />
+                            <FormInput
+                                label="Phone"
+                                icon={Phone}
+                                inputRef={phoneNumberRef}
+                                placeholder="Enter your phone number"
+                            />
 
                             <div className="flex items-center">
-                                <input type="checkbox" id="terms" checked={acceptTerms}
-                                       onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2"/>
-                                <label htmlFor="terms" className="text-gray-700 dark:text-gray-300">
-                                    I accept the <span className="text-primary cursor-pointer"
-                                                       onClick={() => setIsModalOpen(true)}>Terms and Conditions</span>
+                                <input
+                                    type="checkbox"
+                                    id="terms"
+                                    checked={acceptTerms}
+                                    onChange={() => setAcceptTerms(!acceptTerms)}
+                                    className="mr-2 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                                />
+                                <label
+                                    htmlFor="terms"
+                                    className="text-sm text-gray-700 dark:text-gray-300"
+                                >
+                                    I accept the{" "}
+                                    <span
+                                        className="text-primary cursor-pointer hover:underline"
+                                        onClick={() => setIsModalOpen(true)}
+                                    >
+                                        Terms and Conditions
+                                    </span>
                                 </label>
                             </div>
 
                             <button
                                 type="submit"
-                                className="w-full py-2 bg-primary text-white rounded-md transition flex items-center justify-center"
+                                className="w-full py-3 bg-primary text-white rounded-md transition-all duration-300 flex items-center justify-center hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
                                 disabled={isSigningUp}
                             >
                                 {isSigningUp ? (
@@ -164,8 +208,10 @@ const SignUpPage = () => {
                             <div className="text-center">
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
                                     Already have an account?{" "}
-                                    <Link to="/login"
-                                          className="font-medium text-primary hover:text-primary-dark transition-colors duration-300">
+                                    <Link
+                                        to="/login"
+                                        className="font-medium text-primary hover:underline transition-colors duration-300"
+                                    >
                                         Sign in
                                     </Link>
                                 </p>
