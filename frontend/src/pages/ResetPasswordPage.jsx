@@ -9,7 +9,7 @@ const ResetPasswordPage = () => {
     const { isDarkMode } = useTheme();
     const { resetPassword } = useAuthStore();
     const navigate = useNavigate();
-    const { token } = useParams();
+    const token = new URL(window.location.href).pathname.split('/').pop();
 
     const newPasswordRef = useRef(null);
     const confirmPasswordRef = useRef(null);

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
-import { Moon, Sun, ArrowLeft, Mail, AlertCircle, CheckCircle, Loader } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useAuthStore } from '../store/useAuthStore';
+import React, {useState} from 'react';
+import {useTheme} from '../contexts/ThemeContext';
+import {Moon, Sun, ArrowLeft, Mail, AlertCircle, CheckCircle, Loader} from 'lucide-react';
+import {Link} from 'react-router-dom';
+import {useAuthStore} from '../store/useAuthStore.js';
 
 const ForgotPasswordPage = () => {
-    const { isDarkMode, toggleDarkMode } = useTheme();
-    const { forgotPassword } = useAuthStore();
+    const {isDarkMode, toggleDarkMode} = useTheme();
+    const {forgotPassword} = useAuthStore();
     const [email, setEmail] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
+    const [message, setMessage] = useState({type: '', text: ''});
     const [emailError, setEmailError] = useState('');
 
     // Validate email format
@@ -22,7 +22,7 @@ const ForgotPasswordPage = () => {
         e.preventDefault();
 
         // Clear previous messages and errors
-        setMessage({ type: '', text: '' });
+        setMessage({type: '', text: ''});
         setEmailError('');
 
         // Validate email before submission
@@ -39,17 +39,18 @@ const ForgotPasswordPage = () => {
         setIsSubmitting(true);
 
         try {
-            await forgotPassword({ email });
-            setMessage({
-                type: 'success',
-                text: 'Password reset link sent! Please check your email inbox.'
-            });
-            // Clear the form after successful submission
-            setEmail('');
+            const res = await forgotPassword({email});
+            if (res.status === 200 || res.status === 201) {
+                setMessage({
+                    type: 'success',
+                    text: 'Password reset link sent! Please check your email inbox.'
+                });
+                setEmail('');
+            }
         } catch (error) {
             setMessage({
                 type: 'error',
-                text: 'Failed to send reset instructions. Please try again later.'
+                text: 'Failed to send reset instructions. Mostly the email does NOT exist ! \nPlease try again later.'
             });
             console.error('Forgot password error:', error);
         } finally {
@@ -58,7 +59,8 @@ const ForgotPasswordPage = () => {
     };
 
     return (
-        <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-200`}>
+        <div
+            className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-200`}>
             <div className="container mx-auto px-4 flex-grow flex flex-col">
                 {/* Header with back button and theme toggle */}
                 <div className="flex justify-between items-center pt-6 sm:pt-8">
@@ -71,7 +73,7 @@ const ForgotPasswordPage = () => {
                         }`}
                         aria-label="Back to login page"
                     >
-                        <ArrowLeft size={18} />
+                        <ArrowLeft size={18}/>
                         <span className="text-sm sm:text-base">Back to Login</span>
                     </Link>
 
@@ -84,7 +86,7 @@ const ForgotPasswordPage = () => {
                         }`}
                         aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
                     >
-                        {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                        {isDarkMode ? <Sun size={18}/> : <Moon size={18}/>}
                     </button>
                 </div>
 
@@ -143,7 +145,7 @@ const ForgotPasswordPage = () => {
                                     </div>
                                     {emailError && (
                                         <div className="mt-1 flex items-center text-red-500 text-sm">
-                                            <AlertCircle size={14} className="mr-1" />
+                                            <AlertCircle size={14} className="mr-1"/>
                                             <span>{emailError}</span>
                                         </div>
                                     )}
@@ -162,9 +164,9 @@ const ForgotPasswordPage = () => {
                                         }`}
                                     >
                                         {message.type === 'success' ? (
-                                            <CheckCircle size={18} className="mr-2 flex-shrink-0 mt-0.5" />
+                                            <CheckCircle size={18} className="mr-2 flex-shrink-0 mt-0.5"/>
                                         ) : (
-                                            <AlertCircle size={18} className="mr-2 flex-shrink-0 mt-0.5" />
+                                            <AlertCircle size={18} className="mr-2 flex-shrink-0 mt-0.5"/>
                                         )}
                                         <span className="text-sm">{message.text}</span>
                                     </div>
@@ -187,7 +189,7 @@ const ForgotPasswordPage = () => {
                                 >
                                     {isSubmitting ? (
                                         <span className="flex items-center justify-center">
-                                            <Loader size={18} className="animate-spin mr-2" />
+                                            <Loader size={18} className="animate-spin mr-2"/>
                                             Sending...
                                         </span>
                                     ) : (

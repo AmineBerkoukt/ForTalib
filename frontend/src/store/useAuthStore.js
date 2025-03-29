@@ -220,13 +220,15 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
-    forgotPassword: async (data) => {
+    //http://localhost:5000/api/auth/forgot-password
+    forgotPassword: async (email) => {
         try {
-            const response = await api.post('/auth/forgot-password', data);
+            const response = await axios.post('http://localhost:5000/api/auth/forgot-password', email);
             toast.success("Reset instructions sent successfully!");
+            return response;
         } catch (error) {
             toast.error("Error during the process. Please retry !");
-            console.log("Error in updateProfile:", error);
+            console.log("Error in forgotPassword:", error.message);
         }
 
     },
@@ -235,10 +237,11 @@ export const useAuthStore = create((set, get) => ({
         try {
             const response = await api.post(`/auth/reset-password/${token}`, newPassword);
             toast.success("Password changed successfully !");
+            return response;
 
         } catch (error) {
             toast.error("Error during the process. Please retry !");
-            console.log("Error in updateProfile:", error);
+            console.log("Error in resetPassword:", error);
         }
     },
 

@@ -139,7 +139,7 @@ const App = () => {
                 <Route path="/signup" element={<SignUpPage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
-                <Route path="/reset-password" element={<ResetPasswordPage/>}/>
+                <Route path="/reset-password/:token" element={<ResetPasswordPage/>}/>
 
                 {/* Protected Routes */}
                 <Route

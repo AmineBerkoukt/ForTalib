@@ -165,7 +165,7 @@ export const forgotPassword = async (req, res) => {
             }
         );
 
-        const resetLink = `${process.env.EMAIL_REDIRECT}/reset-password/${resetToken}`;
+        const resetLink = `${process.env.EMAIL_REDIRECT}/reset-password/${encodeURIComponent(resetToken)}`;
 
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpires = Date.now() + 3600000; //1H
@@ -176,6 +176,7 @@ export const forgotPassword = async (req, res) => {
             user.lastName,
             resetLink
         );
+        console.log("sending email ...")
         await sendEmail(user.email, subject, htmlContent);
 
         res.status(200).json({
