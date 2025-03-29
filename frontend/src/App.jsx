@@ -73,7 +73,7 @@ const App = () => {
         initializeAuth();
     }, [checkAuth, logout, location.pathname, navigate]);
 
-    //Console access
+    /*//Console access
     useEffect(() => {
         // Handle Right Click
         const handleRightClick = (event) => {
@@ -108,7 +108,7 @@ const App = () => {
             document.removeEventListener("contextmenu", handleRightClick);
             document.removeEventListener("keydown", handleKeyboardShortcut);
         };
-    }, [isDarkMode]);
+    }, []);*/
 
     if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
         return <HomeLoading/>;

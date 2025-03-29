@@ -46,7 +46,7 @@ export default function ChangePasswordPage() {
                 navigate("/");
             }
         } catch (e) {
-            toast.error("Password was NOT changed!");
+            console.log(e.message);
         }
     };
 

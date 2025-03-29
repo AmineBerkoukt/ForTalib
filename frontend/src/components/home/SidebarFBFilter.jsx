@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { usePostStore } from "../../store/usePostStore.js";
+import {toast} from "react-hot-toast";
 
 const DEFAULT_FILTERS = {
     price: 2000,
@@ -31,6 +32,7 @@ const SidebarFBFilter = () => {
     const handleSearch = useCallback(async () => {
         try {
             await getPostsFilter(filters.price, filters.rate);
+            toast.success("Filters applied !")
         } catch (error) {
             console.error("Error fetching filtered posts:", error);
         }
@@ -41,6 +43,7 @@ const SidebarFBFilter = () => {
         setFilters(DEFAULT_FILTERS);
         try {
             await getPosts();
+            toast.success("Filters removed !")
         } catch (error) {
             console.error("Error fetching all posts:", error);
         }
