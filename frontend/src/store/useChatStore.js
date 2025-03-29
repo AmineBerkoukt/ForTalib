@@ -3,8 +3,6 @@ import toast from "react-hot-toast";
 import api from "../utils/api.js";
 import { useAuthStore } from "./useAuthStore";
 
-//const BASE_URL = "http://localhost:5000/api/messages";
-const BASE_URL = import.meta.env.BASE_URL ;
 
 
 export const useChatStore = create((set, get) => ({

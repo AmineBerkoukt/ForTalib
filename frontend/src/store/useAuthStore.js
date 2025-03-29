@@ -223,7 +223,7 @@ export const useAuthStore = create((set, get) => ({
     //http://localhost:5000/api/auth/forgot-password
     forgotPassword: async (email) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/forgot-password', email);
+            const response = await api.post('/auth/forgot-password', email);
             toast.success("Reset instructions sent successfully!");
             return response;
         } catch (error) {
