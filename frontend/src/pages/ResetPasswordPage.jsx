@@ -2,14 +2,12 @@ import React, { useState, useRef } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useAuthStore } from '../store/useAuthStore';
-import { toast } from 'react-hot-toast'; // Added toast import
+import {useAuthStore} from '../store/useAuthStore';
 
 const ResetPasswordPage = () => {
     const { isDarkMode } = useTheme();
-    const { resetPassword } = useAuthStore();
     const navigate = useNavigate();
-    const token = new URL(window.location.href).pathname.split('/').pop();
+    const { token } = useParams();
 
     const newPasswordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
@@ -18,6 +16,7 @@ const ResetPasswordPage = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const { resetPassword } = useAuthStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,15 +48,15 @@ const ResetPasswordPage = () => {
         setError('');
 
         try {
-            // Using the resetPassword function from the store
-            await resetPassword(token, newPassword);
-            // The toast notification is already handled within the resetPassword function
-            navigate('/login', {
-                replace: true,
-                state: { message: 'Password reset successful. Please log in with your new password.' }
-            });
+            const res = await resetPassword(token, newPassword);
+            if(res.status === 200 || res.status === 201) {
+                navigate('/login', {
+                    replace: true,
+                    state: { message: 'Password reset successful. Please log in with your new password.' }
+                });
+            }
+
         } catch (error) {
-            // Error is already shown via toast in the resetPassword function
             setError('Failed to reset password. Please try again.');
         } finally {
             setIsSubmitting(false);

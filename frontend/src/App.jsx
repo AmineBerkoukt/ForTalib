@@ -49,7 +49,7 @@ const App = () => {
     const {isModalOpen, modalData, disactivateModal} = useModalStore();
     const [isLoading, setIsLoading] = useState(true);
 
-    const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
+    const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password", "/reset-password/:token"];
 
     useEffect(() => {
         const initializeAuth = async () => {
@@ -139,7 +139,7 @@ const App = () => {
                 <Route path="/signup" element={<SignUpPage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
-                <Route path="/reset-password/:token" element={<ResetPasswordPage/>}/>
+                <Route path="/reset-password/:token?" element={<ResetPasswordPage/>}/>
 
                 {/* Protected Routes */}
                 <Route

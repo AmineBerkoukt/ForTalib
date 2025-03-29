@@ -235,7 +235,7 @@ export const useAuthStore = create((set, get) => ({
 
     resetPassword: async (token, newPassword) => {
         try {
-            const response = await api.post(`/auth/reset-password/${token}`, newPassword);
+            const response = await api.post(`/auth/reset-password/${token}`, {newPassword});
             toast.success("Password changed successfully !");
             return response;
 
