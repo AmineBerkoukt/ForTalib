@@ -6,8 +6,8 @@ import api from "../utils/api.js";
 
 // Set the BASE_URL based on the environment
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL_NOAPI = import.meta.env.VITE_PFP_URL;
 
-const token = localStorage.getItem('token');
 
 // Define the Zustand store
 export const useAuthStore = create((set, get) => ({
@@ -23,7 +23,7 @@ export const useAuthStore = create((set, get) => ({
 
     oAuthLogin: async (authData) => {
         try {
-            const response = await axios.post(`${BASE_URL}/auth/google/register`, authData);
+            const response = await api.post(`/auth/google/register`, authData);
 
             if (!response.data.token || !response.data.user) {
                 throw new Error("Invalid response from server");
@@ -54,7 +54,7 @@ export const useAuthStore = create((set, get) => ({
                 return;
             }
 
-            const res = await axios.get(BASE_URL + "/users/me", {
+            const res = await api.get("/users/me", {
                 headers: {Authorization: `Bearer ${storedToken}`},
             });
 
@@ -73,7 +73,7 @@ export const useAuthStore = create((set, get) => ({
     signup: async (data) => {
         set({isSigningUp: true});
         try {
-            const res = await axios.post(BASE_URL + "/auth/register", data);
+            const res = await api.post("/auth/register", data);
             if (res.status === 201) {
                 set({authUser: res.data});
                 toast.success("Account created successfully");
@@ -118,7 +118,7 @@ export const useAuthStore = create((set, get) => ({
     login: async (data) => {
         set({isLoggingIn: true});
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login", data);
+            const res = await api.post("/auth/login", data);
 
             await localStorage.setItem('token', res.data.token);
 
@@ -164,7 +164,7 @@ export const useAuthStore = create((set, get) => ({
             return;
         }
 
-        const socket = io("http://localhost:5000", {
+        const socket = io(BASE_URL_NOAPI, {
             query: {userId: authUser._id},
         });
 
@@ -180,7 +180,7 @@ export const useAuthStore = create((set, get) => ({
 
         socket.on("forceLogout", (message) => {
             console.warn("User banned, logging out...");
-            alert(message);
+            toast.error(message);
             localStorage.removeItem("token");
             set({ authUser: null });
             window.location.href = "/login";
