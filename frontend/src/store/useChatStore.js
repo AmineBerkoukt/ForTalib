@@ -3,7 +3,9 @@ import toast from "react-hot-toast";
 import api from "../utils/api.js";
 import { useAuthStore } from "./useAuthStore";
 
-const BASE_URL = "http://localhost:5000/api/messages";
+//const BASE_URL = "http://localhost:5000/api/messages";
+const BASE_URL = import.meta.env.BASE_URL ;
+
 
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -16,7 +18,7 @@ export const useChatStore = create((set, get) => ({
   getAllUsers: async () => {
     set({ isUsersLoading: true });
     try {
-      const res = await api.get(BASE_URL + "/users");
+      const res = await api.get("/message/users");
       set({ allUsers: res.data });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -27,7 +29,7 @@ export const useChatStore = create((set, get) => ({
 
   getUsersForSidebar: async (showOnlineOnly = false, onlineUsers = []) => {
     try {
-      const res = await api.get(BASE_URL + "/recent");
+      const res = await api.get( "/messages/recent");
       let users = res.data;
 
       if (showOnlineOnly) {
@@ -43,7 +45,7 @@ export const useChatStore = create((set, get) => ({
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });
     try {
-      const res = await api.get(BASE_URL + `/${userId}`);
+      const res = await api.get(`/messages/${userId}`);
       set({ messages: res.data });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -59,7 +61,7 @@ export const useChatStore = create((set, get) => ({
     console.log("sendMessage selectedUser : ", selectedUser);
     const id = selectedUser._id ? selectedUser._id : selectedUser.id;
     try {
-      const res = await api.post(BASE_URL + `/send/${id}`, messageData, configToSend);
+      const res = await api.post( `/messages/send/${id}`, messageData, configToSend);
       set({ messages: [...messages, res.data] });
 
       await get().getUsersForSidebar();
@@ -122,9 +124,6 @@ export const useChatStore = create((set, get) => ({
     }catch (error) {
       console.log("Error in useChatStore.getSelectedUserInfo " + error.message);
     }
-
-
-
   }
 
 
