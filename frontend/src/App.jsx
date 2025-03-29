@@ -22,6 +22,8 @@ import ChangePasswordPage from "./pages/ChangePasswordPage.jsx";
 import CompleteSignUpPage from "./pages/CompleteSignUpPage.jsx";
 import BanManagementPage from "./pages/BanManagementPage.jsx";
 import HomeLoading from "./components/skeletons/HomeLoading.jsx";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
+import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
 
 const ProtectedRoute = ({element, isAuthenticated, redirectTo}) => {
     return isAuthenticated ? element : <Navigate to={redirectTo}/>;
@@ -136,9 +138,20 @@ const App = () => {
                 {/* Public Routes */}
                 <Route path="/signup" element={<SignUpPage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/" element={<HomePage/>}/>
+                <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
+                <Route path="/reset-password" element={<ResetPasswordPage/>}/>
 
                 {/* Protected Routes */}
+                <Route
+                    path="/"
+                    element={
+                        <ProtectedRoute
+                            element={<HomePage/>}
+                            isAuthenticated={!!authUser}
+                            redirectTo="/login"
+                        />
+                    }
+                />
                 <Route
                     path="/chat"
                     element={

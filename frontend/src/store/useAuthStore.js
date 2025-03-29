@@ -219,4 +219,27 @@ export const useAuthStore = create((set, get) => ({
             set({isUpdatingProfile: false});
         }
     },
+
+    forgotPassword: async (data) => {
+        try {
+            const response = await api.post('/auth/forgot-password', data);
+            toast.success("Reset instructions sent successfully!");
+        } catch (error) {
+            toast.error("Error during the process. Please retry !");
+            console.log("Error in updateProfile:", error);
+        }
+
+    },
+
+    resetPassword: async (token, newPassword) => {
+        try {
+            const response = await api.post(`/auth/reset-password/${token}`, newPassword);
+            toast.success("Password changed successfully !");
+
+        } catch (error) {
+            toast.error("Error during the process. Please retry !");
+            console.log("Error in updateProfile:", error);
+        }
+    },
+
 }));
