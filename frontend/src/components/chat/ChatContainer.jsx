@@ -80,10 +80,8 @@ const ChatContainer = () => {
 
     const noMessages = messages.length === 0;
 
-
     const mainUserPfp = authUser?.profilePhoto ? BASE_URL + authUser?.profilePhoto : "./avatar.png"
     const otherUserPfp = selectedUser.profilePhoto ? BASE_URL + selectedUser.profilePhoto : "./avatar.png"
-
 
     return (
         <div className="flex-1 flex flex-col h-full relative">
@@ -117,7 +115,7 @@ const ChatContainer = () => {
                             ref={index === messages.length - 1 ? messageEndRef : null}
                         >
                             <div className="chat-image avatar">
-                                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gray-200 dark:border-gray-700 flex-shrink-0">
                                     <img
                                         src={message.senderId === authUser._id
                                             ? mainUserPfp
@@ -198,4 +196,3 @@ const ChatContainer = () => {
 };
 
 export default ChatContainer;
-

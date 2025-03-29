@@ -104,14 +104,14 @@ const SearchWithDropdown = ({ searchQuery, setSearchQuery, baseClasses, onlineUs
                                     ${highlightedIndex === index ? 'bg-gray-100 dark:bg-gray-600' : 'hover:bg-gray-50 dark:hover:bg-gray-600'}`}
                                     role="option"
                                 >
-                                    <div className="relative">
+                                    <div className="relative flex-shrink-0">
                                         <img
                                             src={profilePicture}
                                             alt={`${user.firstName} ${user.lastName}`}
-                                            className="w-8 h-8 rounded-full object-cover"
+                                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                                         />
                                         {onlineUsers.includes(user._id) && (
-                                            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-gray-700" />
+                                            <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-gray-700" />
                                         )}
                                     </div>
                                     <span className="text-gray-900 dark:text-gray-100">
