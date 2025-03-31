@@ -12,17 +12,18 @@ import evaluateRoutes from "./src/routes/evaluateRoutes.js";
 import banRoutes from "./src/routes/banRoutes.js";
 import passport from 'passport';
 import http from 'http';
+import cors from 'cors';
+import {app, server} from "./src/config/socket.js";
+import path from "path";
+import {fileURLToPath} from "url";
+import messageRoutes from "./src/routes/messageRoutes.js";
 //Multer config :
 import {uploadPostImages, uploadPfp} from './src/config/upload.js';
 import {authenticateToken} from './src/middlewares/authMiddleware.js';
 
 
 //Socket
-import cors from 'cors';
-import {app, server} from "./src/config/socket.js";
-import path from "path";
-import {fileURLToPath} from "url";
-import messageRoutes from "./src/routes/messageRoutes.js";
+
 
 dotenv.config();
 connectDB();
