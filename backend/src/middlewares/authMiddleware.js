@@ -18,7 +18,7 @@ export const authenticateToken = (req, res, next) => {
         });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET || 'my_jwt_secret', {
+    jwt.verify(token, process.env.JWT_SECRET || 'Q1FA:m%t/]MD&ad#/dx%){!V7mP=tBrfX1$t1J8DU+:cz*1]txiuY4vuCdb!nzzD', {
         algorithms: ['HS256']
     }, (err, decoded) => {
         if (err) {
