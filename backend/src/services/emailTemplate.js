@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
 dotenv.config();
-const FRONTEND_URL = process.env.EMAIL_REDIRECT;
+const REDIRECT = process.env.EMAIL_REDIRECT;
 
 export const generatePostEmailTemplate = (post) => {
     const { _id, title, description, price, address, elevator, maximumCapacity, images } = post;
@@ -17,14 +17,8 @@ export const generatePostEmailTemplate = (post) => {
             <p><strong>Maximum Capacity:</strong> ${maximumCapacity} people</p>
             <p><strong>Elevator:</strong> ${elevator ? "Yes" : "No"}</p>
             
-            ${images.length > 0 ? `
-                <div style="text-align: center; margin-top: 15px;">
-                    ${images.map(img => `<img src="http://localhost:5000${img}" alt="Post Image" style="max-width:100%; border-radius: 5px; margin-bottom: 10px;">`).join('')}
-                </div>
-            ` : ''}
-
             <div style="text-align: center; margin-top: 20px;">
-                <a href="${FRONTEND_URL}" style="display: inline-block; background-color: #007BFF; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                <a href="${REDIRECT}" style="display: inline-block; background-color: #007BFF; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">
                     View Post
                 </a>
             </div>

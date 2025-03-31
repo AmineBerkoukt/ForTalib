@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 dotenv.config()
 
 export const authenticateToken = (req, res, next) => {
-    console.log("Auth middleware executed !")
     if (req.originalUrl.startsWith('/api/auth') || req.originalUrl.startsWith('/uploads')) {
         return next();
     }
