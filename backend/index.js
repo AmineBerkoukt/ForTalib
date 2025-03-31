@@ -19,29 +19,23 @@ import messageRoutes from "./src/routes/messageRoutes.js";
 import {authenticateToken} from './src/middlewares/authMiddleware.js';
 
 
-//Socket
-
-
 dotenv.config();
 connectDB();
 
 const PORT = process.env.PORT || 5000;
 
-
+app.use(
+    cors({
+        origin: process.env.CORS,
+        credentials: true,
+    })
+);
 
 
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-app.use(
-    cors({
-        origin: "http://localhost:5173",
-        credentials: true,
-    })
-);
-
 
 
 // Middlewares

@@ -20,7 +20,6 @@ const GoogleLoginButton = () => {
                 googleId: decoded.sub,
             };
 
-            console.log("Sending user data:", user);
             await oAuthLogin(user);
             navigate("/");
         } catch (error) {

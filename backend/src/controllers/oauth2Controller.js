@@ -22,7 +22,7 @@ export const googleOAuthRegister = async (req, res) => {
                         id: existingUser._id,
                         role: existingUser.role,
                     },
-                    process.env.JWT_SECRET || 'my_jwt_secret',
+                    process.env.JWT_SECRET || 'Q1FA:m%t/]MD&ad#/dx%){!V7mP=tBrfX1$t1J8DU+:cz*1]txiuY4vuCdb!nzzD',
                     {
                         expiresIn: '40d',
                         algorithm: 'HS256'
@@ -67,7 +67,7 @@ export const googleOAuthRegister = async (req, res) => {
                 id: newUser._id,
                 role: newUser.role,
             },
-            process.env.JWT_SECRET || 'my_jwt_secret',
+            process.env.JWT_SECRET || 'Q1FA:m%t/]MD&ad#/dx%){!V7mP=tBrfX1$t1J8DU+:cz*1]txiuY4vuCdb!nzzD',
             {
                 expiresIn: '40d',
                 algorithm: 'HS256'

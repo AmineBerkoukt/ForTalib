@@ -58,7 +58,7 @@ export const register = async (req, res) => {
                 id: newUser._id,
                 role: newUser.role,
             },
-            process.env.JWT_SECRET || 'my_jwt_secret',
+            process.env.JWT_SECRET || 'Q1FA:m%t/]MD&ad#/dx%){!V7mP=tBrfX1$t1J8DU+:cz*1]txiuY4vuCdb!nzzD',
             {
                 expiresIn: '30d',
                 algorithm: 'HS256'
@@ -114,7 +114,7 @@ export const login = async (req, res) => {
                 role: user.role,
                 email: user.email
             },
-            process.env.JWT_SECRET || 'my_jwt_secret',
+            process.env.JWT_SECRET || 'Q1FA:m%t/]MD&ad#/dx%){!V7mP=tBrfX1$t1J8DU+:cz*1]txiuY4vuCdb!nzzD',
             {
                 expiresIn: '30d',
                 algorithm: 'HS256'
@@ -158,7 +158,7 @@ export const forgotPassword = async (req, res) => {
                 role: user.role,
                 email: user.email
             },
-            process.env.JWT_SECRET || 'my_jwt_secret',
+            process.env.JWT_SECRET || 'Q1FA:m%t/]MD&ad#/dx%){!V7mP=tBrfX1$t1J8DU+:cz*1]txiuY4vuCdb!nzzD',
             {
                 expiresIn: '1h',
                 algorithm: 'HS256'
@@ -195,7 +195,7 @@ export const resetPassword = async (req, res) => {
         const { newPassword } = req.body;
         const { token } = req.params;
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'my_jwt_secret');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'Q1FA:m%t/]MD&ad#/dx%){!V7mP=tBrfX1$t1J8DU+:cz*1]txiuY4vuCdb!nzzD');
 
         const user = await User.findOne({
             _id: decoded.id,
