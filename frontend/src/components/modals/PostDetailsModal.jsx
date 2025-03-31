@@ -89,7 +89,11 @@ const PostDetailsModal = () => {
     if (!isModalActive || !modalData) return null
 
     const propertyDetails = [
-        {icon: <MapPin className="w-4 h-4"/>, label: "Address", value: modalData.address},
+        {
+            icon: <Calendar className="w-4 h-4"/>,
+            label: "Published",
+            value: new Date(modalData.createdAt).toLocaleDateString(),
+        },
         {icon: <Phone className="w-4 h-4"/>, label: "Phone", value: modalData.user?.phoneNumber},
         {
             icon: <Star className="w-4 h-4"/>,
@@ -97,11 +101,7 @@ const PostDetailsModal = () => {
             value: modalData.avgRate ? `${modalData.avgRate}/5` : "N/A",
         },
         {icon: <Users className="w-4 h-4"/>, label: "Capacity", value: `${modalData.maximumCapacity} people`},
-        {
-            icon: <Calendar className="w-4 h-4"/>,
-            label: "Published",
-            value: new Date(modalData.createdAt).toLocaleDateString(),
-        },
+        {icon: <MapPin className="w-4 h-4"/>, label: "Address", value: modalData.address},
     ]
 
     return ReactDOM.createPortal(

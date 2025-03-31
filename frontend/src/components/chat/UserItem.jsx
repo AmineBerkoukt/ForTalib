@@ -4,12 +4,13 @@ const BASE_URL = import.meta.env.VITE_PFP_URL;
 const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode }) => {
     // Check if the user is online by checking if their ID is in the onlineUsers array
     const isUserOnline = onlineUsers && onlineUsers.includes(user._id);
-    const handleClick = (user) =>{
+    const handleClick = (user) => {
         console.log(user._id);
         setSelectedUser(user);
     }
 
     const profilePicture = user.profilePhoto ? BASE_URL + user.profilePhoto : "./avatar.png"
+
     return (
         <button
             onClick={() => handleClick(user)}
@@ -27,14 +28,14 @@ const UserItem = ({ user, onlineUsers, selectedUser, setSelectedUser, isDarkMode
             }`}
         >
             {/* User Avatar with Online Status */}
-            <div className="relative group">
+            <div className="relative group flex-shrink-0">
                 <img
                     src={profilePicture}
                     alt={user.firstName}
-                    className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-full transition-transform duration-200 group-hover:scale-105"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border border-gray-200 dark:border-gray-700 transition-transform duration-200 group-hover:scale-105"
                 />
                 {isUserOnline && (
-                    <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full
+                    <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-green-500 rounded-full
                     ring-2 ring-gray-800 dark:ring-gray-900 animate-pulse" />
                 )}
             </div>

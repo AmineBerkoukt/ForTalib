@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, Moon, Sun } from "lucide-react";
+import { Eye, EyeOff, Info, Loader2, Lock, Mail, MessageSquare, Moon, Sun } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useTheme } from "../contexts/ThemeContext";
 import LoginHero from "../components/skeletons/LoginHero";
 import Footer from "../components/Footer.jsx";
+import GoogleLoginButton from "../components/GoogleLoginButton.jsx";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -14,14 +15,8 @@ const LoginPage = () => {
   const { login, isLoggingIn } = useAuthStore();
   const { isDarkMode, toggleDarkMode } = useTheme();
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    return password.length >= 8;
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password) => password.length >= 8;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,6 +71,12 @@ const LoginPage = () => {
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Google Login */}
+                <div className="w-full">
+                  <GoogleLoginButton />
+                </div>
+
+                {/* Email Input */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     Email
@@ -97,6 +98,7 @@ const LoginPage = () => {
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
 
+                {/* Password Input */}
                 <div>
                   <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     Password
@@ -126,6 +128,7 @@ const LoginPage = () => {
                   {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                 </div>
 
+                {/* Forgot Password */}
                 <div className="flex items-center justify-between">
                   <div className="text-sm">
                     <Link to="/forgot-password" className="font-medium text-primary hover:text-primary-dark">
@@ -134,6 +137,7 @@ const LoginPage = () => {
                   </div>
                 </div>
 
+                {/* Submit Button */}
                 <div>
                   <button
                       type="submit"

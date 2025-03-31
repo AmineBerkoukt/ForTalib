@@ -11,6 +11,7 @@ import { useSavedPostStore } from "../store/useSavedPostStore.js";
 import FeedSkeleton from "../components/skeletons/FeedSkeleton.jsx";
 
 const POSTS_PER_PAGE = 10;
+const BASE_URL = import.meta.env.VITE_PFP_URL;
 
 const HomePage = () => {
     const { isDarkMode } = useTheme();
@@ -116,7 +117,7 @@ const HomePage = () => {
                         <div className="space-y-4 sm:space-y-6">
                             {displayedPosts.map((post) => {
                                 const updatedImages = post.images
-                                    ? post.images.map((image) => `http://localhost:5000${image}`)
+                                    ? post.images.map((image) => `${BASE_URL}+${image}`)
                                     : [];
 
                                 const isPostSaved = Array.isArray(savedPostsIds) && savedPostsIds.includes(post._id);

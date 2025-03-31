@@ -9,6 +9,8 @@ import ProfileInfo from "../components/profile/ProfileInfo.jsx"
 import Post from "../components/Post"
 import LoadingScene from "../components/skeletons/LoadingScene.jsx"
 
+const BASE_URL = import.meta.env.VITE_PFP_URL;
+
 const ProfilePage = () => {
     const {id} = useParams()
     const navigate = useNavigate()
@@ -54,7 +56,7 @@ const ProfilePage = () => {
     }
 
     const processImages = (images) => {
-        return (images || []).map((img) => (img.startsWith("http") ? img : `http://localhost:5000${img}`))
+        return (images || []).map((img) => (img.startsWith("http") ? img : `${BASE_URL}+${img}`))
     }
 
     if (isLoading) {

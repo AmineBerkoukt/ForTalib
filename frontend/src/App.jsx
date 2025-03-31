@@ -22,6 +22,8 @@ import ChangePasswordPage from "./pages/ChangePasswordPage.jsx";
 import CompleteSignUpPage from "./pages/CompleteSignUpPage.jsx";
 import BanManagementPage from "./pages/BanManagementPage.jsx";
 import HomeLoading from "./components/skeletons/HomeLoading.jsx";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
+import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
 
 const ProtectedRoute = ({element, isAuthenticated, redirectTo}) => {
     return isAuthenticated ? element : <Navigate to={redirectTo}/>;
@@ -47,7 +49,7 @@ const App = () => {
     const {isModalOpen, modalData, disactivateModal} = useModalStore();
     const [isLoading, setIsLoading] = useState(true);
 
-    const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password"];
+    const publicRoutes = ["/login", "/signup", "/forgot-password", "/reset-password", "/reset-password/:token"];
 
     useEffect(() => {
         const initializeAuth = async () => {
@@ -73,7 +75,7 @@ const App = () => {
         initializeAuth();
     }, [checkAuth, logout, location.pathname, navigate]);
 
-    //Console access
+    /*//Console access
     useEffect(() => {
         // Handle Right Click
         const handleRightClick = (event) => {
@@ -108,7 +110,7 @@ const App = () => {
             document.removeEventListener("contextmenu", handleRightClick);
             document.removeEventListener("keydown", handleKeyboardShortcut);
         };
-    }, [isDarkMode]);
+    }, []);*/
 
     if (isLoading || (isCheckingAuth && !authUser && !publicRoutes.includes(location.pathname))) {
         return <HomeLoading/>;
@@ -136,9 +138,20 @@ const App = () => {
                 {/* Public Routes */}
                 <Route path="/signup" element={<SignUpPage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/" element={<HomePage/>}/>
+                <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
+                <Route path="/reset-password/:token?" element={<ResetPasswordPage/>}/>
 
                 {/* Protected Routes */}
+                <Route
+                    path="/"
+                    element={
+                        <ProtectedRoute
+                            element={<HomePage/>}
+                            isAuthenticated={!!authUser}
+                            redirectTo="/login"
+                        />
+                    }
+                />
                 <Route
                     path="/chat"
                     element={
