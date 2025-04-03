@@ -1,7 +1,6 @@
 import React from 'react'
 import DashboardHeader from '../components/dashboard/DashboardHeader.jsx'
 import DashboardStats from '../components/dashboard/DashboardStats.jsx'
-import HouseOwnerRequests from '../components/dashboard/HouseOwnerRequests.jsx'
 import UserManagement from '../components/dashboard/UserManagement.jsx'
 import Layout from "../components/dashboard/Layout.jsx"
 import { motion } from 'framer-motion'
