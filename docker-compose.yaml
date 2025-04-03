@@ -1,0 +1,53 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: corent-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: Amine
+      MONGO_INITDB_ROOT_PASSWORD: CorentDB
+      MONGO_INITDB_DATABASE: CoRent
+    networks:
+      - corent
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: corent-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    networks:
+      - corent
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: corent-frontend
+    restart: always
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    networks:
+      - corent
+
+networks:
+  corent:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local

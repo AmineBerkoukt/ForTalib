@@ -5,7 +5,6 @@ import User from './src/models/User.js';
 
 async function seedAdminUser() {
     try {
-        const existingAdmin = await User.findOne({ role: 'admin' });
 
         if (!existingAdmin) {  // Only create if no admin exists
             const hashedPassword = await bcrypt.hash('amine123', 10); // Hash the password
