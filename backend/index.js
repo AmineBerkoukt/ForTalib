@@ -29,7 +29,7 @@ app.use(
         origin: [
             'http://localhost',        // frontend on host (for local dev)
             'http://localhost:80',     // frontend on host via Docker
-            'http://localhost:3000',   // in case you're using React dev server locally
+            'http://localhost:5173',   // in case you're using React dev server locally
             'http://frontend',         // frontend service name inside Docker
         ],
         credentials: true,
