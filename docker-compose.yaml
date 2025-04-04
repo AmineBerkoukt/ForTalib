@@ -28,6 +28,8 @@ services:
       - mongodb
     networks:
       - corent
+    command: sh -c "node seedAdmin.js && npm start"
+
 
   frontend:
     build:
