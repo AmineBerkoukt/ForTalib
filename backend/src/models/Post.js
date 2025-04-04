@@ -10,7 +10,7 @@ const PostSchema = new mongoose.Schema({
     elevator: { type: Boolean, default: false },
     maximumCapacity: { type: Number, required: true, min: 0 },
     creationDate: { type: Date, default: Date.now },
-    avgRate: { type: Number }
+    avgRate: { type: Number, default: 0 }
 }, { timestamps: true } );
 
 export default mongoose.model('Post', PostSchema);

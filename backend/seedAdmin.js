@@ -44,13 +44,14 @@ async function seedDatabase() {
             description: 'Introduction for the users to a colocation platform for students',
             images: [],
             price: 0,
+            avgRate: 0,
             address: 'Default Address',
             elevator: false,
             maximumCapacity: 1
         });
 
         await defaultPost.save();
-        console.log('✅ Default post created');
+        console.log('✅ Default post created v2.0');
 
         process.exit();
     } catch (err) {
