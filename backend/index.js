@@ -22,6 +22,19 @@ import {authenticateToken} from './src/middlewares/authMiddleware.js';
 dotenv.config();
 connectDB();
 
+app.use(
+  cors({
+    origin: "*", // Allows all origins
+    credentials: true, // If using cookies or authorization headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+
+// Debugging: Log incoming requests and CORS
+app.use((req, res, next) => {
+  console.log(`Incoming request from: ${req.headers.origin}`);
+  next();
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.use(
@@ -35,6 +48,7 @@ app.use(
         credentials: true,
     })
 );
+
 
 
 
@@ -68,3 +82,4 @@ server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 
+export default app;
