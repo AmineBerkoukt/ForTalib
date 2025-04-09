@@ -37,6 +37,17 @@ app.use((req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
+app.use(
+    cors({
+        origin: [
+            'http://localhost',        // frontend on host (for local dev)
+            'http://localhost:80',     // frontend on host via Docker
+            'http://localhost:5173',   // in case you're using React dev server locally
+            'http://frontend',         // frontend service name inside Docker
+        ],
+        credentials: true,
+    })
+);
 
 
 
